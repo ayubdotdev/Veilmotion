@@ -1,201 +1,229 @@
-// components/PatternSelector.tsx
-"use client";
-
+import { AnimatePresence } from "framer-motion";
+import { Check, Copy, Eye, X } from "lucide-react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { useState } from "react";
-import { Pattern } from "../types/pattern"; // Assuming this type is defined
-import { patterns } from "../utils/patterns"; // Your patterns data
-import { cn } from "@/lib/utils";
-import { Check, Copy, Eye } from "lucide-react"; // Optional: for icons
+import { BouncingCirclesComponent } from "@/bgs/Geometrics";
+import { RadialPulseComponent } from "@/bgs/Gradients";
+import { GlowOrbsComponent } from "@/bgs/Effects";
+import { FloatingSquaresComponent } from "@/bgs/Floatings";
+import { DotNetworkComponent } from "@/bgs/Dots";
 
-// Define the categories for the tabs, adding "All" for a complete view
-const categories = [
-  "All",
-  "Geometrics",
-  "Gradients",
-  "Effects",
-  "Floatings",
-  "Dots",
-] as const;
-type Category = (typeof categories)[number];
-
-interface PatternSelectorProps {
-  activePattern: Pattern | null;
-  setActivePattern: (pattern: Pattern | null) => void;
+interface Pattern {
+  id: string;
+  name: string;
+  category: "Geometrics" | "Gradients" | "Effects" | "Floatings" | "Dots";
+  description: string;
+  style: React.CSSProperties;
+  component: React.FC; 
+  code: string;       
 }
 
-export const PatternSelector = ({ activePattern, setActivePattern }: PatternSelectorProps) => {
+const categories = ["All", "Geometrics", "Gradients", "Effects", "Floatings", "Dots"] as const;
+type Category = (typeof categories)[number];
+
+
+// Individual Pattern Components for Rendering
+const PatternComponents: Record<string, React.FC> = {
+  "geometrics-circles-bounce": BouncingCirclesComponent,
+  "gradient-radial-pulse": RadialPulseComponent,
+  "effect-glow-orbs": GlowOrbsComponent,
+  "floating-squares-random": FloatingSquaresComponent,
+  "dots-soft-network": DotNetworkComponent,
+};
+// Main Component
+export default function PatternSelector() {
   const [activeCategory, setActiveCategory] = useState<Category>("All");
+  const [activePattern, setActivePattern] = useState<Pattern | null>(null);
   const [isCopied, setIsCopied] = useState<string | null>(null);
+  const [previewPattern, setPreviewPattern] = useState<Pattern | null>(null);
 
-  // Handle copying the pattern's code to the clipboard
-  const handleCopyCode = (code: string, patternId: string) => {
-    navigator.clipboard.writeText(code);
-    setIsCopied(patternId);
-    setTimeout(() => setIsCopied(null), 2000); // Reset after 2 seconds
+  // Handle copying with improved feedback
+  const handleCopyCode = async (pattern: Pattern) => {
+    try {
+      await navigator.clipboard.writeText(pattern.code);
+      setIsCopied(pattern.id);
+      setTimeout(() => setIsCopied(null), 2000);
+    } catch (err) {
+      console.error('Failed to copy code:', err);
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = pattern.code;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setIsCopied(pattern.id);
+      setTimeout(() => setIsCopied(null), 2000);
+    }
   };
 
-  // Handle preview - this should trigger the pattern to appear on entire site
+  // Handle preview with proper global application
   const handlePreview = (pattern: Pattern) => {
+    setPreviewPattern(pattern);
     setActivePattern(pattern);
-    // You might need to trigger additional logic here to apply the pattern site-wide
-    // For example, dispatching an event or updating a global state
-    window.dispatchEvent(new CustomEvent('patternChanged', {
-      detail: { pattern }
-    }));
   };
 
-  // Filter patterns based on the selected category tab
-  const filteredPatterns =
-    activeCategory === "All"
-      ? patterns
-      : patterns.filter((p) => p.category === activeCategory);
+  // Clear preview
+  const clearPreview = () => {
+    setPreviewPattern(null);
+    setActivePattern(null);
+  };
+
+  // Filter patterns based on category
+  const filteredPatterns = activeCategory === "All" 
+    ? patterns 
+    : patterns.filter((pattern: Pattern) => pattern.category === activeCategory);
 
   return (
-    <div className="relative">
-      <section className="mt-10 px-6 max-w-7xl mx-auto">
-        <h2 className="text-3xl font-bold mb-4 text-black dark:text-white text-center">
-          Choose Your Background
-        </h2>
-        <p className="text-center text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
-          Select a category and click on a card or the 'Preview' button to apply a background. Hover to see details and copy its code.
-        </p>
+    <div className="min-h-screen bg-white dark:bg-gray-900 relative">
+      {/* Global Background Preview */}
+      <AnimatePresence>
+        {previewPattern && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+            className="fixed inset-0 z-0"
+            style={previewPattern.style}
+          >
+            {PatternComponents[previewPattern.id] && 
+              React.createElement(PatternComponents[previewPattern.id])
+            }
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-        {/* Category Tabs in a rounded container */}
-        <div className="w-full max-w-4xl mx-auto mb-8 px-4 sm:px-6">
-          <div className="relative bg-slate-50/70 dark:bg-slate-800/70 border border-gray-300 dark:border-gray-800  backdrop-blur-sm p-1.5 sm:p-2 rounded-2xl">
-            <div className="flex justify-center items-center overflow-x-auto scrollbar-hide">
-              <div className="flex gap-0.5 sm:gap-1 min-w-max px-2 sm:px-0">
-                {categories.map((category, index) => (
-                  <div key={category} className="flex items-center">
-                    <button
-                      onClick={() => setActiveCategory(category)}
-                      className={cn(
-                        "relative py-2.5 sm:py-3 px-3 sm:px-5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 focus:outline-none whitespace-nowrap",
-                        activeCategory === category
-                          ? "text-white shadow-md"
-                          : "text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-white/40 dark:hover:bg-slate-700/40"
-                      )}
-                    >
-                      {/* Animated background for active tab */}
-                      {activeCategory === category && (
-                        <motion.div
-                          layoutId="activeTab"
-                          className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl"
-                          initial={false}
-                          transition={{
-                            type: "spring",
-                            stiffness: 400,
-                            damping: 30,
-                          }}
-                        />
-                      )}
+      {/* Clear Preview Button */}
+      {previewPattern && (
+        <motion.button
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          onClick={clearPreview}
+          className="fixed top-4 right-4 z-50 bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow-lg transition-colors"
+        >
+          <X size={20} />
+        </motion.button>
+      )}
 
-                      {/* Tab text */}
-                      <motion.span
-                        className="relative z-10"
-                        initial={{ opacity: 0, y: 3 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.15 }}
-                      >
-                        {category}
-                      </motion.span>
-                    </button>
+      {/* Main Content */}
+      <div className="relative z-10 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white">
+              Background Pattern Library
+            </h1>
+            <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+              Choose from our collection of animated background patterns. Preview them live and copy the React code for your projects.
+            </p>
+          </div>
 
-                    {/* Subtle separation line */}
-                    {index < categories.length - 1 && (
-                      <div className="w-px h-4 sm:h-5 bg-slate-300/40 dark:bg-slate-600/40 mx-0.5 sm:mx-1 flex-shrink-0" />
-                    )}
-                  </div>
-                ))}
-              </div>
+          {/* Category Tabs */}
+          <div className="flex justify-center mb-8">
+            <div className="bg-gray-100 dark:bg-gray-800 p-1 rounded-xl flex gap-1">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setActiveCategory(category)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all relative ${
+                    activeCategory === category
+                      ? "text-white shadow-md"
+                      : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+                  }`}
+                >
+                  {activeCategory === category && (
+                    <motion.div
+                      layoutId="activeTab"
+                      className="absolute inset-0 bg-blue-500 rounded-lg"
+                      initial={false}
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    />
+                  )}
+                  <span className="relative z-10">{category}</span>
+                </button>
+              ))}
             </div>
           </div>
-        </div>
 
-        {/* Patterns Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6 px-4 sm:px-0">
-          {filteredPatterns.map((pattern) => (
-          <div
-          key={pattern.id}
-          className={cn(
-            "group relative rounded-2xl backdrop-blur-sm p-2 sm:p-3 cursor-pointer outline-none",
-          )}
-        >
-              {/* Aspect Ratio Container */}
-              <div
-                className="relative w-full rounded-xl overflow-hidden "
-                style={{
-                  aspectRatio: '16/25',
-                  ...pattern.style
-                }}
+          {/* Patterns Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {filteredPatterns.map((pattern) => (
+              <motion.div
+                key={pattern.id}
+                layout
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                className="group relative bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
               >
-                {/* Hover Overlay (always present, but hidden until hover) */}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-800/70 to-transparent flex flex-col items-center justify-end p-4 sm:p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-
-                  {/* Pattern Name */}
-                  <div className="text-white font-semibold text-sm sm:text-base text-center  drop-shadow-sm transform group-hover:translate-y-0 translate-y-2 pb-4 opacity-0 group-hover:opacity-100 transition duration-300 delay-100">
-                    {pattern.name}
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex flex-col gap-2.5 w-full max-w-32 transform group-hover:translate-y-0 translate-y-4 opacity-0 group-hover:opacity-100 pb-15 transition duration-300 delay-150">
-                    {/* Preview Button */}
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handlePreview(pattern);
-                      }}
-                      className="flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white text-xs sm:text-sm font-medium py-2.5 px-4 rounded-lg transition-colors duration-200"
-                    >
-                      <Eye size={14} /> Preview
-                    </button>
-
-                    {/* Copy Button */}
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleCopyCode(pattern.code, pattern.id);
-                      }}
-                      className={cn(
-                        "flex items-center justify-center gap-2 text-xs sm:text-sm font-medium py-2.5 px-4 rounded-lg transition-colors duration-200",
-                        isCopied === pattern.id
-                          ? "bg-teal-500 hover:bg-teal-600 text-white shadow-lg shadow-teal-500/25"
-                          : "bg-white/90 hover:bg-white text-slate-700"
-                      )}
-                    >
-                      {isCopied === pattern.id ? (
-                        <>
-                          <Check size={14} className="text-white" /> Copied!
-                        </>
-                      ) : (
-                        <>
-                          <Copy size={14} /> Copy
-                        </>
-                      )}
-                    </button>
+                {/* Pattern Preview Area */}
+                <div 
+                  className="relative h-48 overflow-hidden"
+                  style={pattern.style}
+                >
+                  {React.createElement(pattern.component)}
+                  
+                  {/* Hover Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center p-4">
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handlePreview(pattern)}
+                        className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+                      >
+                        <Eye size={16} />
+                        Preview
+                      </button>
+                      <button
+                        onClick={() => handleCopyCode(pattern)}
+                        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                          isCopied === pattern.id
+                            ? "bg-green-500 text-white"
+                            : "bg-white text-gray-900 hover:bg-gray-100"
+                        }`}
+                      >
+                        {isCopied === pattern.id ? (
+                          <>
+                            <Check size={16} />
+                            Copied!
+                          </>
+                        ) : (
+                          <>
+                            <Copy size={16} />
+                            Copy
+                          </>
+                        )}
+                      </button>
+                    </div>
                   </div>
                 </div>
 
-                {/* Active Pattern Border Animation */}
+                {/* Pattern Info */}
+                <div className="p-4">
+                  <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
+                    {pattern.name}
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                    {pattern.description}
+                  </p>
+                  <span className="inline-block px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs rounded-md">
+                    {pattern.category}
+                  </span>
+                </div>
+
+                {/* Active Pattern Indicator */}
                 {activePattern?.id === pattern.id && (
                   <motion.div
-                    layoutId="activePatternBorder"
-                    className="absolute inset-0 border  border-b-cyan-300  rounded-2xl pointer-events-none"
+                    layoutId="activePattern"
+                    className="absolute inset-0 border-2 border-blue-500 rounded-xl pointer-events-none"
                     initial={false}
-                    transition={{
-                      type: "spring",
-                      stiffness: 400,
-                      damping: 30,
-                    }}
+                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
                   />
                 )}
-              </div>
-            </div>
-          ))}
+              </motion.div>
+            ))}
+          </div>
         </div>
-
-      </section>
+      </div>
     </div>
   );
-};
+}

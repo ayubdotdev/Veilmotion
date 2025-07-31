@@ -2,9 +2,18 @@
 import { useEffect, useState } from "react";
 import Hero from "./components/Hero";
 import { Navbar } from "./components/Navbar";
-import { PatternSelector } from "./components/PattenSelector";
-import { Pattern } from "./types/pattern";
-import { patterns } from "./utils/patterns";
+import PatternSelector from "./components/PattenSelector";
+
+interface Pattern {
+  id: string;
+  name: string;
+  category: "Geometrics" | "Gradients" | "Effects" | "Floatings" | "Dots";
+  description: string;
+  style: React.CSSProperties;
+  component: React.FC; 
+  code: string;
+}
+
 
 export default function Home() {
   const [activePattern, setActivePattern] = useState<Pattern | null>(null);
