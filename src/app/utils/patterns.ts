@@ -175,3 +175,5 @@ export const SoftDotNetwork = () => {
 };`
   }
 ];
+
+export {patterns}

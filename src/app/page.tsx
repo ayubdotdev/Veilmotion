@@ -1,36 +1,52 @@
 "use client"
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Hero from "./components/Hero";
 import { Navbar } from "./components/Navbar";
 import PatternSelector from "./components/PattenSelector";
+
+import { BouncingCirclesComponent } from "@/bgs/Geometrics";
+import { RadialPulseComponent } from "@/bgs/Gradients";
+import { GlowOrbsComponent } from "@/bgs/Effects";
+import { FloatingSquaresComponent } from "@/bgs/Floatings";
+import { DotNetworkComponent } from "@/bgs/Dots";
+import { patterns } from "./utils/patterns";
 
 interface Pattern {
   id: string;
   name: string;
   category: "Geometrics" | "Gradients" | "Effects" | "Floatings" | "Dots";
-  description: string;
   style: React.CSSProperties;
   component: React.FC; 
   code: string;
 }
 
+// Individual Pattern Components for Rendering - using imports from bgs folder
+const PatternComponents: Record<string, React.FC> = {
+  "geometrics-circles-bounce": BouncingCirclesComponent,
+  "gradient-radial-pulse": RadialPulseComponent,
+  "effect-glow-orbs": GlowOrbsComponent,
+  "floating-squares-random": FloatingSquaresComponent,
+  "dots-soft-network": DotNetworkComponent,
+};
 
 export default function Home() {
   const [activePattern, setActivePattern] = useState<Pattern | null>(null);
   const [theme, setTheme] = useState<"light" | "dark">("light");
 
-  // Load active pattern from localStorage on initial render
+  // Load active pattern from localStorage on initial render (only in browser)
   useEffect(() => {
-    const savedId = localStorage.getItem("activePatternId");
-    const found = patterns.find((p) => p.id === savedId);
-    if (found) {
-      setActivePattern(found);
+    if (typeof window !== 'undefined') {
+      const savedId = localStorage.getItem("activePatternId");
+      const found = patterns.find((p) => p.id === savedId);
+      if (found) {
+        setActivePattern(found);
+      }
     }
   }, []);
 
   // Save active pattern to localStorage whenever it changes
   useEffect(() => {
-    if (activePattern) {
+    if (typeof window !== 'undefined' && activePattern) {
       localStorage.setItem("activePatternId", activePattern.id);
     }
   }, [activePattern]);
@@ -55,9 +71,11 @@ export default function Home() {
 
   // Apply the theme to the root <html> element
   useEffect(() => {
-    const root = document.documentElement;
-    root.classList.remove("light", "dark");
-    root.classList.add(theme);
+    if (typeof window !== 'undefined') {
+      const root = document.documentElement;
+      root.classList.remove("light", "dark");
+      root.classList.add(theme);
+    }
   }, [theme]);
 
   return (
@@ -67,8 +85,11 @@ export default function Home() {
         <div
           className="fixed inset-0 -z-10 transition-all duration-500"
           style={activePattern.style}
-          dangerouslySetInnerHTML={{ __html: activePattern.code }}
-        />
+        >
+          {PatternComponents[activePattern.id] && 
+            React.createElement(PatternComponents[activePattern.id])
+          }
+        </div>
       )}
       
       <Navbar />

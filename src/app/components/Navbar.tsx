@@ -1,10 +1,9 @@
-// components/Navbar.tsx
 'use client'
 
 import Link from 'next/link'
-import { Rocket, Github, Twitter } from 'lucide-react'
-import { ModeToggle } from './mode-toggle'
+import { Github, Twitter } from 'lucide-react'
 import Image from 'next/image'
+import { ModeToggle } from './mode-toggle'
 
 export function Navbar() {
   return (
