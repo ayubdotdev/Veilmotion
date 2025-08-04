@@ -3,13 +3,9 @@ import React, { useEffect, useState } from "react";
 import Hero from "./components/Hero";
 import { Navbar } from "./components/Navbar";
 import PatternSelector from "./components/PattenSelector";
-
-import { BouncingCirclesComponent } from "@/bgs/Geometrics";
-import { RadialPulseComponent } from "@/bgs/Gradients";
-import { GlowOrbsComponent } from "@/bgs/Effects";
-import { FloatingSquaresComponent } from "@/bgs/Floatings";
-import { DotNetworkComponent } from "@/bgs/Dots";
+import { PatternComponents } from "./components/PatternComponents"; 
 import { patterns } from "./utils/patterns";
+import { useTheme } from "next-themes";
 
 interface Pattern {
   id: string;
@@ -20,18 +16,16 @@ interface Pattern {
   code: string;
 }
 
-// Individual Pattern Components for Rendering - using imports from bgs folder
-const PatternComponents: Record<string, React.FC> = {
-  "geometrics-circles-bounce": BouncingCirclesComponent,
-  "gradient-radial-pulse": RadialPulseComponent,
-  "effect-glow-orbs": GlowOrbsComponent,
-  "floating-squares-random": FloatingSquaresComponent,
-  "dots-soft-network": DotNetworkComponent,
-};
 
 export default function Home() {
   const [activePattern, setActivePattern] = useState<Pattern | null>(null);
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const { theme } = useTheme(); // Get the current theme from next-themes
+  const [mounted, setMounted] = useState(false);
+
+  // Ensure component is mounted (prevents hydration mismatch)
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Load active pattern from localStorage on initial render (only in browser)
   useEffect(() => {
@@ -48,35 +42,15 @@ export default function Home() {
   useEffect(() => {
     if (typeof window !== 'undefined' && activePattern) {
       localStorage.setItem("activePatternId", activePattern.id);
+    } else if (typeof window !== 'undefined' && !activePattern) {
+      localStorage.removeItem("activePatternId");
     }
   }, [activePattern]);
 
-  // Update the document theme based on the selected pattern's brightness
-  useEffect(() => {
-    if (activePattern) {
-      const background = activePattern.style.background || "";
-      const isDark =
-        activePattern.id.startsWith("dark-") ||
-        (typeof background === "string" &&
-          (background.includes("#0") ||
-            background.includes("#1") ||
-            background.includes("rgba(0,") ||
-            background.includes("rgba(1,")));
-
-      setTheme(isDark ? "dark" : "light");
-    } else {
-      setTheme("light");
-    }
-  }, [activePattern]);
-
-  // Apply the theme to the root <html> element
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const root = document.documentElement;
-      root.classList.remove("light", "dark");
-      root.classList.add(theme);
-    }
-  }, [theme]);
+  // Don't render until mounted to prevent hydration issues
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <main className="relative bg-white dark:bg-black">
@@ -99,7 +73,7 @@ export default function Home() {
           const pattern = patterns.find(p => p.id === id);
           setActivePattern(pattern || null);
         }}
-        theme={theme}
+        theme={theme === "dark" ? "dark" : "light"}
       />
       <PatternSelector 
         activePattern={activePattern}

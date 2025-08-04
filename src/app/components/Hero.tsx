@@ -20,7 +20,7 @@ export default function Hero({ activePattern, setActivePattern, theme }: HeroPro
                         <span className="bg-clip-text text-transparent bg-gradient-to-b from-indigo-700 via-indigo-500 to-indigo-300">
                             Veilmotion
                         </span>{' '}
-                        brings visuals to life
+                        brings <br />visuals to life
                     </h1>
                 </div>
 

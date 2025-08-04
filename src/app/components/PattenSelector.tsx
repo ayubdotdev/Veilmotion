@@ -1,13 +1,10 @@
 import { AnimatePresence } from "framer-motion";
-import { Check, Copy, Eye, X } from "lucide-react";
+import { ArrowDown, Check, Copy, Eye, X } from "lucide-react";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { motion } from "framer-motion";
-import { BouncingCirclesComponent } from "@/bgs/Geometrics";
-import { RadialPulseComponent } from "@/bgs/Gradients";
-import { GlowOrbsComponent } from "@/bgs/Effects";
-import { FloatingSquaresComponent } from "@/bgs/Floatings";
-import { DotNetworkComponent } from "@/bgs/Dots";
+import { PatternComponents } from "../components/PatternComponents"
 import { patterns } from "../utils/patterns";
+import { ReturnPreview, useReturnPreview } from "./Return";
 
 interface Pattern {
   id: string;
@@ -27,54 +24,75 @@ const categories = ["All", "Geometrics", "Gradients", "Effects", "Floatings", "D
 type Category = (typeof categories)[number];
 
 
-const PatternComponents: Record<string, React.FC> = {
-  "geometrics-circles-bounce": BouncingCirclesComponent,
-  "gradient-radial-pulse": RadialPulseComponent,
-  "effect-glow-orbs": GlowOrbsComponent,
-  "floating-squares-random": FloatingSquaresComponent,
-  "dots-soft-network": DotNetworkComponent,
-};
-
-
 export default function PatternSelector({ activePattern, setActivePattern }: PatternSelectorProps) {
   const [activeCategory, setActiveCategory] = useState<Category>("All");
   const [isCopied, setIsCopied] = useState<string | null>(null);
   const [previewPattern, setPreviewPattern] = useState<Pattern | null>(null);
+  const {
+    isPreviewActive,
+    savePositionAndPreview,
+    returnToSavedPosition,
+    clearPreview
+  } = useReturnPreview();
 
-  // Handle copying with improved feedback
-  const handleCopyCode = async (pattern: Pattern) => {
+
+  // Handle copying with improved feedback and error handling
+  const handleCopyCode = async (pattern: Pattern, event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+
     try {
       await navigator.clipboard.writeText(pattern.code);
       setIsCopied(pattern.id);
       setTimeout(() => setIsCopied(null), 2000);
+      console.log('Code copied successfully!');
     } catch (err) {
       console.error('Failed to copy code:', err);
       // Fallback for older browsers
-      const textArea = document.createElement('textarea');
-      textArea.value = pattern.code;
-      document.body.appendChild(textArea);
-      textArea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textArea);
-      setIsCopied(pattern.id);
-      setTimeout(() => setIsCopied(null), 2000);
+      try {
+        const textArea = document.createElement('textarea');
+        textArea.value = pattern.code;
+        textArea.style.position = 'fixed';
+        textArea.style.opacity = '0';
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        setIsCopied(pattern.id);
+        setTimeout(() => setIsCopied(null), 2000);
+        console.log('Code copied using fallback method!');
+      } catch (fallbackErr) {
+        console.error('Fallback copy failed:', fallbackErr);
+        alert('Failed to copy code. Please try again.');
+      }
     }
   };
 
   // Handle preview with proper global application
-  const handlePreview = (pattern: Pattern) => {
+  const handlePreview = (pattern: Pattern, event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+
     setPreviewPattern(pattern);
     if (setActivePattern) {
       setActivePattern(pattern);
     }
+    savePositionAndPreview();
+
+    console.log('Preview activated for pattern:', pattern.name);
   };
 
   // Clear preview
-  const clearPreview = () => {
+  const handleClearPreview = () => {
     setPreviewPattern(null);
     if (setActivePattern) {
       setActivePattern(null);
     }
+    console.log('Preview cleared');
+  };
+
+  const handleReturnToPosition = () => {
+    returnToSavedPosition();
   };
 
   // Filter patterns based on category
@@ -83,7 +101,7 @@ export default function PatternSelector({ activePattern, setActivePattern }: Pat
     : patterns.filter((pattern: Pattern) => pattern.category === activeCategory);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 relative">
+    <div className="min-h-screen bg-black  relative">
       <AnimatePresence>
         {previewPattern && (
           <motion.div
@@ -106,15 +124,22 @@ export default function PatternSelector({ activePattern, setActivePattern }: Pat
         <motion.button
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          onClick={clearPreview}
-          className="fixed top-4 right-4 z-50 bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow-lg transition-colors"
+          onClick={handleClearPreview}
+          className="fixed top-20 right-4 mt-8  z-50 bg-red-500 hover:bg-red-600 text-white p-3 rounded-full shadow-lg transition-colors"
         >
           <X size={20} />
         </motion.button>
       )}
 
+      {/* Return to Previous Position Button */}
+      <ReturnPreview
+        isVisible={isPreviewActive && previewPattern !== null}
+        onReturn={handleReturnToPosition}
+        className="mt-10 size-10"
+      />
+
       {/* Main Content */}
-      <div className="relative z-10 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
+      <div className="relative z-10 bg-white dark:bg-black backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white">
@@ -125,31 +150,32 @@ export default function PatternSelector({ activePattern, setActivePattern }: Pat
             </p>
           </div>
 
-          {/* Category Tabs */}
-          <div className="flex justify-center mb-8">
-            <div className="bg-gray-100 dark:bg-gray-800 p-1 rounded-xl flex gap-1">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => setActiveCategory(category)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all relative ${activeCategory === category
-                      ? "text-white shadow-md"
-                      : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-                    }`}
-                >
-                  {activeCategory === category && (
-                    <motion.div
-                      layoutId="activeTab"
-                      className="absolute inset-0 bg-blue-500 rounded-lg"
-                      initial={false}
-                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                    />
-                  )}
-                  <span className="relative z-10">{category}</span>
-                </button>
-              ))}
-            </div>
-          </div>
+     {/* Category Tabs */}
+<div className="mb-8 flex justify-center">
+  <div className="grid grid-cols-3 md:flex md:flex-wrap md:justify-center bg-gray-100 dark:bg-gray-800 p-1 rounded-xl gap-2 w-full max-w-md lg:max-w-2xl">
+    {categories.map((category) => (
+      <button
+        key={category}
+        onClick={() => setActiveCategory(category)}
+        className={`relative text-sm font-medium transition-all px-4 py-2 rounded-lg text-center ${
+          activeCategory === category
+            ? "text-white shadow-md"
+            : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+        }`}
+      >
+        {activeCategory === category && (
+          <motion.div
+            layoutId="activeTab"
+            className="absolute inset-0 bg-blue-500 rounded-lg"
+            initial={false}
+            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+          />
+        )}
+        <span className="relative z-10">{category}</span>
+      </button>
+    ))}
+  </div>
+</div>
 
           {/* Patterns Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -173,16 +199,16 @@ export default function PatternSelector({ activePattern, setActivePattern }: Pat
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center p-4">
                     <div className="flex gap-2">
                       <button
-                        onClick={() => handlePreview(pattern)}
-                        className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+                        onClick={(e) => handlePreview(pattern, e)}
+                        className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors z-20"
                       >
                         <Eye size={16} />
                         Preview
                       </button>
                       <button
-                        onClick={() => handleCopyCode(pattern)}
-                        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${isCopied === pattern.id
-                            ? "bg-blue-900 text-white"
+                        onClick={(e) => handleCopyCode(pattern, e)}
+                        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors z-20 ${isCopied === pattern.id
+                            ? "bg-green-500 text-white"
                             : "bg-white text-gray-900 hover:bg-gray-100"
                           }`}
                       >
@@ -203,8 +229,8 @@ export default function PatternSelector({ activePattern, setActivePattern }: Pat
                 </div>
 
                 {/* Pattern Info */}
-                <div className="absolute inset-0 flex items-center justify-center p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-300  rounded-lg">
-                  <h3 className="font-semibold text-center pt-12  text-white">
+                <div className="p-4">
+                  <h3 className="font-semibold text-center text-gray-900 dark:text-white">
                     {pattern.name}
                   </h3>
                 </div>
