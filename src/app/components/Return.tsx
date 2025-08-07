@@ -31,7 +31,6 @@ export const ReturnPreview = ({ isVisible, onReturn, className = "" }: ReturnPre
   );
 };
 
-// Hook for managing scroll position and return functionality
 export const useReturnPreview = () => {
   const [savedScrollPosition, setSavedScrollPosition] = useState<number>(0);
   const [isPreviewActive, setIsPreviewActive] = useState<boolean>(false);
@@ -45,7 +44,7 @@ export const useReturnPreview = () => {
     // Scroll to top for preview
     window.scrollTo({
       top: 0,
-      behavior: "smooth",
+      behavior: "auto",
     });
   };
 
@@ -73,7 +72,6 @@ export const useReturnPreview = () => {
   };
 };
 
-// Alternative component with more customization options
 export const ReturnPreviewButton = ({ 
   isVisible, 
   onReturn, 

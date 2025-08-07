@@ -10,7 +10,7 @@ import { useTheme } from "next-themes";
 interface Pattern {
   id: string;
   name: string;
-  category: "Geometrics" | "Gradients" | "Effects" | "Floatings" | "Dots";
+  category: "Grids" | "Gradients" | "Effects" | "Dots" 
   style: React.CSSProperties;
   component: React.FC; 
   code: string;

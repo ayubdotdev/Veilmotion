@@ -1,9 +1,10 @@
 'use client';
 
 import { motion, } from "framer-motion";
-import React, { useRef, useEffect, useCallback, useMemo } from "react";
+import React, { useRef, useEffect, useCallback, useMemo, useState } from "react";
 import { gsap } from "gsap";
 import { InertiaPlugin } from "gsap/InertiaPlugin";
+
 
 gsap.registerPlugin(InertiaPlugin);
 
@@ -322,7 +323,26 @@ export const DotNetworkComponent = () => (
     ))}
   </div>
 );
+export const DotNetworkComponentv2 = () => (
+  <div className="absolute inset-0 grid grid-cols-16 grid-rows-8 gap-2 p-2">
+    {[...Array(128)].map((_, i) => {
+      const row = Math.floor(i / 16); // Get the row number (0–7)
 
+      return (
+        <motion.div
+          key={i}
+          className="w-2 h-2 bg-white/30 rounded-full"
+          animate={{ opacity: [0.3, 0.8, 0.3], scale: [1, 1.2, 1] }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            delay: row * 0.2, // Delay based on row index
+          }}
+        />
+      );
+    })}
+  </div>
+);
 export const MovingDotsComponent = () => (
   <div className="absolute inset-0 grid grid-cols-16 grid-rows-8 gap-4 p-4">
     {[...Array(128)].map((_, i) => {
@@ -385,6 +405,215 @@ export const BlinkingDotsComponent = () => {
     </div>
   );
 };
+export const FadeDotComponent = () => {
+  const DOT_SIZE = 2; // px
+  const GAP_SIZE = 16; // px
+
+  const [gridSize, setGridSize] = useState({ cols: 0, rows: 0 });
+
+  useEffect(() => {
+    const updateGridSize = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+
+      const cols = Math.floor(width / (DOT_SIZE + GAP_SIZE));
+      const rows = Math.floor(height / (DOT_SIZE + GAP_SIZE));
+      setGridSize({ cols, rows });
+    };
+
+    updateGridSize();
+    window.addEventListener("resize", updateGridSize);
+    return () => window.removeEventListener("resize", updateGridSize);
+  }, []);
+
+  const dots = useMemo(() => {
+    const { cols, rows } = gridSize;
+    const centerX = (cols - 1) / 2;
+    const centerY = (rows - 1) / 2;
+    const maxDist = Math.sqrt(centerX ** 2 + centerY ** 2);
+
+    return Array.from({ length: cols * rows }, (_, i) => {
+      const col = i % cols;
+      const row = Math.floor(i / cols);
+      const dist = Math.sqrt((col - centerX) ** 2 + (row - centerY) ** 2);
+      const opacity = Math.max(0.1, 1 - (dist / maxDist) ** 2);
+      const delay = Math.random() * 2;
+      return { opacity, delay };
+    });
+  }, [gridSize]);
+
+  return (
+    <div
+      className="absolute    inset-0 grid bg-black"
+      style={{
+        gridTemplateColumns: `repeat(${gridSize.cols}, ${DOT_SIZE}px)`,
+        gap: `${GAP_SIZE}px`,
+        justifyContent: "center",
+        alignContent: "center",
+      }}
+    >
+      {dots.map((dot, i) => (
+        <motion.div
+          key={i}
+          className="rounded-full bg-white/60"
+          style={{
+            width: DOT_SIZE,
+            height: DOT_SIZE,
+          }}
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{
+            opacity: dot.opacity,
+            scale: [1, 1.25, 1],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            repeatType: "mirror",
+            delay: dot.delay,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+
+
+
+interface Particle {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  opacity: number;
+  speedX: number;
+  speedY: number;
+}
+export const ParticlesBackgroundComponent = () => {
+  const [particles, setParticles] = useState<Particle[]>([]);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const [hasMounted, setHasMounted] = useState(false);
+
+  // Set initial dimensions and indicate that component has mounted
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+      setHasMounted(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!hasMounted) return;
+
+    // Create initial particles
+    const initialParticles = Array.from({ length: 50 }, (_, i) => ({
+      id: i,
+      x: Math.random() * dimensions.width,
+      y: Math.random() * dimensions.height,
+      size: Math.random() * 2 + 1,
+      opacity: Math.random() * 0.5 + 0.1,
+      speedX: (Math.random() - 0.5) * 0.5,
+      speedY: (Math.random() - 0.5) * 0.5,
+    }));
+
+    setParticles(initialParticles);
+
+    // Resize handler
+    const handleResize = () => {
+      setDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Particle animation
+    const animateInterval = setInterval(() => {
+      setParticles(prevParticles =>
+        prevParticles.map(particle => {
+          let newX = particle.x + particle.speedX;
+          let newY = particle.y + particle.speedY;
+
+          if (newX < 0 || newX > dimensions.width) {
+            newX = Math.random() * dimensions.width;
+          }
+          if (newY < 0 || newY > dimensions.height) {
+            newY = Math.random() * dimensions.height;
+          }
+
+          return {
+            ...particle,
+            x: newX,
+            y: newY,
+          };
+        })
+      );
+    }, 50);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      clearInterval(animateInterval);
+    };
+  }, [hasMounted, dimensions.width, dimensions.height]);
+
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {particles.map(particle => (
+        <motion.div
+          key={particle.id}
+          animate={{
+            x: particle.x,
+            y: particle.y,
+          }}
+          transition={{ duration: 5, ease: "linear" }}
+          className="absolute rounded-full bg-white"
+          style={{
+            width: particle.size,
+            height: particle.size,
+            opacity: particle.opacity,
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+
+interface GlowingProps {
+  starCount?: number;
+}
+export const GlowingParticles: React.FC<GlowingProps> = ({ starCount = 200 }) => {
+  const stars = Array.from({ length: starCount }, (_, i) => ({
+    id: i,
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+    size: Math.random() * 2 + 1,
+    delay: Math.random() * 5,
+  }));
+
+  return (
+    <div className="galaxy-container">
+      {stars.map((star) => (
+        <div
+          key={star.id}
+          className="star"
+          style={{
+            left: `${star.x}%`,
+            top: `${star.y}%`,
+            width: `${star.size}px`,
+            height: `${star.size}px`,
+            animationDelay: `${star.delay}s`,
+          }}
+        />
+      ))}
+    </div>
+  );
+};
 
 
 
@@ -409,42 +638,93 @@ export const BlinkingDotsComponent = () => {
 
 
 
-// export const  = () => {
-//   const numDots = 40;
 
-//   return (
-//     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-//       {[...Array(numDots)].map((_, i) => {
-//         const size = Math.random() * 4 + 2; // dot size: 2px to 6px
-//         const left = Math.random() * 100; // 0% to 100%
-//         const delay = Math.random() * 5; // seconds
-//         const duration = Math.random() * 5 + 5; // 5–10s
-//         const yOffset = Math.random() * 50 + 20; // 20–70px
 
-//         return (
-//           <motion.div
-//             key={i}
-//             className="absolute bg-white/30 rounded-full"
-//             style={{
-//               width: `${size}px`,
-//               height: `${size}px`,
-//               left: `${left}%`,
-//               top: "-10px", // Start above the screen
-//             }}
-//             animate={{
-//               y: [0, yOffset * 2],
-//               opacity: [0, 1, 0],
-//             }}
-//             transition={{
-//               duration,
-//               delay,
-//               repeat: Infinity,
-//               repeatType: "loop",
-//               ease: "easeInOut",
-//             }}
-//           />
-//         );
-//       })}
-//     </div>
-//   );
-// };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+interface Particlee {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  delay: number;
+}
+interface FloatingProps {
+  particleCount?: number;
+}
+export const FloatingParticles: React.FC<FloatingProps> = ({ particleCount = 50 }) => {
+  const particles: Particlee[] = Array.from({ length: particleCount }, (_, i) => ({
+    id: i,
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+    size: Math.random() * 4 + 2,
+    delay: Math.random() * 4,
+  }));
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+      {particles.map((particle) => (
+        <motion.div
+          key={particle.id}
+          className="absolute rounded-full bg-white"
+          style={{
+            left: `${particle.x}%`,
+            top: `${particle.y}%`,
+            width: particle.size,
+            height: particle.size,
+            boxShadow: `0 0 4px rgba(255, 255, 255, 0.6), 0 0 6px rgba(255, 255, 255, 0.4)`,
+            opacity: 0.8,
+          }}
+          animate={{
+            x: [0, 5, 0, -5, 0],
+            y: [0, -5, 0, 5, 0],
+            opacity: [0.5, 1, 0.5],
+            scale: [1, 1.2, 1],
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: 6,
+            ease: "easeInOut",
+            delay: particle.delay,
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+

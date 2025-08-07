@@ -1,6 +1,7 @@
 "use client";
 
-import { Copy, Eye } from "lucide-react";
+import {  Code2Icon, Copy, Eye, GitBranch } from "lucide-react";
+import Link from "next/link";
 
 interface HeroProps {
     activePattern?: string | null;
@@ -13,7 +14,7 @@ export default function Hero({ activePattern, setActivePattern, theme }: HeroPro
 
     return (
         <section className="h-screen flex items-center justify-center text-center px-4 sm:px-6 lg:px-8 pt-8 ">
-            <div className="max-w-4xl w-full mx-auto relative z-10">
+            <div className="max-w-4xl w-full mx-auto relative pt-10  z-10">
                 {/* Main Heading */}
                 <div className="mb-6 sm:mb-8">
                     <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-black dark:text-white mb-3">
@@ -29,6 +30,7 @@ export default function Hero({ activePattern, setActivePattern, theme }: HeroPro
                     Discover hand-crafted, responsive background animations and CSS particle systems. Seamlessly plug them into any project — built with Tailwind CSS and powered by Framer Motion.
                 </p>
 
+                
 
                 {/* Feature Highlights */}
                 <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 mb-10  ">
@@ -55,6 +57,25 @@ export default function Hero({ activePattern, setActivePattern, theme }: HeroPro
                     </div>
                 </div>
 
+                {/* Action Buttons */}
+                <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-10">
+                    <Link 
+                        href="/how-to-use"
+                        className="group flex items-center gap-2 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform "
+                    >
+                        <Code2Icon className="h-5 w-5  transition-transform duration-300"/>
+                        How to Use?
+                    </Link>
+                    
+                    <Link 
+                        href="/how-to-contribute"
+                        className="group flex items-center gap-2 px-3 py-2 bg-gray-800 hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-600 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform "
+                    >
+                        <GitBranch className="h-5 w-5  transition-transform duration-300" />
+                        How to Contribute?
+                    </Link>
+                </div>
+
                 {/* Stats */}
                 <div className={`flex justify-center gap-8 pt-6 border-t ${isPatternDark ? "border-white/20" : "border-gray-300 dark:border-gray-700"}`}>
                     <div className="text-center">
@@ -64,7 +85,6 @@ export default function Hero({ activePattern, setActivePattern, theme }: HeroPro
                     <div className="text-center">
                         <div className="text-2xl font-bold text-black dark:text-white">Free</div>
                         <div className="text-sm  text-black dark:text-white">Open to all</div>
-
                     </div>
                     <div className="text-center">
                         <div className="text-2xl font-bold text-black dark:text-white">Tailwind</div>

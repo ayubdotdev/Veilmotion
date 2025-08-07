@@ -1,15 +1,16 @@
 import { AnimatePresence } from "framer-motion";
-import { ArrowDown, Check, Copy, Eye, X } from "lucide-react";
+import { Check, Copy, Eye, X } from "lucide-react";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { motion } from "framer-motion";
 import { PatternComponents } from "../components/PatternComponents"
 import { patterns } from "../utils/patterns";
 import { ReturnPreview, useReturnPreview } from "./Return";
+import Favorite from "./Favorites";
 
 interface Pattern {
   id: string;
   name: string;
-  category: "Geometrics" | "Gradients" | "Effects" | "Floatings" | "Dots";
+  category: "Grids" | "Gradients" | "Effects" | "Dots";
   style: React.CSSProperties;
   component: React.FC;
   code: string;
@@ -20,14 +21,15 @@ interface PatternSelectorProps {
   setActivePattern?: Dispatch<SetStateAction<Pattern | null>>;
 }
 
-const categories = ["All", "Geometrics", "Gradients", "Effects", "Floatings", "Dots"] as const;
+const categories = ["All", "Grids","Gradients", "Effects", "Dots", "Favorites"] as const;
 type Category = (typeof categories)[number];
-
 
 export default function PatternSelector({ activePattern, setActivePattern }: PatternSelectorProps) {
   const [activeCategory, setActiveCategory] = useState<Category>("All");
   const [isCopied, setIsCopied] = useState<string | null>(null);
   const [previewPattern, setPreviewPattern] = useState<Pattern | null>(null);
+  const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  
   const {
     isPreviewActive,
     savePositionAndPreview,
@@ -35,6 +37,20 @@ export default function PatternSelector({ activePattern, setActivePattern }: Pat
     clearPreview
   } = useReturnPreview();
 
+  // Handle toggling favorites
+  const handleToggleFavorite = (patternId: string) => {
+    setFavorites(prev => {
+      const newFavorites = new Set(prev);
+      if (newFavorites.has(patternId)) {
+        newFavorites.delete(patternId);
+        console.log(`Removed ${patternId} from favorites`);
+      } else {
+        newFavorites.add(patternId);
+        console.log(`Added ${patternId} to favorites`);
+      }
+      return newFavorites;
+    });
+  };
 
   // Handle copying with improved feedback and error handling
   const handleCopyCode = async (pattern: Pattern, event: React.MouseEvent) => {
@@ -98,10 +114,12 @@ export default function PatternSelector({ activePattern, setActivePattern }: Pat
   // Filter patterns based on category
   const filteredPatterns = activeCategory === "All"
     ? patterns
+    : activeCategory === "Favorites"
+    ? patterns.filter((pattern: Pattern) => favorites.has(pattern.id))
     : patterns.filter((pattern: Pattern) => pattern.category === activeCategory);
 
   return (
-    <div className="min-h-screen bg-black  relative">
+    <div className="min-h-screen bg-black relative">
       <AnimatePresence>
         {previewPattern && (
           <motion.div
@@ -125,7 +143,7 @@ export default function PatternSelector({ activePattern, setActivePattern }: Pat
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           onClick={handleClearPreview}
-          className="fixed top-20 right-4 mt-8  z-50 bg-red-500 hover:bg-red-600 text-white p-3 rounded-full shadow-lg transition-colors"
+          className="fixed top-20 right-4 mt-8 z-50 bg-red-500 hover:bg-red-600 text-white p-3 rounded-full shadow-lg transition-colors"
         >
           <X size={20} />
         </motion.button>
@@ -143,39 +161,55 @@ export default function PatternSelector({ activePattern, setActivePattern }: Pat
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white">
-              Background Pattern Library
+            Explore Stunning Animated Backgrounds
             </h1>
             <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Choose from our collection of animated background patterns. Preview them live and copy the React code for your projects.
+              Choose from our collection of animated background patterns. <br />Preview them live and copy the React code for your projects.
             </p>
           </div>
 
-     {/* Category Tabs */}
-<div className="mb-8 flex justify-center">
-  <div className="grid grid-cols-3 md:flex md:flex-wrap md:justify-center bg-gray-100 dark:bg-gray-800 p-1 rounded-xl gap-2 w-full max-w-md lg:max-w-2xl">
-    {categories.map((category) => (
-      <button
-        key={category}
-        onClick={() => setActiveCategory(category)}
-        className={`relative text-sm font-medium transition-all px-4 py-2 rounded-lg text-center ${
-          activeCategory === category
-            ? "text-white shadow-md"
-            : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-        }`}
-      >
-        {activeCategory === category && (
-          <motion.div
-            layoutId="activeTab"
-            className="absolute inset-0 bg-blue-500 rounded-lg"
-            initial={false}
-            transition={{ type: "spring", stiffness: 400, damping: 30 }}
-          />
-        )}
-        <span className="relative z-10">{category}</span>
-      </button>
-    ))}
-  </div>
-</div>
+          {/* Category Tabs */}
+          <div className="mb-8 flex justify-center">
+            <div className="grid grid-cols-3 md:flex md:flex-wrap md:justify-center bg-gray-100 dark:bg-gray-800 p-1 rounded-xl gap-2 w-full max-w-md lg:max-w-2xl">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setActiveCategory(category)}
+                  className={`relative text-sm font-medium transition-all px-4 py-2 rounded-lg text-center ${
+                    activeCategory === category
+                      ? "text-white shadow-md"
+                      : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+                  }`}
+                >
+                  {activeCategory === category && (
+                    <motion.div
+                      layoutId="activeTab"
+                      className="absolute inset-0 bg-blue-500 rounded-lg"
+                      initial={false}
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    />
+                  )}
+                  <span className="relative z-10">{category}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Empty Favorites Message */}
+          {activeCategory === "Favorites" && favorites.size === 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center py-12"
+            >
+              <div className="text-gray-400 dark:text-gray-500 text-lg mb-2">
+                No favorites yet
+              </div>
+              <p className="text-gray-500 dark:text-gray-400 text-sm">
+                Click the heart icon on any pattern to add it to your favorites
+              </p>
+            </motion.div>
+          )}
 
           {/* Patterns Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -188,6 +222,13 @@ export default function PatternSelector({ activePattern, setActivePattern }: Pat
                 exit={{ opacity: 0, y: 20 }}
                 className="group relative bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
               >
+                {/* Favorite Heart Icon */}
+                <Favorite
+                  patternId={pattern.id}
+                  isFavorited={favorites.has(pattern.id)}
+                  onToggleFavorite={handleToggleFavorite}
+                />
+
                 {/* Pattern Preview Area */}
                 <div
                   className="relative h-48 overflow-hidden"

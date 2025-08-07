@@ -1,14 +1,14 @@
 import React from "react";
-import {  BlinkingDotsComponent, DotGridAnimations, DotNetworkComponent, MovingDotsComponent } from "@/bgs/Dots";
+import { BlinkingDotsComponent, DotGridAnimations, DotNetworkComponent, DotNetworkComponentv2, FadeDotComponent, MovingDotsComponent } from "@/bgs/Dots";
 import { GlowOrbsComponent } from "@/bgs/Effects";
-import {  GlowingParticles, ParticlesBackgroundComponent, RotatingParticles } from "@/bgs/Floatings";
-import { AnimatedBlackGridBackground, AnimatedGrid, RandomGeometricComponent, SphereBgComponent, } from "@/bgs/Geometrics";
-import { PurpleGradient, PurpleGradientTop } from "@/bgs/Gradients";
+import { FloatingParticles, GlowingParticles, ParticlesBackgroundComponent, } from "@/bgs/Dots";
+import { AnimatedBlackGridBackground, MagentaGrid, DarkBg, CoolBlueGrid, WarmAmberGrid, LimeFadeGrid, CyanBurstGrid, VioletMistGrid, MagentaFlame, NeonShock, GreenPunchGrid, ToxicPulse, } from "@/bgs/Geometrics";
+import { CyanGradient, CyanGradientBlack, CyanGradientBlackTop, CyanGradientTop, FuchsiaGradient, FuchsiaGradientBlack, FuchsiaGradientBlackTop, FuchsiaGradientTop, PurpleGradient, PurpleGradientBlackTop, PurpleGradientTop, RedGradient, RedGradientBlack, RedGradientBlackTop, RedGradientTop, TealGradient, TealGradientBlackTop, TealGradientTop, } from "@/bgs/Gradients";
 
 interface Pattern {
   id: string;
   name: string;
-  category: "Geometrics" | "Gradients" | "Effects" | "Floatings" | "Dots";
+  category: "Grids" | "Gradients" | "Effects" | "Dots";
   style: React.CSSProperties;
   component: React.FC;
   code: string;
@@ -16,557 +16,920 @@ interface Pattern {
 
 const patterns: Pattern[] = [
   //geometrics
- 
   {
-    id: "random-geometrics",
-    name: "Random Geometry",
-    category: "Geometrics",
-    style: {
-      backgroundColor: "black",
-    },
-    component: RandomGeometricComponent,
-    code: `import React, { useEffect, useRef, useState } from "react";
-  import { motion, AnimatePresence } from "framer-motion";
-  
-  interface Dot {
-    id: number;
-    x: number;
-    y: number;
-    size: number;
-    opacity: number;
-    color: number;
-    duration: number;
-    delay: number;
-  }
-  
-  export const PremiumDotsComponent = () => {
-    const [dots, setDots] = useState<Dot[]>([]);
-    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-    const containerRef = useRef<HTMLDivElement>(null);
-  
-    useEffect(() => {
-      const generateDots = () => {
-        const newDots = [];
-        const dotCount = 80;
-        for (let i = 0; i < dotCount; i++) {
-          newDots.push({
-            id: i,
-            x: Math.random() * 100,
-            y: Math.random() * 100,
-            size: Math.random() * 6 + 3,
-            opacity: Math.random() * 0.5 + 0.1,
-            color: Math.floor(Math.random() * 5),
-            duration: Math.random() * 4 + 4,
-            delay: Math.random() * 2,
-          });
-        }
-        setDots(newDots);
-      };
-      generateDots();
-    }, []);
-  
-    useEffect(() => {
-      const handleMouseMove = (e: MouseEvent) => {
-        if (containerRef.current) {
-          const rect = containerRef.current.getBoundingClientRect();
-          setMousePos({
-            x: ((e.clientX - rect.left) / rect.width) * 100,
-            y: ((e.clientY - rect.top) / rect.height) * 100,
-          });
-        }
-      };
-  
-      const container = containerRef.current;
-      if (container) {
-        container.addEventListener('mousemove', handleMouseMove);
-        return () => container.removeEventListener('mousemove', handleMouseMove);
-      }
-    }, []);
-  
-    const getColorClasses = (colorIndex: number): string => {
-      const colors = [
-        'bg-gradient-to-r from-blue-400 via-cyan-500 to-blue-600',
-        'bg-gradient-to-r from-purple-400 via-pink-500 to-red-500',
-        'bg-gradient-to-r from-emerald-400 via-teal-500 to-cyan-600',
-        'bg-gradient-to-r from-amber-400 via-orange-500 to-red-600',
-        'bg-gradient-to-r from-indigo-400 via-purple-500 to-pink-600',
-      ];
-      return colors[colorIndex];
-    };
-  
-    const getShadowClasses = (colorIndex: number): string => {
-      const shadows = [
-        'shadow-blue-500/40', 'shadow-pink-500/40', 'shadow-emerald-500/40',
-        'shadow-amber-500/40', 'shadow-purple-500/40',
-      ];
-      return shadows[colorIndex];
-    };
-  
-    return (
-      <div
-        ref={containerRef}
-        className="relative w-full h-full min-h-screen overflow-hidden bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950"
-      >
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-950/30 via-transparent to-purple-950/30 animate-pulse"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_70%,_rgba(120,119,198,0.1),_transparent_50%)]"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,_rgba(168,85,247,0.1),_transparent_50%)]"></div>
-  
-        <div className="absolute inset-0">
-          <AnimatePresence>
-            {dots.map((dot) => {
-              const distanceFromMouse = Math.sqrt(
-                Math.pow(dot.x - mousePos.x, 2) + Math.pow(dot.y - mousePos.y, 2)
-              );
-              const mouseInfluence = Math.max(0, 25 - distanceFromMouse) / 25;
-  
-              return (
-                <motion.div
-                  key={dot.id}
-                  className={\`absolute rounded-full \${getColorClasses(dot.color)} shadow-lg \${getShadowClasses(dot.color)} backdrop-blur-sm\`}
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={{
-                    scale: 1 + mouseInfluence * 0.8,
-                    opacity: Math.min(1, dot.opacity + mouseInfluence * 0.4),
-                    x: [0, Math.random() * 40 - 20, 0],
-                    y: [0, Math.random() * 40 - 20, 0],
-                    filter: mouseInfluence > 0.3 ? 'brightness(1.5)' : 'brightness(1)',
-                  }}
-                  transition={{
-                    duration: dot.duration,
-                    delay: dot.delay,
-                    repeat: Infinity,
-                    repeatType: "mirror",
-                    ease: "easeInOut",
-                  }}
-                  style={{
-                    left: \`\${dot.x}%\`,
-                    top: \`\${dot.y}%\`,
-                    width: \`\${dot.size}px\`,
-                    height: \`\${dot.size}px\`,
-                  }}
-                />
-              );
-            })}
-          </AnimatePresence>
-        </div>
-  
-        <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-40">
-          <defs>
-            <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="rgba(59, 130, 246, 0.6)" />
-              <stop offset="50%" stopColor="rgba(168, 85, 247, 0.4)" />
-              <stop offset="100%" stopColor="rgba(236, 72, 153, 0.6)" />
-            </linearGradient>
-          </defs>
-          {dots.map((dot, i) =>
-            dots.slice(i + 1).map((otherDot, j) => {
-              const distance = Math.sqrt(
-                Math.pow(dot.x - otherDot.x, 2) + Math.pow(dot.y - otherDot.y, 2)
-              );
-              if (distance < 18) {
-                const opacity = Math.max(0, (18 - distance) / 18) * 0.5;
-                return (
-                  <motion.line
-                    key={\`\${i}-\${j}\`}
-                    x1={\`\${dot.x}%\`} y1={\`\${dot.y}%\`}
-                    x2={\`\${otherDot.x}%\`} y2={\`\${otherDot.y}%\`}
-                    stroke="url(#lineGradient)"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: [opacity, opacity * 2.5, opacity] }}
-                    transition={{ duration: 2 + Math.random() * 2, repeat: Infinity }}
-                    strokeWidth={opacity * 2}
-                  />
-                );
-              }
-              return null;
-            })
-          )}
-        </svg>
-      </div>
-    );
-  };`
-  },
-  {
-    id: "dark-sphere",
-    name: "Dark Sphere",
-    category: "Geometrics",
+    id: "dark-grid",
+    name: "Dark Grid",
+    category: "Grids",
     style: {
       backgroundColor: "black"
     },
-    component: SphereBgComponent,
-    code: `interface SphereBgComponentProps {
-    children?: React.ReactNode;
+    component: DarkBg,
+    code: `
+import { motion } from "framer-motion";
+import clsx from "clsx";
+import { useRef, useEffect, useState } from "react";
+export const DarkBg = () => {
+  const gridSize = 32;
+  const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 1920;
+  const screenHeight = typeof window !== 'undefined' ? window.innerHeight : 1080;
+
+  const verticalLines = Math.ceil(screenWidth / gridSize);
+  const horizontalLines = Math.ceil(screenHeight / gridSize);
+
+  const allLines = [];
+  for (let i = 0; i < horizontalLines; i++) {
+    allLines.push({ type: 'horizontal', index: i, position: i * gridSize, staggerIndex: i });
   }
-  export const SphereBgComponent: React.FC<SphereBgComponentProps> = ({ children }) => {
-    const gridSize = 32;
-    const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 1920;
-    const screenHeight = typeof window !== 'undefined' ? window.innerHeight : 1080;
-    
-    const verticalLines = Math.ceil(screenWidth / gridSize);
-    const horizontalLines = Math.ceil(screenHeight / gridSize);
-  
-    const containerVariants = {
-      hidden: { opacity: 0 },
-      visible: {
-        opacity: 1,
-        transition: {
-          staggerChildren: 0.12,
-          delayChildren: 0.3
-        }
+  for (let i = 0; i < verticalLines; i++) {
+    allLines.push({ type: 'vertical', index: i, position: i * gridSize, staggerIndex: horizontalLines + i });
+  }
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.12,
+        delayChildren: 0.3
       }
-    };
-    
-    const lineVariants = {
-      hidden: {
-        scaleY: 0,
-        opacity: 0
-      },
-      visible: {
-        scaleY: 1,
-        opacity: 0.3,
-        transition: {
-          duration: 1.4,
-          ease: "easeOut"
-        }
-      }
-    };
-    
-    const horizontalLineVariants = {
-      hidden: {
-        scaleX: 0,
-        opacity: 0
-      },
-      visible: {
-        scaleX: 1,
-        opacity: 0.3,
-        transition: {
-          duration: 1.4,
-          ease: "easeOut"
-        }
-      }
-    };
-    
-    const radialVariants = {
-      hidden: {
-        scale: 0,
-        opacity: 0
-      },
-      visible: {
-        scale: 1,
-        opacity: 0.15,
-        transition: {
-          duration: 2.0,
-          ease: "easeOut",
-          delay: 1.5
-        }
-      }
-    };
-  
-    const allLines = [];
-  
-    for (let i = 0; i < horizontalLines; i++) {
-      allLines.push({
-        type: 'horizontal',
-        index: i,
-        position: i * gridSize,
-        staggerIndex: i
-      });
     }
-    
-    for (let i = 0; i < verticalLines; i++) {
-      allLines.push({
-        type: 'vertical',
-        index: i,
-        position: i * gridSize,
-        staggerIndex: horizontalLines + i
-      });
+  };
+
+  const lineVariants = {
+    hidden: { scale: 0, opacity: 0 },
+    visible: { scale: 1, opacity: 0.3, transition: { duration: 1.4, ease: "easeOut" as const } }
+  };
+
+  const radialVariants = {
+    hidden: { scale: 0, opacity: 0 },
+    visible: {
+      scale: 1,
+      opacity: 0.15,
+      transition: {
+        duration: 2.0,
+        ease: "easeOut" as const,
+        delay: 1.5
+      }
     }
-  
-    return (
-      <div className="min-h-screen w-full bg-[#020617] relative overflow-hidden">
-        {/* Animated Grid Background */}
+  };
+
+  return (
+    <div className="min-h-screen w-full bg-[#020617] relative overflow-hidden">
+      <motion.div
+        className="absolute inset-0 z-0"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        {allLines.map((line) => (
+          <motion.div
+            key={\`\${line.type}-\${line.index}\`}
+            className={\`absolute \${line.type === 'vertical' ? 'top-0 h-full w-px' : 'left-0 w-full h-px'} bg-slate-600\`}
+            style={line.type === 'vertical' ? { left: \`\${line.position}px\` } : { top: \`\${line.position}px\` }}
+            variants={lineVariants}
+            custom={line.staggerIndex}
+            initial="hidden"
+            animate="visible"
+          />
+        ))}
+
         <motion.div
-          className="absolute inset-0 z-0"
-          variants={containerVariants}
+          className="absolute inset-0"
+          style={{ background: \`radial-gradient(circle at 50% 50%, rgba(139,92,246,0.15) 0%, transparent 70%)\` }}
+          variants={radialVariants}
           initial="hidden"
           animate="visible"
-        >
-          {/* All Grid Lines with Top-to-Bottom Stagger */}
-          {allLines.map((line) => (
-            <motion.div
-              key={\`\${line.type}-\${line.index}\`}
-              className={\`absolute \${line.type === 'vertical' ? 'top-0 h-full w-px' : 'left-0 w-full h-px'} bg-slate-600\`}
-              style={
-                line.type === 'vertical'
-                  ? { left: \`\${line.position}px\` }
-                  : { top: \`\${line.position}px\` }
-              }
-              variants={line.type === 'vertical' ? lineVariants : horizontalLineVariants}
-              custom={line.staggerIndex}
-              transition={{
-                delay: line.staggerIndex * 0.12,
-                duration: 1.4,
-                ease: "easeOut"
-              }}
-              initial="hidden"
-              animate="visible"
-            />
-          ))}
-  
-          {/* Animated Radial Gradient Overlay */}
-          <motion.div
-            className="absolute inset-0"
-            style={{
-              background: \`radial-gradient(circle at 50% 50%, rgba(139,92,246,0.15) 0%, transparent 70%)\`
-            }}
-            variants={radialVariants}
-          />
-        </motion.div>
-  
-        {/* Content Layer */}
-        <div className="relative z-10">
-          {children}
-        </div>
-      </div>
-    );
-  };`
-  },  
+        />
+      </motion.div>
+    </div>
+  );
+};`
+  },
   {
     id: "black-grid",
     name: "Black Grid",
-    category: "Geometrics",
+    category: "Grids",
     style: {
       backgroundColor: "black",
     },
     component: AnimatedBlackGridBackground,
-    code: `interface AnimatedBlackGridBackgroundProps {
-    children?: React.ReactNode;
-  }
-  export const AnimatedBlackGridBackground: React.FC<AnimatedBlackGridBackgroundProps> = ({ children }) => {
+    code: `
+    import { motion } from "framer-motion";
+    import clsx from "clsx";
+    import { useRef, useEffect, useState } from "react";
+    export const AnimatedBlackGridBackground = () => {
+      const gridSize = 40;
+      const lines = 100;
+      return (
+        <div className="min-h-screen w-full bg-black relative overflow-hidden">
+          <motion.div
+            className="absolute inset-0 z-0"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+          >
+            {[...Array(lines)].map((_, i) => {
+              const offset = i - Math.floor(lines / 2);
+              return (
+                <motion.div
+                  key={\`h-\${i}\`}
+                  className="absolute left-0 w-full border-t border-slate-800"
+                  style={{ top: \`calc(50% + \${offset * gridSize}px)\` }}
+                  initial={{ scaleX: 0, originX: 0.5 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{
+                    duration: 0.6,
+                    ease: "easeOut",
+                    delay: Math.abs(offset) * 0.01,
+                  }}
+                />
+              );
+            })}
+    
+            {[...Array(lines)].map((_, i) => {
+              const offset = i - Math.floor(lines / 2);
+              return (
+                <motion.div
+                  key={\`v-\${i}\`}
+                  className="absolute top-0 h-full border-l border-slate-800"
+                  style={{ left: \`calc(50% + \${offset * gridSize}px)\` }}
+                  initial={{ scaleY: 0, originY: 0.5 }}
+                  animate={{ scaleY: 1 }}
+                  transition={{
+                    duration: 0.6,
+                    ease: "easeOut",
+                    delay: Math.abs(offset) * 0.01,
+                  }}
+                />
+              );
+            })}
+          </motion.div>
+        </div>
+      );
+    };`
+  },
+
+
+  //linear//
+  {
+    id: "neon-lime-grid",
+    name: "Linear - Cyber Punk Shock",
+    category: "Grids",
+    style: {},
+    component: NeonShock,
+    code: `
+  "use client";
+  
+  import React from "react";
+  import { motion } from "framer-motion";
+  
+  export const NeonShock = () => {
     const gridSize = 40;
-    const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 1920;
-    const screenHeight = typeof window !== 'undefined' ? window.innerHeight : 1080;
-  
-    const verticalLines = Math.ceil(screenWidth / gridSize);
-    const horizontalLines = Math.ceil(screenHeight / gridSize);
-  
-    const lineVariants = {
-      hidden: {
-        scale: 0,
-        opacity: 0
-      },
-      visible: {
-        scale: 1,
-        opacity: 0.4,
-        transition: {
-          duration: 0.8,
-          ease: "easeOut"
-        }
-      }
-    };
+    const lines = 100;
   
     return (
-      <div className="min-h-screen w-full bg-black relative overflow-hidden">
-        {/* Grid lines rendered without staggered parent */}
-        <div className="absolute inset-0 z-0">
-          {/* Vertical Lines */}
-          {Array.from({ length: verticalLines }).map((_, i) => (
-            <motion.div
-              key={\`v-\${i}\`}
-              className="absolute top-0 h-full w-px"
-              style={{
-                left: \`\${i * gridSize}px\`,
-                backgroundColor: '#6B7280'
-              }}
-              variants={lineVariants}
-              initial="hidden"
-              animate="visible"
-            />
-          ))}
+      <div className="min-h-screen w-full bg-[#081104] relative overflow-hidden">
+        <motion.div
+          className="absolute inset-0 z-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+        >
+          {[...Array(lines)].map((_, i) => {
+            const offset = i - Math.floor(lines / 2);
+            return (
+              <motion.div
+                key={\`h-\${i}\`}
+                className="absolute left-0 w-full border-t border-lime-400/20"
+                style={{ top: \`calc(50% + \${offset * gridSize}px)\` }}
+                initial={{ scaleX: 0, originX: 0.5 }}
+                animate={{ scaleX: 1 }}
+                transition={{
+                  duration: 0.6,
+                  ease: "easeOut",
+                  delay: Math.abs(offset) * 0.01,
+                }}
+              />
+            );
+          })}
   
-          {/* Horizontal Lines */}
-          {Array.from({ length: horizontalLines }).map((_, i) => (
-            <motion.div
-              key={\`h-\${i}\`}
-              className="absolute left-0 w-full h-px"
-              style={{
-                top: \`\${i * gridSize}px\`,
-                backgroundColor: '#6B7280'
-              }}
-              variants={lineVariants}
-              initial="hidden"
-              animate="visible"
-            />
-          ))}
-        </div>
+          {[...Array(lines)].map((_, i) => {
+            const offset = i - Math.floor(lines / 2);
+            return (
+              <motion.div
+                key={\`v-\${i}\`}
+                className="absolute top-0 h-full border-l border-lime-400/20"
+                style={{ left: \`calc(50% + \${offset * gridSize}px)\` }}
+                initial={{ scaleY: 0, originY: 0.5 }}
+                animate={{ scaleY: 1 }}
+                transition={{
+                  duration: 0.6,
+                  ease: "easeOut",
+                  delay: Math.abs(offset) * 0.01,
+                }}
+              />
+            );
+          })}
   
-        {/* Content Layer */}
-        <div className="relative z-10">
-          {children}
-        </div>
+          <motion.div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: \`
+linear-gradient(
+  to top,
+  rgba(0, 255, 200, 0.25),  /* teal neon */
+  rgba(128, 0, 255, 0.15),  /* purple glow */
+  rgba(0, 0, 0, 0.5) 70%    /* shadowed base */
+)                    \`,
+              backgroundSize: "100% 100%",
+            }}
+          />
+        </motion.div>
       </div>
     );
   };`
-  },  
+  },
   {
-    id: "animated-grid",
-    name: "Animated Grid",
-    category: "Geometrics",
-    style: {
-    
-    },
-    component: AnimatedGrid,
-    code: `interface AnimatedGridProps {
-  direction?: "right" | "left" | "up" | "down" | "diagonal";
-  speed?: number;
-  borderColor?: string;
-  squareSize?: number;
-  hoverFillColor?: string;
-}
-export const AnimatedGrid: React.FC<AnimatedGridProps> = ({
-  direction = "right",
-  speed = 1,
-  borderColor = "#999",
-  squareSize = 40,
-  hoverFillColor = "#222",
-}) => {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const requestRef = useRef<number | null>(null);
-  const numSquaresX = useRef<number>(0);
-  const numSquaresY = useRef<number>(0);
-  const gridOffset = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
-  const hoveredSquareRef = useRef<{ x: number; y: number } | null>(null);
+    id: "toxicpulse-grid",
+    name: "Linear - Toxic Pulse",
+    category: "Grids",
+    style: {},
+    component: ToxicPulse,
+    code: `
+  "use client";
+  
+  import React from "react";
+  import { motion } from "framer-motion";
+  
+  export const CyanBurstGrid = () => {
+    const gridSize = 40;
+    const lines = 100;
+  
+    return (
+      <div className="min-h-screen w-full bg-[#0f0318] relative overflow-hidden">
+        <motion.div
+          className="absolute inset-0 z-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+        >
+          {[...Array(lines)].map((_, i) => {
+            const offset = i - Math.floor(lines / 2);
+            return (
+              <motion.div
+                key={\`h-\${i}\`}
+                className="absolute left-0 w-full border-t border-fuchsia-500/20"
+                style={{ top: \`calc(50% + \${offset * gridSize}px)\` }}
+                initial={{ scaleX: 0, originX: 0.5 }}
+                animate={{ scaleX: 1 }}
+                transition={{
+                  duration: 0.6,
+                  ease: "easeOut",
+                  delay: Math.abs(offset) * 0.01,
+                }}
+              />
+            );
+          })}
+  
+          {[...Array(lines)].map((_, i) => {
+            const offset = i - Math.floor(lines / 2);
+            return (
+              <motion.div
+                key={\`v-\${i}\`}
+                className="absolute top-0 h-full border-l border-fuchsia-500/20"
+                style={{ left: \`calc(50% + \${offset * gridSize}px)\` }}
+                initial={{ scaleY: 0, originY: 0.5 }}
+                animate={{ scaleY: 1 }}
+                transition={{
+                  duration: 0.6,
+                  ease: "easeOut",
+                  delay: Math.abs(offset) * 0.01,
+                }}
+              />
+            );
+          })}
+  
+          <motion.div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: \`
+ linear-gradient(
+  to top,
+  rgba(0, 153, 255, 0.25),   /* electric blue */
+  rgba(204, 0, 255, 0.15),   /* magenta glow */
+  rgba(0, 0, 0, 0.4) 70%     /* deep shadow base */
+)
+    \`,
+              backgroundSize: "100% 100%",
+            }}
+          />
+        </motion.div>
+      </div>
+    );
+  };`
+  },
+  {
+    id: "cyanburst-grid",
+    name: "Linear - Cyan Burst",
+    category: "Grids",
+    style: {},
+    component: CyanBurstGrid,
+    code: `
+"use client";
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+import React from "react";
+import { motion } from "framer-motion";
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+export const CyanBurstGrid = () => {
+  const gridSize = 40;
+  const lines = 100;
 
-    const resizeCanvas = () => {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-      numSquaresX.current = Math.ceil(canvas.width / squareSize) + 1;
-      numSquaresY.current = Math.ceil(canvas.height / squareSize) + 1;
-    };
+  return (
+    <div className="min-h-screen w-full bg-[#020617] relative overflow-hidden">
+      <motion.div
+        className="absolute inset-0 z-0"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+        {[...Array(lines)].map((_, i) => {
+          const offset = i - Math.floor(lines / 2);
+          return (
+            <motion.div
+              key={\`h-\${i}\`}
+              className="absolute left-0 w-full border-t border-slate-600/30"
+              style={{ top: \`calc(50% + \${offset * gridSize}px)\` }}
+              initial={{ scaleX: 0, originX: 0.5 }}
+              animate={{ scaleX: 1 }}
+              transition={{
+                duration: 0.6,
+                ease: "easeOut",
+                delay: Math.abs(offset) * 0.01,
+              }}
+            />
+          );
+        })}
 
-    window.addEventListener("resize", resizeCanvas);
-    resizeCanvas();
+        {[...Array(lines)].map((_, i) => {
+          const offset = i - Math.floor(lines / 2);
+          return (
+            <motion.div
+              key={\`v-\${i}\`}
+              className="absolute top-0 h-full border-l border-slate-600/30"
+              style={{ left: \`calc(50% + \${offset * gridSize}px)\` }}
+              initial={{ scaleY: 0, originY: 0.5 }}
+              animate={{ scaleY: 1 }}
+              transition={{
+                duration: 0.6,
+                ease: "easeOut",
+                delay: Math.abs(offset) * 0.01,
+              }}
+            />
+          );
+        })}
 
-    const drawGrid = () => {
-      if (!ctx || !canvas) return;
+        <motion.div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: \`
+  linear-gradient(to top, rgba(34,211,238,0.25) 0%, transparent 65%)
+\`,
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      const startX = Math.floor(gridOffset.current.x / squareSize) * squareSize;
-      const startY = Math.floor(gridOffset.current.y / squareSize) * squareSize;
-
-      for (let x = startX; x < canvas.width + squareSize; x += squareSize) {
-        for (let y = startY; y < canvas.height + squareSize; y += squareSize) {
-          const squareX = x - (gridOffset.current.x % squareSize);
-          const squareY = y - (gridOffset.current.y % squareSize);
-
-          if (
-            hoveredSquareRef.current &&
-            Math.floor((x - startX) / squareSize) === hoveredSquareRef.current.x &&
-            Math.floor((y - startY) / squareSize) === hoveredSquareRef.current.y
-          ) {
-            ctx.fillStyle = hoverFillColor;
-            ctx.fillRect(squareX, squareY, squareSize, squareSize);
-          }
-
-          ctx.strokeStyle = borderColor;
-          ctx.strokeRect(squareX, squareY, squareSize, squareSize);
-        }
-      }
-
-      const gradient = ctx.createRadialGradient(
-        canvas.width / 2,
-        canvas.height / 2,
-        0,
-        canvas.width / 2,
-        canvas.height / 2,
-        Math.sqrt(canvas.width ** 2 + canvas.height ** 2) / 2
-      );
-      gradient.addColorStop(0, "rgba(0, 0, 0, 0)");
-      gradient.addColorStop(1, "#060010");
-
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-    };
-
-    const updateAnimation = () => {
-      const effectiveSpeed = Math.max(speed, 0.1);
-      switch (direction) {
-        case "right":
-          gridOffset.current.x = (gridOffset.current.x - effectiveSpeed + squareSize) % squareSize;
-          break;
-        case "left":
-          gridOffset.current.x = (gridOffset.current.x + effectiveSpeed + squareSize) % squareSize;
-          break;
-        case "up":
-          gridOffset.current.y = (gridOffset.current.y + effectiveSpeed + squareSize) % squareSize;
-          break;
-        case "down":
-          gridOffset.current.y = (gridOffset.current.y - effectiveSpeed + squareSize) % squareSize;
-          break;
-        case "diagonal":
-          gridOffset.current.x = (gridOffset.current.x - effectiveSpeed + squareSize) % squareSize;
-          gridOffset.current.y = (gridOffset.current.y - effectiveSpeed + squareSize) % squareSize;
-          break;
-      }
-
-      drawGrid();
-      requestRef.current = requestAnimationFrame(updateAnimation);
-    };
-
-    const handleMouseMove = (event: MouseEvent) => {
-      if (!canvas) return;
-      const rect = canvas.getBoundingClientRect();
-      const mouseX = event.clientX - rect.left;
-      const mouseY = event.clientY - rect.top;
-
-      const startX = Math.floor(gridOffset.current.x / squareSize) * squareSize;
-      const startY = Math.floor(gridOffset.current.y / squareSize) * squareSize;
-
-      const hoveredSquareX = Math.floor((mouseX + gridOffset.current.x - startX) / squareSize);
-      const hoveredSquareY = Math.floor((mouseY + gridOffset.current.y - startY) / squareSize);
-
-      if (
-        !hoveredSquareRef.current ||
-        hoveredSquareRef.current.x !== hoveredSquareX ||
-        hoveredSquareRef.current.y !== hoveredSquareY
-      ) {
-        hoveredSquareRef.current = { x: hoveredSquareX, y: hoveredSquareY };
-      }
-    };
-
-    const handleMouseLeave = () => {
-      hoveredSquareRef.current = null;
-    };
-
-    canvas.addEventListener("mousemove", handleMouseMove);
-    canvas.addEventListener("mouseleave", handleMouseLeave);
-    requestRef.current = requestAnimationFrame(updateAnimation);
-
-    return () => {
-      window.removeEventListener("resize", resizeCanvas);
-      if (requestRef.current) cancelAnimationFrame(requestRef.current);
-      canvas.removeEventListener("mousemove", handleMouseMove);
-      canvas.removeEventListener("mouseleave", handleMouseLeave);
-    };
-  }, [direction, speed, borderColor, hoverFillColor, squareSize]);
-
-  return <canvas ref={canvasRef} className="w-full h-full border-none block" />;
+            backgroundSize: "100% 100%",
+          }}
+        />
+      </motion.div>
+    </div>
+  );
 };`
   },
-    
+  {
+
+    id: "diagonal-grid",
+    name: "Linear - Indigo Mist",
+    category: "Grids",
+    style: {},
+    component: VioletMistGrid,
+    code: `
+"use client";
+
+import React from "react";
+import { motion } from "framer-motion";
+
+export const MagentaGrid = () => {
+  const gridSize = 40;
+  const lines = 100;
+
+  return (
+    <div className="min-h-screen w-full bg-[#020617] relative overflow-hidden">
+      <motion.div
+        className="absolute inset-0 z-0"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+        {[...Array(lines)].map((_, i) => {
+          const offset = i - Math.floor(lines / 2);
+          return (
+            <motion.div
+              key={\`h-\${i}\`}
+              className="absolute left-0 w-full border-t border-slate-600/30"
+              style={{ top: \`calc(50% + \${offset * gridSize}px)\` }}
+              initial={{ scaleX: 0, originX: 0.5 }}
+              animate={{ scaleX: 1 }}
+              transition={{
+                duration: 0.6,
+                ease: "easeOut",
+                delay: Math.abs(offset) * 0.01,
+              }}
+            />
+          );
+        })}
+
+        {[...Array(lines)].map((_, i) => {
+          const offset = i - Math.floor(lines / 2);
+          return (
+            <motion.div
+              key={\`v-\${i}\`}
+              className="absolute top-0 h-full border-l border-slate-600/30"
+              style={{ left: \`calc(50% + \${offset * gridSize}px)\` }}
+              initial={{ scaleY: 0, originY: 0.5 }}
+              animate={{ scaleY: 1 }}
+              transition={{
+                duration: 0.6,
+                ease: "easeOut",
+                delay: Math.abs(offset) * 0.01,
+              }}
+            />
+          );
+        })}
+
+        <motion.div
+          className="absolute inset-0"
+          style={{
+             backgroundImage: \`
+  linear-gradient(to top, rgba(79,70,229,0.5) 0%, transparent 65%)
+\`
+            backgroundSize: "100% 100%",
+          }}
+        />
+      </motion.div>
+    </div>
+  );
+};`
+  },
+  {
+    id: "magenta-flame-grid",
+    name: "Linear - Magenta Flame",
+    category: "Grids",
+    style: {},
+    component: MagentaFlame,
+    code: `
+  "use client";
+  
+  import React from "react";
+  import { motion } from "framer-motion";
+  
+  export const CyanBurstGrid = () => {
+    const gridSize = 40;
+    const lines = 100;
+  
+    return (
+      <div className="min-h-screen w-full bg-[#0f0318] relative overflow-hidden">
+        <motion.div
+          className="absolute inset-0 z-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+        >
+          {[...Array(lines)].map((_, i) => {
+            const offset = i - Math.floor(lines / 2);
+            return (
+              <motion.div
+                key={\`h-\${i}\`}
+                className="absolute left-0 w-full border-t border-fuchsia-500/20"
+                style={{ top: \`calc(50% + \${offset * gridSize}px)\` }}
+                initial={{ scaleX: 0, originX: 0.5 }}
+                animate={{ scaleX: 1 }}
+                transition={{
+                  duration: 0.6,
+                  ease: "easeOut",
+                  delay: Math.abs(offset) * 0.01,
+                }}
+              />
+            );
+          })}
+  
+          {[...Array(lines)].map((_, i) => {
+            const offset = i - Math.floor(lines / 2);
+            return (
+              <motion.div
+                key={\`v-\${i}\`}
+                className="absolute top-0 h-full border-l border-fuchsia-500/20"
+                style={{ left: \`calc(50% + \${offset * gridSize}px)\` }}
+                initial={{ scaleY: 0, originY: 0.5 }}
+                animate={{ scaleY: 1 }}
+                transition={{
+                  duration: 0.6,
+                  ease: "easeOut",
+                  delay: Math.abs(offset) * 0.01,
+                }}
+              />
+            );
+          })}
+  
+          <motion.div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: \`
+ linear-gradient(to top,  rgba(236,72,153,0.15) 0%, rgba(168,85,247,0.05) 40%, transparent 70%)              \`,
+              backgroundSize: "100% 100%",
+            }}
+          />
+        </motion.div>
+      </div>
+    );
+  };`
+  },
+
+  //radial//
+  {
+    id: "magenta-grid",
+    name: "Radial - Magenta Touch",
+    category: "Grids",
+    style: {},
+    component: MagentaGrid,
+    code: `
+"use client";
+
+import React from "react";
+import { motion } from "framer-motion";
+
+export const MagentaGrid = () => {
+  const gridSize = 40;
+  const lines = 100;
+
+  return (
+    <div className="min-h-screen w-full bg-[#020617] relative overflow-hidden">
+      <motion.div
+        className="absolute inset-0 z-0"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+        {[...Array(lines)].map((_, i) => {
+          const offset = i - Math.floor(lines / 2);
+          return (
+            <motion.div
+              key={\`h-\${i}\`}
+              className="absolute left-0 w-full border-t border-slate-600/30"
+              style={{ top: \`calc(50% + \${offset * gridSize}px)\` }}
+              initial={{ scaleX: 0, originX: 0.5 }}
+              animate={{ scaleX: 1 }}
+              transition={{
+                duration: 0.6,
+                ease: "easeOut",
+                delay: Math.abs(offset) * 0.01,
+              }}
+            />
+          );
+        })}
+
+        {[...Array(lines)].map((_, i) => {
+          const offset = i - Math.floor(lines / 2);
+          return (
+            <motion.div
+              key={\`v-\${i}\`}
+              className="absolute top-0 h-full border-l border-slate-600/30"
+              style={{ left: \`calc(50% + \${offset * gridSize}px)\` }}
+              initial={{ scaleY: 0, originY: 0.5 }}
+              animate={{ scaleY: 1 }}
+              transition={{
+                duration: 0.6,
+                ease: "easeOut",
+                delay: Math.abs(offset) * 0.01,
+              }}
+            />
+          );
+        })}
+
+        <motion.div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: \`radial-gradient(circle at 50% 60%, rgba(236,72,153,0.15) 0%, rgba(168,85,247,0.05) 40%, transparent 70%)\`,
+            backgroundSize: "100% 100%",
+          }}
+        />
+      </motion.div>
+    </div>
+  );
+};`
+  },
+  {
+    id: "coolblue-grid",
+    name: "Radial - Cool Blue",
+    category: "Grids",
+    style: {},
+    component: CoolBlueGrid,
+    code: `
+"use client";
+
+import React from "react";
+import { motion } from "framer-motion";
+
+export const CoolBlueGrid = () => {
+  const gridSize = 40;
+  const lines = 100;
+
+  return (
+    <div className="min-h-screen w-full bg-[#020617] relative overflow-hidden">
+      <motion.div
+        className="absolute inset-0 z-0"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+        {[...Array(lines)].map((_, i) => {
+          const offset = i - Math.floor(lines / 2);
+          return (
+            <motion.div
+              key={\`h-\${i}\`}
+              className="absolute left-0 w-full border-t border-slate-600/30"
+              style={{ top: \`calc(50% + \${offset * gridSize}px)\` }}
+              initial={{ scaleX: 0, originX: 0.5 }}
+              animate={{ scaleX: 1 }}
+              transition={{
+                duration: 0.6,
+                ease: "easeOut",
+                delay: Math.abs(offset) * 0.01,
+              }}
+            />
+          );
+        })}
+
+        {[...Array(lines)].map((_, i) => {
+          const offset = i - Math.floor(lines / 2);
+          return (
+            <motion.div
+              key={\`v-\${i}\`}
+              className="absolute top-0 h-full border-l border-slate-600/30"
+              style={{ left: \`calc(50% + \${offset * gridSize}px)\` }}
+              initial={{ scaleY: 0, originY: 0.5 }}
+              animate={{ scaleY: 1 }}
+              transition={{
+                duration: 0.6,
+                ease: "easeOut",
+                delay: Math.abs(offset) * 0.01,
+              }}
+            />
+          );
+        })}
+
+        <motion.div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: \`
+  radial-gradient(circle at 50% 50%, rgba(56,189,248,0.2) 0%, transparent 70%)
+\`,
+            backgroundSize: "100% 100%",
+          }}
+        />
+      </motion.div>
+    </div>
+  );
+};`
+  },
+  {
+    id: "warmamber-grid",
+    name: "Radial - Warm Amber",
+    category: "Grids",
+    style: {},
+    component: WarmAmberGrid,
+    code: `
+"use client";
+
+import React from "react";
+import { motion } from "framer-motion";
+
+export const WarmAmberGrid = () => {
+  const gridSize = 40;
+  const lines = 100;
+
+  return (
+    <div className="min-h-screen w-full bg-[#020617] relative overflow-hidden">
+      <motion.div
+        className="absolute inset-0 z-0"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+        {[...Array(lines)].map((_, i) => {
+          const offset = i - Math.floor(lines / 2);
+          return (
+            <motion.div
+              key={\`h-\${i}\`}
+              className="absolute left-0 w-full border-t border-slate-600/30"
+              style={{ top: \`calc(50% + \${offset * gridSize}px)\` }}
+              initial={{ scaleX: 0, originX: 0.5 }}
+              animate={{ scaleX: 1 }}
+              transition={{
+                duration: 0.6,
+                ease: "easeOut",
+                delay: Math.abs(offset) * 0.01,
+              }}
+            />
+          );
+        })}
+
+        {[...Array(lines)].map((_, i) => {
+          const offset = i - Math.floor(lines / 2);
+          return (
+            <motion.div
+              key={\`v-\${i}\`}
+              className="absolute top-0 h-full border-l border-slate-600/30"
+              style={{ left: \`calc(50% + \${offset * gridSize}px)\` }}
+              initial={{ scaleY: 0, originY: 0.5 }}
+              animate={{ scaleY: 1 }}
+              transition={{
+                duration: 0.6,
+                ease: "easeOut",
+                delay: Math.abs(offset) * 0.01,
+              }}
+            />
+          );
+        })}
+
+        <motion.div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: \`
+  radial-gradient(circle at 50% 50%, rgba(251,191,36,0.2) 0%, transparent 70%)
+\`,
+
+            backgroundSize: "100% 100%",
+          }}
+        />
+      </motion.div>
+    </div>
+  );
+};`
+  },
+  {
+    id: "limefade-grid",
+    name: "Radial - Lime Fade",
+    category: "Grids",
+    style: {},
+    component: LimeFadeGrid,
+    code: `
+"use client";
+
+import React from "react";
+import { motion } from "framer-motion";
+
+export const LimeFadeGrid = () => {
+  const gridSize = 40;
+  const lines = 100;
+
+  return (
+    <div className="min-h-screen w-full bg-[#020617] relative overflow-hidden">
+      <motion.div
+        className="absolute inset-0 z-0"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+        {[...Array(lines)].map((_, i) => {
+          const offset = i - Math.floor(lines / 2);
+          return (
+            <motion.div
+              key={\`h-\${i}\`}
+              className="absolute left-0 w-full border-t border-slate-600/30"
+              style={{ top: \`calc(50% + \${offset * gridSize}px)\` }}
+              initial={{ scaleX: 0, originX: 0.5 }}
+              animate={{ scaleX: 1 }}
+              transition={{
+                duration: 0.6,
+                ease: "easeOut",
+                delay: Math.abs(offset) * 0.01,
+              }}
+            />
+          );
+        })}
+
+        {[...Array(lines)].map((_, i) => {
+          const offset = i - Math.floor(lines / 2);
+          return (
+            <motion.div
+              key={\`v-\${i}\`}
+              className="absolute top-0 h-full border-l border-slate-600/30"
+              style={{ left: \`calc(50% + \${offset * gridSize}px)\` }}
+              initial={{ scaleY: 0, originY: 0.5 }}
+              animate={{ scaleY: 1 }}
+              transition={{
+                duration: 0.6,
+                ease: "easeOut",
+                delay: Math.abs(offset) * 0.01,
+              }}
+            />
+          );
+        })}
+
+        <motion.div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: \`
+  radial-gradient(circle at 50% 50%, rgba(132,204,22,0.1) 0%, transparent 80%)
+\`,
+
+            backgroundSize: "100% 100%",
+          }}
+        />
+      </motion.div>
+    </div>
+  );
+};`
+  },
+  {
+    id: "greenpunch-grid",
+    name: "Radial - Green Punch",
+    category: "Grids",
+    style: {},
+    component: GreenPunchGrid,
+    code: `
+"use client";
+
+import React from "react";
+import { motion } from "framer-motion";
+
+export const PinkRoseGrid = () => {
+  const gridSize = 40;
+  const lines = 100;
+
+  return (
+    <div className="min-h-screen w-full bg-[#020617] relative overflow-hidden">
+      <motion.div
+        className="absolute inset-0 z-0"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+        {[...Array(lines)].map((_, i) => {
+          const offset = i - Math.floor(lines / 2);
+          return (
+            <motion.div
+              key={\`h-\${i}\`}
+              className="absolute left-0 w-full border-t border-slate-600/30"
+              style={{ top: \`calc(50% + \${offset * gridSize}px)\` }}
+              initial={{ scaleX: 0, originX: 0.5 }}
+              animate={{ scaleX: 1 }}
+              transition={{
+                duration: 0.6,
+                ease: "easeOut",
+                delay: Math.abs(offset) * 0.01,
+              }}
+            />
+          );
+        })}
+
+        {[...Array(lines)].map((_, i) => {
+          const offset = i - Math.floor(lines / 2);
+          return (
+            <motion.div
+              key={\`v-\${i}\`}
+              className="absolute top-0 h-full border-l border-slate-600/30"
+              style={{ left: \`calc(50% + \${offset * gridSize}px)\` }}
+              initial={{ scaleY: 0, originY: 0.5 }}
+              animate={{ scaleY: 1 }}
+              transition={{
+                duration: 0.6,
+                ease: "easeOut",
+                delay: Math.abs(offset) * 0.01,
+              }}
+            />
+          );
+        })}
+
+        <motion.div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: \`
+            radial-gradient(circle at 50% 50%, rgba(34,197,94,0.2) 0%, transparent 60%)
+\`,
+
+            backgroundSize: "100% 100%",
+          }}
+        />
+      </motion.div>
+    </div>
+  );
+};`
+  },
+
 
   //gradients
   {
-    id: "purple-gradient",
-    name: "Purple Gradient",
+    id: "indigo-gradient-v1",
+    name: "Indigo Gradient v1",
     category: "Gradients",
     style: {
     },
@@ -593,7 +956,6 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
         }}
       />
 
-      {/* Your Foreground Content */}
       <div className="relative z-10">{children}</div>
     </div>
   );
@@ -601,8 +963,8 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
 `
   },
   {
-    id: "purple-gradient-top",
-    name: "Purple Gradient Bottom",
+    id: "indigo-gradient-v2",
+    name: "Indigo Gradient v2",
     category: "Gradients",
     style: {
     },
@@ -637,6 +999,611 @@ export const PurpleGradientTop: React.FC<PurpleGradientTopProps> = ({ children }
 };
 `
   },
+  {
+    id: "indigo-gradient-black-v1",
+    name: "Indigo Gradient Black v1 ",
+    category: "Gradients",
+    style: {
+    },
+    component: PurpleGradientTop,
+    code: `"use client";
+
+import React from "react";
+import { motion } from "framer-motion";
+
+interface PurpleGradientProps {
+  children?: React.ReactNode;
+}
+
+export const PurpleGradientTop: React.FC<PurpleGradientProps> = ({ children }) => {
+  return (
+    <div className="min-h-screen w-full relative overflow-hidden">
+      {/* Radial Gradient Background: near-black base fading to purple */}
+      <motion.div
+        className="absolute inset-0 z-0"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.5, ease: "easeOut" }}
+        style={{
+          background: "radial-gradient(125% 125% at 50% 90%, #0a0a0a 40%, #6366f1 100%)",
+        }}
+      />
+
+      {/* Foreground Content */}
+      <div className="relative z-10">{children}</div>
+    </div>
+  );
+};
+
+`
+  },
+  {
+    id: "indigo-gradient-black-v2",
+    name: "Indigo Gradient Black v2",
+    category: "Gradients",
+    style: {
+    },
+    component: PurpleGradientBlackTop,
+    code: `"use client";
+
+import React from "react";
+import { motion } from "framer-motion";
+
+interface PurpleGradientProps {
+  children?: React.ReactNode;
+}
+export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
+  return (
+    <div className="min-h-screen w-full relative overflow-hidden">
+      {/* Radial Gradient Background with Fade-in Animation */}
+      <motion.div
+        className="absolute inset-0 z-0"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.5, ease: "easeOut" }}
+        style={{
+          background: "radial-gradient(125% 125% at 50% 10%, #0a0a0a 40%, #6366f1 100%)",
+        }}
+      />
+
+      {/* Your Foreground Content */}
+      <div className="relative z-10">{children}</div>
+    </div>
+  );
+};`
+  },
+
+  {
+    id: "teal-gradient-v1",
+    name: "Teal Gradient v1",
+    category: "Gradients",
+    style: {},
+    component: TealGradient,
+    code: `"use client";
+  
+  import React from "react";
+  import { motion } from "framer-motion";
+  
+  interface TealGradientProps {
+    children?: React.ReactNode;
+  }
+  export const TealGradient: React.FC<TealGradientProps> = ({ children }) => {
+    return (
+      <div className="min-h-screen w-full relative overflow-hidden">
+        {/* Radial Gradient Background with Fade-in Animation */}
+        <motion.div
+          className="absolute inset-0 z-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          style={{
+            background: "radial-gradient(125% 125% at 50% 10%, #fff 40%, #14b8a6 100%)",
+          }}
+        />
+        <div className="relative z-10">{children}</div>
+      </div>
+    );
+  };`
+  },
+  {
+    id: "teal-gradient-v2",
+    name: "Teal Gradient v2",
+    category: "Gradients",
+    style: {},
+    component: TealGradientTop,
+    code: `"use client";
+  
+  import React from "react";
+  import { motion } from "framer-motion";
+  
+  interface TealGradientTopProps {
+    children?: React.ReactNode;
+  }
+  
+  export const TealGradientTop: React.FC<TealGradientTopProps> = ({ children }) => {
+    return (
+      <div className="min-h-screen w-full relative overflow-hidden">
+        {/* Radial Gradient Background: teal at top fading to white */}
+        <motion.div
+          className="absolute inset-0 z-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          style={{
+            background: "radial-gradient(125% 125% at 50% 90%, #fff 40%, #14b8a6 100%)",
+          }}
+        />
+        <div className="relative z-10">{children}</div>
+      </div>
+    );
+  };`
+  },
+  {
+    id: "teal-gradient-black-v1",
+    name: "Teal Gradient Black v1",
+    category: "Gradients",
+    style: {},
+    component: TealGradientBlackTop,
+    code: `"use client";
+  
+  import React from "react";
+  import { motion } from "framer-motion";
+  
+  interface TealGradientProps {
+    children?: React.ReactNode;
+  }
+  
+  export const TealGradientBlackTop: React.FC<TealGradientProps> = ({ children }) => {
+    return (
+      <div className="min-h-screen w-full relative overflow-hidden">
+        {/* Radial Gradient Background: near-black base fading to teal */}
+        <motion.div
+          className="absolute inset-0 z-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          style={{
+            background: "radial-gradient(125% 125% at 50% 90%, #0a0a0a 40%, #14b8a6 100%)",
+          }}
+        />
+        <div className="relative z-10">{children}</div>
+      </div>
+    );
+  };`
+  },
+  {
+    id: "teal-gradient-black-v2",
+    name: "Teal Gradient Black v2",
+    category: "Gradients",
+    style: {},
+    component: TealGradient,
+    code: `"use client";
+  
+  import React from "react";
+  import { motion } from "framer-motion";
+  
+  interface TealGradientProps {
+    children?: React.ReactNode;
+  }
+  export const TealGradient: React.FC<TealGradientProps> = ({ children }) => {
+    return (
+      <div className="min-h-screen w-full relative overflow-hidden">
+        {/* Radial Gradient Background with Fade-in Animation */}
+        <motion.div
+          className="absolute inset-0 z-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          style={{
+            background: "radial-gradient(125% 125% at 50% 10%, #0a0a0a 40%, #14b8a6 100%)",
+          }}
+        />
+        <div className="relative z-10">{children}</div>
+      </div>
+    );
+  };`
+  },
+
+  {
+    id: "cyan-gradient-v1",
+    name: "Cyan Gradient v1",
+    category: "Gradients",
+    style: {},
+    component: CyanGradient,
+    code: `"use client";
+
+import React from "react";
+import { motion } from "framer-motion";
+
+interface CyanGradientProps {
+  children?: React.ReactNode;
+}
+export const CyanGradient: React.FC<CyanGradientProps> = ({ children }) => {
+  return (
+    <div className="min-h-screen w-full relative overflow-hidden">
+      {/* Radial Gradient Background with Fade-in Animation */}
+      <motion.div
+        className="absolute inset-0 z-0"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.5, ease: "easeOut" }}
+        style={{
+          background: "radial-gradient(125% 125% at 50% 10%, #fff 40%, #06b6d4 100%)",
+        }}
+      />
+      <div className="relative z-10">{children}</div>
+    </div>
+  );
+};`
+  },
+  {
+    id: "cyan-gradient-v2",
+    name: "Cyan Gradient v2",
+    category: "Gradients",
+    style: {},
+    component: CyanGradientTop,
+    code: `"use client";
+
+import React from "react";
+import { motion } from "framer-motion";
+
+interface CyanGradientTopProps {
+  children?: React.ReactNode;
+}
+
+export const CyanGradientTop: React.FC<CyanGradientTopProps> = ({ children }) => {
+  return (
+    <div className="min-h-screen w-full relative overflow-hidden">
+      {/* Radial Gradient Background: cyan at top fading to white */}
+      <motion.div
+        className="absolute inset-0 z-0"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.5, ease: "easeOut" }}
+        style={{
+          background: "radial-gradient(125% 125% at 50% 90%, #fff 40%, #06b6d4 100%)",
+        }}
+      />
+      <div className="relative z-10">{children}</div>
+    </div>
+  );
+};`
+  },
+  {
+    id: "cyan-gradient-black-v1",
+    name: "Cyan Gradient Black v1",
+    category: "Gradients",
+    style: {},
+    component: CyanGradientBlackTop,
+    code: `"use client";
+
+import React from "react";
+import { motion } from "framer-motion";
+
+interface CyanGradientProps {
+  children?: React.ReactNode;
+}
+
+export const CyanGradientBlackTop: React.FC<CyanGradientProps> = ({ children }) => {
+  return (
+    <div className="min-h-screen w-full relative overflow-hidden">
+      {/* Radial Gradient Background: near-black base fading to cyan */}
+      <motion.div
+        className="absolute inset-0 z-0"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.5, ease: "easeOut" }}
+        style={{
+          background: "radial-gradient(125% 125% at 50% 90%, #0a0a0a 40%, #06b6d4 100%)",
+        }}
+      />
+      <div className="relative z-10">{children}</div>
+    </div>
+  );
+};`
+  },
+  {
+    id: "cyan-gradient-black-v2",
+    name: "Cyan Gradient Black v2",
+    category: "Gradients",
+    style: {},
+    component: CyanGradientBlack,
+    code: `"use client";
+
+import React from "react";
+import { motion } from "framer-motion";
+
+interface CyanGradientProps {
+  children?: React.ReactNode;
+}
+export const CyanGradient: React.FC<CyanGradientProps> = ({ children }) => {
+  return (
+    <div className="min-h-screen w-full relative overflow-hidden">
+      {/* Radial Gradient Background with Fade-in Animation */}
+      <motion.div
+        className="absolute inset-0 z-0"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.5, ease: "easeOut" }}
+        style={{
+          background: "radial-gradient(125% 125% at 50% 10%, #0a0a0a 40%, #06b6d4 100%)",
+        }}
+      />
+      <div className="relative z-10">{children}</div>
+    </div>
+  );
+};`
+  },
+
+  {
+    id: "fuchsia-gradient-v1",
+    name: "Fuchsia Gradient v1",
+    category: "Gradients",
+    style: {},
+    component: FuchsiaGradient,
+    code: `"use client";
+  
+  import React from "react";
+  import { motion } from "framer-motion";
+  
+  interface FuchsiaGradientProps {
+    children?: React.ReactNode;
+  }
+  export const FuchsiaGradient: React.FC<FuchsiaGradientProps> = ({ children }) => {
+    return (
+      <div className="min-h-screen w-full relative overflow-hidden">
+        {/* Radial Gradient Background with Fade-in Animation */}
+        <motion.div
+          className="absolute inset-0 z-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          style={{
+            background: "radial-gradient(125% 125% at 50% 10%, #fff 40%, #d946ef 100%)",
+          }}
+        />
+        <div className="relative z-10">{children}</div>
+      </div>
+    );
+  };`
+  },
+  {
+    id: "fuchsia-gradient-v2",
+    name: "Fuchsia Gradient v2",
+    category: "Gradients",
+    style: {},
+    component: FuchsiaGradientTop,
+    code: `"use client";
+  
+  import React from "react";
+  import { motion } from "framer-motion";
+  
+  interface FuchsiaGradientTopProps {
+    children?: React.ReactNode;
+  }
+  
+  export const FuchsiaGradientTop: React.FC<FuchsiaGradientTopProps> = ({ children }) => {
+    return (
+      <div className="min-h-screen w-full relative overflow-hidden">
+        {/* Radial Gradient Background: fuchsia at top fading to white */}
+        <motion.div
+          className="absolute inset-0 z-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          style={{
+            background: "radial-gradient(125% 125% at 50% 90%, #fff 40%, #d946ef 100%)",
+          }}
+        />
+        <div className="relative z-10">{children}</div>
+      </div>
+    );
+  };`
+  },
+  {
+    id: "fuchsia-gradient-black-v1",
+    name: "Fuchsia Gradient Black v1",
+    category: "Gradients",
+    style: {},
+    component: FuchsiaGradientBlackTop,
+    code: `"use client";
+  
+  import React from "react";
+  import { motion } from "framer-motion";
+  
+  interface FuchsiaGradientProps {
+    children?: React.ReactNode;
+  }
+  
+  export const FuchsiaGradientBlackTop: React.FC<FuchsiaGradientProps> = ({ children }) => {
+    return (
+      <div className="min-h-screen w-full relative overflow-hidden">
+        {/* Radial Gradient Background: near-black base fading to fuchsia */}
+        <motion.div
+          className="absolute inset-0 z-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          style={{
+            background: "radial-gradient(125% 125% at 50% 90%, #0a0a0a 40%, #d946ef 100%)",
+          }}
+        />
+        <div className="relative z-10">{children}</div>
+      </div>
+    );
+  };`
+  },
+  {
+    id: "fuchsia-gradient-black-v2",
+    name: "Fuchsia Gradient Black v2",
+    category: "Gradients",
+    style: {},
+    component: FuchsiaGradientBlack,
+    code: `"use client";
+  
+  import React from "react";
+  import { motion } from "framer-motion";
+  
+  interface FuchsiaGradientProps {
+    children?: React.ReactNode;
+  }
+  export const FuchsiaGradient: React.FC<FuchsiaGradientProps> = ({ children }) => {
+    return (
+      <div className="min-h-screen w-full relative overflow-hidden">
+        {/* Radial Gradient Background with Fade-in Animation */}
+        <motion.div
+          className="absolute inset-0 z-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          style={{
+            background: "radial-gradient(125% 125% at 50% 10%, #0a0a0a 40%, #d946ef 100%)",
+          }}
+        />
+        <div className="relative z-10">{children}</div>
+      </div>
+    );
+  };`
+  },
+
+  {
+    id: "red-gradient-v1",
+    name: "Red Gradient v1",
+    category: "Gradients",
+    style: {},
+    component: RedGradient,
+    code: `"use client";
+    
+    import React from "react";
+    import { motion } from "framer-motion";
+    
+    interface RedGradientProps {
+      children?: React.ReactNode;
+    }
+    export const RedGradient: React.FC<RedGradientProps> = ({ children }) => {
+      return (
+        <div className='min-h-screen w-full relative overflow-hidden'>
+          <motion.div
+            className='absolute inset-0 z-0'
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+            style={{
+              background: "radial-gradient(125% 125% at 50% 10%, #ffffff 40%, #ef4444 100%)"
+            }}
+          />
+          <div className='relative z-10'>{children}</div>
+        </div>
+      );
+    };`
+  },
+  {
+    id: "red-gradient-v2",
+    name: "Red Gradient v2",
+    category: "Gradients",
+    style: {},
+    component: RedGradientTop,
+    code: `"use client";
+    
+    import React from "react";
+    import { motion } from "framer-motion";
+    
+    interface RedGradientProps {
+      children?: React.ReactNode;
+    }
+    export const RedGradientTop: React.FC<RedGradientProps> = ({ children }) => {
+      return (
+        <div className='min-h-screen w-full relative overflow-hidden'>
+          <motion.div
+            className='absolute inset-0 z-0'
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+            style={{
+              background: "radial-gradient(125% 125% at 50% 90%, #ffffff 40%, #ef4444 100%)"
+            }}
+          />
+          <div className='relative z-10'>{children}</div>
+        </div>
+      );
+    };`
+  },
+  {
+    id: "red-gradient-black-v1",
+    name: "Red Gradient Black v1",
+    category: "Gradients",
+    style: {},
+    component: RedGradientBlackTop,
+    code: `"use client";
+    
+    import React from "react";
+    import { motion } from "framer-motion";
+    
+    interface RedGradientProps {
+      children?: React.ReactNode;
+    }
+    export const RedGradientBlackTop: React.FC<RedGradientProps> = ({ children }) => {
+      return (
+        <div className='min-h-screen w-full relative overflow-hidden'>
+          <motion.div
+            className='absolute inset-0 z-0'
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+            style={{
+              background: "radial-gradient(125% 125% at 50% 90%, #0a0a0a 40%, #ef4444 100%)"
+            }}
+          />
+          <div className='relative z-10'>{children}</div>
+        </div>
+      );
+    };`
+  },
+  {
+    id: "red-gradient-black-v2",
+    name: "Red Gradient Black v2",
+    category: "Gradients",
+    style: {},
+    component: RedGradientBlack,
+    code: `"use client";
+    
+    import React from "react";
+    import { motion } from "framer-motion";
+    
+    interface RedGradientProps {
+      children?: React.ReactNode;
+    }
+    export const RedGradientBlack: React.FC<RedGradientProps> = ({ children }) => {
+      return (
+        <div className='min-h-screen w-full relative overflow-hidden'>
+          <motion.div
+            className='absolute inset-0 z-0'
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+            style={{
+              background: "radial-gradient(125% 125% at 50% 10%, #0a0a0a 40%, #ef4444 100%)"
+            }}
+          />
+          <div className='relative z-10'>{children}</div>
+        </div>
+      );
+    };`
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   //effects
   {
     id: "effect-glow-orbs",
@@ -673,11 +1640,229 @@ export const FloatingGlowOrbs = () => {
   },
 
   //floatings
+  {
+    id: "dots-soft-network",
+    name: "Soft Dot Network",
+    category: "Dots",
+    style: {
+      backgroundColor: "black",
+    },
+    component: DotNetworkComponent,
+    code: `import { motion } from "framer-motion";
+
+export const SoftDotNetwork = () => {
+  return (
+    <div className="absolute inset-0 grid grid-cols-12 grid-rows-6 gap-4 p-4 bg-slate-800">
+      {[...Array(72)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="w-2 h-2 bg-white/20 rounded-full"
+          animate={{ 
+            opacity: [0.2, 0.8, 0.2], 
+            scale: [1, 1.2, 1] 
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            delay: (i % 12) * 0.1,
+          }}
+        />
+      ))}
+    </div>
+  );
+};`
+  },
+  {
+    id: "dots-soft-network-v2",
+    name: "Soft Dot Network v2",
+    category: "Dots",
+    style: {
+      backgroundColor: "black",
+    },
+    component: DotNetworkComponentv2,
+    code: `import { motion } from "framer-motion";
+
+export const DotNetworkComponent = () => (
+  <div className="absolute inset-0 grid grid-cols-16 grid-rows-8 gap-2 p-2">
+    {[...Array(128)].map((_, i) => {
+      const row = Math.floor(i / 16); // Get the row number (0–7)
+
+      return (
+        <motion.div
+          key={i}
+          className="w-2 h-2 bg-white/30 rounded-full"
+          animate={{ opacity: [0.3, 0.8, 0.3], scale: [1, 1.2, 1] }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            delay: row * 0.2, // Delay based on row index
+          }}
+        />
+      );
+    })}
+  </div>
+);`
+  },
+  {
+    id: "moving-dots",
+    name: "Moving Dots",
+    category: "Dots",
+    style: {
+      backgroundColor: "black",
+    },
+    component: MovingDotsComponent,
+    code: `  export const MovingDotsComponent = () => (
+      <div className="absolute inset-0 grid grid-cols-8 grid-rows-4 gap-2 p-2 overflow-hidden">
+        {[...Array(32)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="w-1 h-1 bg-white/30 rounded-full"
+            animate={{ x: ["0%", "100%"] }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              repeatType: "loop",
+              ease: "linear",
+              delay: (i % 8) * 0.2, // stagger horizontally
+            }}
+          />
+        ))}
+      </div>
+    );`
+  },
+  {
+    id: "fade-dot",
+    name: "Fade Dots",
+    category: "Dots",
+    style: {
+      backgroundColor: "black",
+    },
+    component: FadeDotComponent,
+    code: ` import React from 'react';
+import { motion } from 'framer-motion';
+
+export const FadeDotComponent = () => {
+  const DOT_SIZE = 2; // px
+  const GAP_SIZE = 16; // px
+
+  const [gridSize, setGridSize] = useState({ cols: 0, rows: 0 });
+
+  useEffect(() => {
+    const updateGridSize = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+
+      const cols = Math.floor(width / (DOT_SIZE + GAP_SIZE));
+      const rows = Math.floor(height / (DOT_SIZE + GAP_SIZE));
+      setGridSize({ cols, rows });
+    };
+
+    updateGridSize();
+    window.addEventListener("resize", updateGridSize);
+    return () => window.removeEventListener("resize", updateGridSize);
+  }, []);
+
+  const dots = useMemo(() => {
+    const { cols, rows } = gridSize;
+    const centerX = (cols - 1) / 2;
+    const centerY = (rows - 1) / 2;
+    const maxDist = Math.sqrt(centerX ** 2 + centerY ** 2);
+
+    return Array.from({ length: cols * rows }, (_, i) => {
+      const col = i % cols;
+      const row = Math.floor(i / cols);
+      const dist = Math.sqrt((col - centerX) ** 2 + (row - centerY) ** 2);
+      const opacity = Math.max(0.1, 1 - (dist / maxDist) ** 2);
+      const delay = Math.random() * 2;
+      return { opacity, delay };
+    });
+  }, [gridSize]);
+
+  return (
+    <div
+      className="absolute    inset-0 grid bg-black"
+      style={{
+        gridTemplateColumns: \`repeat(\${gridSize.cols}, \${DOT_SIZE}px)\`,
+        gap: \`\${GAP_SIZE}px\`,
+        justifyContent: "center",
+        alignContent: "center",
+      }}
+    >
+      {dots.map((dot, i) => (
+        <motion.div
+          key={i}
+          className="rounded-full bg-white/60"
+          style={{
+            width: DOT_SIZE,
+            height: DOT_SIZE,
+          }}
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{
+            opacity: dot.opacity,
+            scale: [1, 1.25, 1],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            repeatType: "mirror",
+            delay: dot.delay,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+    </div>
+  );
+};`
+  },
+
+  {
+    id: "blinking-dots",
+    name: "Blinking Dots",
+    category: "Dots",
+    style: {
+      backgroundColor: "black",
+    },
+    component: BlinkingDotsComponent,
+    code: `export const BlinkingDotsComponent = () => {
+    const gridSize = 8;
+    const dots = Array.from({ length: gridSize * gridSize }, (_, i) => ({
+      id: i,
+      x: (i % gridSize) * (100 / gridSize),
+      y: Math.floor(i / gridSize) * (100 / gridSize),
+      delay: Math.random() * 3
+    }));
   
+    return (
+      <div className="fixed inset-0 overflow-hidden pointer-events-none bg-gradient-to-tr from-gray-900 to-slate-800">
+        {dots.map((dot) => (
+          <motion.div
+            key={dot.id}
+            className="absolute w-2 h-2 bg-cyan-400 rounded-full"
+            style={{
+              left: \`\${dot.x}%\`,
+              top: \`\${dot.y}%\`,
+            }}
+            animate={{
+              scale: [0, 1, 0],
+              opacity: [0, 1, 0]
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              delay: dot.delay,
+              ease: "easeInOut"
+            }}
+          />
+        ))}
+      </div>
+    );
+  };`
+  },
+
   {
     id: "moving-particles",
     name: "Moving Particles",
-    category: "Floatings",
+    category: "Dots",
     style: {
       backgroundColor: "black",
     },
@@ -791,7 +1976,7 @@ export const ParticlesBackgroundComponent = () => {
   {
     id: "glowing-particles",
     name: "Glowing Particles",
-    category: "Floatings",
+    category: "Dots",
     style: {
       backgroundColor: "black",
     },
@@ -851,174 +2036,6 @@ export const ParticlesBackgroundComponent = () => {
         </div>
       );
     };`
-  },
-  {
-    id: "rotating-particles",
-    name: "Rotating Particles",
-    category: "Floatings",
-    style: {
-      backgroundColor: "black",
-    },
-    component: RotatingParticles,
-    code: `
-    // globals.css
-    .galaxy-container {
-      position: absolute;
-      inset: 0;
-      overflow: hidden;
-      background: radial-gradient(ellipse at center, #000014 0%, #000000 100%);
-      z-index: 0;
-    }
-  
-    .star {
-      position: absolute;
-      background-color: white;
-      border-radius: 50%;
-      opacity: 0.8;
-      animation: twinkle 2s infinite ease-in-out;
-    }
-  
-    @keyframes twinkle {
-      0%, 100% { opacity: 0.3; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.5); }
-    }
-  
-    // main component
-    interface GalaxyProps {
-      starCount?: number;
-    }
-  
-    export const GlowingParticles: React.FC<GalaxyProps> = ({ starCount = 200 }) => {
-      const stars = Array.from({ length: starCount }, (_, i) => ({
-        id: i,
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        size: Math.random() * 2 + 1,
-        delay: Math.random() * 5,
-      }));
-  
-      return (
-        <div className="galaxy-container">
-          {stars.map((star) => (
-            <div
-              key={star.id}
-              className="star"
-              style={{
-                left: \`\${star.x}%\`,
-                top: \`\${star.y}%\`,
-                width: \`\${star.size}px\`,
-                height: \`\${star.size}px\`,
-                animationDelay: \`\${star.delay}s\`,
-              }}
-            />
-          ))}
-        </div>
-      );
-    };`
-  },
-
-  //dots
-  {
-    id: "dots-soft-network",
-    name: "Soft Dot Network",
-    category: "Dots",
-    style: {
-      backgroundColor: "black",
-    },
-    component: DotNetworkComponent,
-    code: `import { motion } from "framer-motion";
-
-export const SoftDotNetwork = () => {
-  return (
-    <div className="absolute inset-0 grid grid-cols-12 grid-rows-6 gap-4 p-4 bg-slate-800">
-      {[...Array(72)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="w-2 h-2 bg-white/20 rounded-full"
-          animate={{ 
-            opacity: [0.2, 0.8, 0.2], 
-            scale: [1, 1.2, 1] 
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            delay: (i % 12) * 0.1,
-          }}
-        />
-      ))}
-    </div>
-  );
-};`
-  },
-  {
-    id: "moving-dots",
-    name: "Moving Dots",
-    category: "Dots",
-    style: {
-      backgroundColor: "black",
-    },
-    component: MovingDotsComponent,
-    code: `  export const MovingDotsComponent = () => (
-      <div className="absolute inset-0 grid grid-cols-8 grid-rows-4 gap-2 p-2 overflow-hidden">
-        {[...Array(32)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="w-1 h-1 bg-white/30 rounded-full"
-            animate={{ x: ["0%", "100%"] }}
-            transition={{
-              duration: 4,
-              repeat: Infinity,
-              repeatType: "loop",
-              ease: "linear",
-              delay: (i % 8) * 0.2, // stagger horizontally
-            }}
-          />
-        ))}
-      </div>
-    );`
-  },
-  {
-    id: "blinking-dots",
-    name: "Blinking Dots",
-    category: "Dots",
-    style: {
-      backgroundColor: "black",
-    },
-    component: BlinkingDotsComponent,
-    code: `export const BlinkingDotsComponent = () => {
-    const gridSize = 8;
-    const dots = Array.from({ length: gridSize * gridSize }, (_, i) => ({
-      id: i,
-      x: (i % gridSize) * (100 / gridSize),
-      y: Math.floor(i / gridSize) * (100 / gridSize),
-      delay: Math.random() * 3
-    }));
-  
-    return (
-      <div className="fixed inset-0 overflow-hidden pointer-events-none bg-gradient-to-tr from-gray-900 to-slate-800">
-        {dots.map((dot) => (
-          <motion.div
-            key={dot.id}
-            className="absolute w-2 h-2 bg-cyan-400 rounded-full"
-            style={{
-              left: \`\${dot.x}%\`,
-              top: \`\${dot.y}%\`,
-            }}
-            animate={{
-              scale: [0, 1, 0],
-              opacity: [0, 1, 0]
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              delay: dot.delay,
-              ease: "easeInOut"
-            }}
-          />
-        ))}
-      </div>
-    );
-  };`
   },
   {
     id: "dot-grid",
@@ -1323,7 +2340,10 @@ export const SoftDotNetwork = () => {
     );
   };
   `
-  },  
+  },
+
+
+
 
 ];
 

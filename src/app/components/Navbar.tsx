@@ -32,7 +32,7 @@ export function Navbar() {
             <Twitter className="h-6 w-6 text-zinc-700 transition-colors hover:text-indigo-500 dark:text-zinc-300 dark:hover:text-indigo-400" />
           </Link>
           <div className="h-6 w-px bg-slate-300 dark:bg-slate-700" />
-          <ThemeToggleButton showLabel variant="circle-blur" start="bottom-left" />
+          <ThemeToggleButton showLabel variant="circle-blur" start="top-right" />
           </div>
       </nav>
     </header>

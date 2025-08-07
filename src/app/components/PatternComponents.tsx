@@ -1,37 +1,75 @@
-import {  BlinkingDotsComponent, DotGridAnimations, DotNetworkComponent, MovingDotsComponent } from "@/bgs/Dots";
+import { BlinkingDotsComponent, DotGridAnimations, DotNetworkComponent, DotNetworkComponentv2, FadeDotComponent, MovingDotsComponent } from "@/bgs/Dots";
 import { GlowOrbsComponent } from "@/bgs/Effects";
-import {  GlowingParticles, ParticlesBackgroundComponent, RotatingParticles } from "@/bgs/Floatings";
-import { AnimatedBlackGridBackground, AnimatedGrid, RandomGeometricComponent, SphereBgComponent } from "@/bgs/Geometrics";
-import { PurpleGradient, PurpleGradientTop } from "@/bgs/Gradients";
+import {  FloatingParticles, GlowingParticles, ParticlesBackgroundComponent,  } from "@/bgs/Dots";
+import { AnimatedBlackGridBackground, CoolBlueGrid, CyanBurstGrid, DarkBg, GreenPunchGrid, LimeFadeGrid, MagentaFlame, MagentaGrid, NeonShock, ToxicPulse, VioletMistGrid, WarmAmberGrid } from "@/bgs/Geometrics";
+import { CyanGradient, CyanGradientBlack, CyanGradientBlackTop, CyanGradientTop, FuchsiaGradient, FuchsiaGradientBlack, FuchsiaGradientBlackTop, FuchsiaGradientTop, PurpleGradient, PurpleGradientBlack, PurpleGradientBlackTop, PurpleGradientTop, RedGradient, RedGradientBlack, RedGradientBlackTop, RedGradientTop, TealGradient, TealGradientBlack, TealGradientBlackTop, TealGradientTop, } from "@/bgs/Gradients";
 
 
 export const PatternComponents: Record<string, React.FC> = {
 
 
-  "geometrics-circles-bounce": AnimatedGrid,
   //gradientrs
-  "purple-gradient":PurpleGradient,
-  "purple-gradient-top":PurpleGradientTop,
+  "indigo-gradient-v1": PurpleGradient,
+  "indigo-gradient-v2": PurpleGradientTop,
+  "indigo-gradient-black-v1": PurpleGradientBlackTop,
+  "indigo-gradient-black-v2": PurpleGradientBlack,
+
+  "teal-gradient-v1": TealGradient,
+  "teal-gradient-v2": TealGradientTop,
+  "teal-gradient-black-v1": TealGradientBlackTop,
+  "teal-gradient-black-v2": TealGradientBlack,
+
+  "cyan-gradient-v1": CyanGradient,
+  "cyan-gradient-v2": CyanGradientTop,
+  "cyan-gradient-black-v1": CyanGradientBlackTop,
+  "cyan-gradient-black-v2": CyanGradientBlack,
+
+  "fuchsia-gradient-v1": FuchsiaGradient,
+  "fuchsia-gradient-v2": FuchsiaGradientTop,
+  "fuchsia-gradient-black-v1": FuchsiaGradientBlackTop,
+  "fuchsia-gradient-black-v2": FuchsiaGradientBlack,
+
+  "red-gradient-v1": RedGradient,
+  "red-gradient-v2": RedGradientTop,
+  "red-gradient-black-v1": RedGradientBlackTop,
+  "red-gradient-black-v2": RedGradientBlack,
+
+
+
+
+
+
+
   "effect-glow-orbs": GlowOrbsComponent,
+
 
 
 
   //floatings
   "glowing-particles": GlowingParticles,
   "moving-particles": ParticlesBackgroundComponent,
-  "rotating-particles":RotatingParticles,
-
-
-  //dots
+  "floating-particles-v1": FloatingParticles,
   "dots-soft-network": DotNetworkComponent,
+  "dots-soft-network-v2": DotNetworkComponentv2,
   "moving-dots": MovingDotsComponent,
-  "blinking-dots":BlinkingDotsComponent,
-  "dot-grid":DotGridAnimations,
+  "blinking-dots": BlinkingDotsComponent,
+  "dot-grid": DotGridAnimations,
+  "fade-dot":FadeDotComponent,
 
-   //geometrics
-  "random-geometrics":RandomGeometricComponent,
-  "dark-sphere":SphereBgComponent,
-  "black-grid":AnimatedBlackGridBackground,
-  "animated-grid":AnimatedGrid
+  //geometrics
+  "black-grid": AnimatedBlackGridBackground,
+  "dark-grid": DarkBg,
+  "magenta-grid":MagentaGrid,
+  "warmamber-grid":WarmAmberGrid,
+  "coolblue-grid":CoolBlueGrid,
+  "cyanburst-grid":CyanBurstGrid,
+  "greenpunch-grid":GreenPunchGrid,
+  "limefade-grid":LimeFadeGrid,
+
+  "diagonal-grid":VioletMistGrid,
+  "magenta-flame-grid":MagentaFlame,
+  "neon-lime-grid":NeonShock,
+  "toxicpulse-grid":ToxicPulse
+ 
 
 };
