@@ -12,6 +12,7 @@ interface Pattern {
   style: React.CSSProperties;
   component: React.FC;
   code: string;
+  isLightBackground?:boolean
 }
 
 const patterns: Pattern[] = [
@@ -933,6 +934,7 @@ export const PinkRoseGrid = () => {
     category: "Gradients",
     style: {
     },
+    isLightBackground:true,
     component: PurpleGradient,
     code: `"use client";
 
@@ -968,6 +970,8 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
     category: "Gradients",
     style: {
     },
+    isLightBackground:true,
+
     component: PurpleGradientTop,
     code: `"use client";
 
@@ -1079,6 +1083,8 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
     category: "Gradients",
     style: {},
     component: TealGradient,
+    isLightBackground:true,
+
     code: `"use client";
   
   import React from "react";
@@ -1109,6 +1115,8 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
     id: "teal-gradient-v2",
     name: "Teal Gradient v2",
     category: "Gradients",
+    isLightBackground:true,
+
     style: {},
     component: TealGradientTop,
     code: `"use client";
@@ -1208,6 +1216,8 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
     id: "cyan-gradient-v1",
     name: "Cyan Gradient v1",
     category: "Gradients",
+    isLightBackground:true,
+
     style: {},
     component: CyanGradient,
     code: `"use client";
@@ -1240,6 +1250,8 @@ export const CyanGradient: React.FC<CyanGradientProps> = ({ children }) => {
     id: "cyan-gradient-v2",
     name: "Cyan Gradient v2",
     category: "Gradients",
+    isLightBackground:true,
+
     style: {},
     component: CyanGradientTop,
     code: `"use client";
@@ -1339,6 +1351,8 @@ export const CyanGradient: React.FC<CyanGradientProps> = ({ children }) => {
     id: "fuchsia-gradient-v1",
     name: "Fuchsia Gradient v1",
     category: "Gradients",
+    isLightBackground:true,
+
     style: {},
     component: FuchsiaGradient,
     code: `"use client";
@@ -1371,6 +1385,8 @@ export const CyanGradient: React.FC<CyanGradientProps> = ({ children }) => {
     id: "fuchsia-gradient-v2",
     name: "Fuchsia Gradient v2",
     category: "Gradients",
+    isLightBackground:true,
+
     style: {},
     component: FuchsiaGradientTop,
     code: `"use client";
@@ -1470,6 +1486,8 @@ export const CyanGradient: React.FC<CyanGradientProps> = ({ children }) => {
     id: "red-gradient-v1",
     name: "Red Gradient v1",
     category: "Gradients",
+    isLightBackground:true,
+
     style: {},
     component: RedGradient,
     code: `"use client";
@@ -1501,6 +1519,8 @@ export const CyanGradient: React.FC<CyanGradientProps> = ({ children }) => {
     id: "red-gradient-v2",
     name: "Red Gradient v2",
     category: "Gradients",
+    isLightBackground:true,
+
     style: {},
     component: RedGradientTop,
     code: `"use client";

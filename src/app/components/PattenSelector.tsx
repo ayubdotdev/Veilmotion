@@ -1,11 +1,21 @@
 import { AnimatePresence } from "framer-motion";
-import { Check, Copy, Eye, X } from "lucide-react";
+import { Check, Copy, Eye, X, Sun, Moon } from "lucide-react";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { motion } from "framer-motion";
 import { PatternComponents } from "../components/PatternComponents"
 import { patterns } from "../utils/patterns";
 import { ReturnPreview, useReturnPreview } from "./Return";
 import Favorite from "./Favorites";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { useTheme } from "next-themes";
+import { Button } from "./ui/button";
 
 interface Pattern {
   id: string;
@@ -14,6 +24,7 @@ interface Pattern {
   style: React.CSSProperties;
   component: React.FC;
   code: string;
+  isLightBackground?: boolean; // New property to identify light backgrounds
 }
 
 interface PatternSelectorProps {
@@ -24,11 +35,17 @@ interface PatternSelectorProps {
 const categories = ["All", "Grids","Gradients", "Effects", "Dots", "Favorites"] as const;
 type Category = (typeof categories)[number];
 
-export default function PatternSelector({ activePattern, setActivePattern }: PatternSelectorProps) {
+export default function PatternSelector({ 
+  activePattern, 
+  setActivePattern
+}: PatternSelectorProps) {
+  const { theme, setTheme } = useTheme();
   const [activeCategory, setActiveCategory] = useState<Category>("All");
   const [isCopied, setIsCopied] = useState<string | null>(null);
   const [previewPattern, setPreviewPattern] = useState<Pattern | null>(null);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  const [showLightModeModal, setShowLightModeModal] = useState(false);
+  const [pendingLightPattern, setPendingLightPattern] = useState<Pattern | null>(null);
   
   const {
     isPreviewActive,
@@ -84,18 +101,55 @@ export default function PatternSelector({ activePattern, setActivePattern }: Pat
     }
   };
 
-  // Handle preview with proper global application
+  // Handle preview with light mode check
   const handlePreview = (pattern: Pattern, event: React.MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
 
+    // Check if this is a light background pattern and user is in dark mode
+    if (pattern.isLightBackground && theme === "dark") {
+      setPendingLightPattern(pattern);
+      setShowLightModeModal(true);
+      return;
+    }
+
+    // Proceed with normal preview
+    activatePreview(pattern);
+  };
+
+  // Activate preview without modal check
+  const activatePreview = (pattern: Pattern) => {
     setPreviewPattern(pattern);
     if (setActivePattern) {
       setActivePattern(pattern);
     }
     savePositionAndPreview();
-
     console.log('Preview activated for pattern:', pattern.name);
+  };
+
+  // Handle light mode modal actions
+  const handleSwitchToLightMode = () => {
+    setTheme("light");
+    setShowLightModeModal(false);
+    
+    // Activate preview after switching theme
+    if (pendingLightPattern) {
+      setTimeout(() => activatePreview(pendingLightPattern), 150);
+      setPendingLightPattern(null);
+    }
+  };
+
+  const handleContinueInDarkMode = () => {
+    setShowLightModeModal(false);
+    if (pendingLightPattern) {
+      activatePreview(pendingLightPattern);
+      setPendingLightPattern(null);
+    }
+  };
+
+  const handleCancelModal = () => {
+    setShowLightModeModal(false);
+    setPendingLightPattern(null);
   };
 
   // Clear preview
@@ -136,6 +190,38 @@ export default function PatternSelector({ activePattern, setActivePattern }: Pat
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Light Mode Recommendation Modal */}
+      <Dialog open={showLightModeModal} onOpenChange={setShowLightModeModal}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Sun className="h-5 w-5 text-yellow-500" />
+              Switch to Light Mode?
+            </DialogTitle>
+            <DialogDescription>
+              This background pattern looks best in light mode. Would you like to switch to light mode for the optimal viewing experience?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex-col sm:flex-row gap-2">
+            <Button
+              variant="outline"
+              onClick={handleCancelModal}
+              className="w-full sm:w-auto"
+            >
+              Cancel
+            </Button>
+            
+            <Button
+              onClick={handleSwitchToLightMode}
+              className="w-full sm:w-auto bg-yellow-500 hover:bg-yellow-600 text-white"
+            >
+              <Sun className="h-4 w-4 " />
+              Switch to Light Mode
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Clear Preview Button */}
       {previewPattern && (
@@ -222,6 +308,14 @@ export default function PatternSelector({ activePattern, setActivePattern }: Pat
                 exit={{ opacity: 0, y: 20 }}
                 className="group relative bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
               >
+                {/* Light Background Indicator */}
+                {pattern.isLightBackground && (
+                  <div className="absolute top-2 right-2 z-10 bg-yellow-100 text-black px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+                    <Sun size={12} />
+                    Best in Light
+                  </div>
+                )}
+
                 {/* Favorite Heart Icon */}
                 <Favorite
                   patternId={pattern.id}

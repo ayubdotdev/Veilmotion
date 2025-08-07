@@ -1,7 +1,8 @@
 "use client";
 
-import {  Code2Icon, Copy, Eye, GitBranch } from "lucide-react";
+import { Code2Icon, Copy, Eye, GitBranch } from "lucide-react";
 import Link from "next/link";
+import { RainbowButton } from "./rainbow-button";
 
 interface HeroProps {
     activePattern?: string | null;
@@ -13,7 +14,7 @@ export default function Hero({ activePattern, setActivePattern, theme }: HeroPro
     const isPatternDark = theme === "dark";
 
     return (
-        <section className="h-screen flex items-center justify-center text-center px-4 sm:px-6 lg:px-8 pt-8 ">
+        <section className="h-screen flex items-center justify-center text-center px-4 sm:px-6 lg:px-8  md:pt-8 pt-14">
             <div className="max-w-4xl w-full mx-auto relative pt-10  z-10">
                 {/* Main Heading */}
                 <div className="mb-6 sm:mb-8">
@@ -30,7 +31,7 @@ export default function Hero({ activePattern, setActivePattern, theme }: HeroPro
                     Discover hand-crafted, responsive background animations and CSS particle systems. Seamlessly plug them into any project — built with Tailwind CSS and powered by Framer Motion.
                 </p>
 
-                
+
 
                 {/* Feature Highlights */}
                 <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 mb-10  ">
@@ -58,29 +59,36 @@ export default function Hero({ activePattern, setActivePattern, theme }: HeroPro
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-10">
-                    <Link 
-                        href="/how-to-use"
-                        className="group flex items-center gap-2 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform "
-                    >
-                        <Code2Icon className="h-5 w-5  transition-transform duration-300"/>
-                        How to Use?
-                    </Link>
-                    
-                    <Link 
+                <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-10 px-4">
+
+                    <RainbowButton>
+                        <Link
+                            href="/how-to-use"
+                            className="group flex items-center gap-2 px-3 py-2  text-white dark:text-black text-lg "
+                        >
+                            <Code2Icon className="size-5  " />
+                            How to Use?
+                        </Link>
+                    </RainbowButton>
+
+                    <RainbowButton variant={"outline"}>
+
+                    <Link
                         href="/how-to-contribute"
-                        className="group flex items-center gap-2 px-3 py-2 bg-gray-800 hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-600 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform "
+                        className="group flex items-center gap-2 px-3 py-2  text-black dark:text-white text-lg "
                     >
                         <GitBranch className="h-5 w-5  transition-transform duration-300" />
                         How to Contribute?
                     </Link>
+                    </RainbowButton>
+
                 </div>
 
                 {/* Stats */}
                 <div className={`flex justify-center gap-8 pt-6 border-t ${isPatternDark ? "border-white/20" : "border-gray-300 dark:border-gray-700"}`}>
                     <div className="text-center">
-                        <div className="text-2xl font-bold text-black dark:text-white">50+</div>
-                        <div className="text-sm  text-black dark:text-white">Particle Types</div>
+                        <div className="text-2xl font-bold text-black dark:text-white">100+</div>
+                        <div className="text-sm  text-black dark:text-white">Backgrounds</div>
                     </div>
                     <div className="text-center">
                         <div className="text-2xl font-bold text-black dark:text-white">Free</div>
