@@ -8,7 +8,7 @@ import { InertiaPlugin } from "gsap/InertiaPlugin";
 
 gsap.registerPlugin(InertiaPlugin);
 
-const throttle = <A extends any[], R>(
+const throttle = <A extends unknown[], R>(
   func: (...args: A) => R,
   limit: number
 ): ((...args: A) => void) => {
@@ -22,6 +22,7 @@ const throttle = <A extends any[], R>(
     }
   };
 };
+
 
 
 

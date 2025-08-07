@@ -333,11 +333,11 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
               Every pattern you copy will include a commented usage example at the top of the code. Look for sections like:
             </p>
             <div className="bg-gray-900 text-gray-100 p-4 rounded text-sm font-mono">
-              <span className="text-green-400">/* </span><br />
-              <span className="text-green-400">USAGE EXAMPLE:</span><br />
+            <span className="text-green-400">{`/*`}</span><br />
+            <span className="text-green-400">USAGE EXAMPLE:</span><br />
               <span className="text-green-400">import &#123; PatternName &#125; from &quot;./components/bg&quot;;</span><br />
-              <span className="text-green-400">*/</span>
-            </div>
+              <span className="text-green-400">{`*/`}</span>
+              </div>
             <p className="text-green-700 dark:text-green-300 mt-4">
               These comments show you exactly how to implement the pattern in your project!
             </p>
