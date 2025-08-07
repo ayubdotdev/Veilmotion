@@ -8,9 +8,13 @@ import { InertiaPlugin } from "gsap/InertiaPlugin";
 
 gsap.registerPlugin(InertiaPlugin);
 
-const throttle = (func: (...args: any[]) => void, limit: number) => {
+const throttle = <A extends any[], R>(
+  func: (...args: A) => R,
+  limit: number
+): ((...args: A) => void) => {
   let lastCall = 0;
-  return function (this: any, ...args: any[]) {
+
+  return function (this: unknown, ...args: A) {
     const now = performance.now();
     if (now - lastCall >= limit) {
       lastCall = now;
@@ -18,6 +22,8 @@ const throttle = (func: (...args: any[]) => void, limit: number) => {
     }
   };
 };
+
+
 
 interface Dot {
   cx: number;

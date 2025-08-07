@@ -143,7 +143,7 @@ export const PatternComponents: Record<string, React.FC> = {
               How to Contribute to Veilmotion?
             </h1>
             <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl">
-              Help us build the most beautiful collection of background animations! Whether you're a designer, developer, or just passionate about great UI, there's a way for you to contribute.
+              Help us build the most beautiful collection of background animations! Whether you&apos;re a designer, developer, or just passionate about great UI, there&apos;s a way for you to contribute.
             </p>
           </motion.div>
         </div>

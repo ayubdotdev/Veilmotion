@@ -266,7 +266,7 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
               </h3>
               <ol className="list-decimal list-inside space-y-2 text-blue-700 dark:text-blue-300">
                 <li>Browse patterns on Veilmotion and find one you like</li>
-                <li>Click the "Copy" button to copy the pattern code</li>
+                <li>Click the &quot;Copy&quot; button to copy the pattern code</li>
                 <li>Create a file called <code className="bg-blue-100 dark:bg-blue-800 px-2 py-1 rounded text-sm">components/bg.tsx</code> in your project</li>
                 <li>Paste the copied code into this file</li>
                 <li>Import and use the component in your pages</li>
@@ -335,7 +335,7 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
             <div className="bg-gray-900 text-gray-100 p-4 rounded text-sm font-mono">
               <span className="text-green-400">/* </span><br />
               <span className="text-green-400">USAGE EXAMPLE:</span><br />
-              <span className="text-green-400">import &#123; PatternName &#125; from "./components/bg";</span><br />
+              <span className="text-green-400">import &#123; PatternName &#125; from &quot;./components/bg&quot;;</span><br />
               <span className="text-green-400">*/</span>
             </div>
             <p className="text-green-700 dark:text-green-300 mt-4">
@@ -368,7 +368,7 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
               </motion.div>              <h3 className="text-lg font-semibold mb-2">Love Veilmotion?</h3>
               <p className="text-gray-600 dark:text-gray-300 mb-6">
                 If you find Veilmotion useful for your projects, please consider giving it a star on GitHub!
-                <br></br> It helps others discover these beautiful animations and supports the project's growth.
+                <br></br> It helps others discover these beautiful animations and supports the project&apos;s growth.
               </p>
               <RainbowButton>
                 <a
