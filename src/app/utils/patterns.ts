@@ -12,7 +12,7 @@ interface Pattern {
   style: React.CSSProperties;
   component: React.FC;
   code: string;
-  isLightBackground?:boolean
+  isLightBackground?: boolean
 }
 
 const patterns: Pattern[] = [
@@ -926,7 +926,7 @@ export const PinkRoseGrid = () => {
 };`
   },
 
-
+  //v1-bottom
   //gradients
   {
     id: "indigo-gradient-v1",
@@ -934,17 +934,40 @@ export const PinkRoseGrid = () => {
     category: "Gradients",
     style: {
     },
-    isLightBackground:true,
+    isLightBackground: true,
     component: PurpleGradient,
-    code: `"use client";
+    code: `
+    //"use client";
+// //usage eg:
+// import React from "react";
+// import {  IndigoGradientv1 } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <IndigoGradientv1/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+    
+    "use client";
 
 import React from "react";
 import { motion } from "framer-motion";
 
-interface PurpleGradientProps {
-  children?: React.ReactNode;
-}
-export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
+export const IndigoBottom = () => {
   return (
     <div className="min-h-screen w-full relative overflow-hidden">
       {/* Radial Gradient Background with Fade-in Animation */}
@@ -957,8 +980,6 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
           background: "radial-gradient(125% 125% at 50% 10%, #fff 40%, #6366f1 100%)",
         }}
       />
-
-      <div className="relative z-10">{children}</div>
     </div>
   );
 };
@@ -970,7 +991,7 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
     category: "Gradients",
     style: {
     },
-    isLightBackground:true,
+    isLightBackground: true,
 
     component: PurpleGradientTop,
     code: `"use client";
@@ -1083,7 +1104,7 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
     category: "Gradients",
     style: {},
     component: TealGradient,
-    isLightBackground:true,
+    isLightBackground: true,
 
     code: `"use client";
   
@@ -1115,7 +1136,7 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
     id: "teal-gradient-v2",
     name: "Teal Gradient v2",
     category: "Gradients",
-    isLightBackground:true,
+    isLightBackground: true,
 
     style: {},
     component: TealGradientTop,
@@ -1216,7 +1237,7 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
     id: "cyan-gradient-v1",
     name: "Cyan Gradient v1",
     category: "Gradients",
-    isLightBackground:true,
+    isLightBackground: true,
 
     style: {},
     component: CyanGradient,
@@ -1250,7 +1271,7 @@ export const CyanGradient: React.FC<CyanGradientProps> = ({ children }) => {
     id: "cyan-gradient-v2",
     name: "Cyan Gradient v2",
     category: "Gradients",
-    isLightBackground:true,
+    isLightBackground: true,
 
     style: {},
     component: CyanGradientTop,
@@ -1351,7 +1372,7 @@ export const CyanGradient: React.FC<CyanGradientProps> = ({ children }) => {
     id: "fuchsia-gradient-v1",
     name: "Fuchsia Gradient v1",
     category: "Gradients",
-    isLightBackground:true,
+    isLightBackground: true,
 
     style: {},
     component: FuchsiaGradient,
@@ -1385,7 +1406,7 @@ export const CyanGradient: React.FC<CyanGradientProps> = ({ children }) => {
     id: "fuchsia-gradient-v2",
     name: "Fuchsia Gradient v2",
     category: "Gradients",
-    isLightBackground:true,
+    isLightBackground: true,
 
     style: {},
     component: FuchsiaGradientTop,
@@ -1486,7 +1507,7 @@ export const CyanGradient: React.FC<CyanGradientProps> = ({ children }) => {
     id: "red-gradient-v1",
     name: "Red Gradient v1",
     category: "Gradients",
-    isLightBackground:true,
+    isLightBackground: true,
 
     style: {},
     component: RedGradient,
@@ -1519,7 +1540,7 @@ export const CyanGradient: React.FC<CyanGradientProps> = ({ children }) => {
     id: "red-gradient-v2",
     name: "Red Gradient v2",
     category: "Gradients",
-    isLightBackground:true,
+    isLightBackground: true,
 
     style: {},
     component: RedGradientTop,

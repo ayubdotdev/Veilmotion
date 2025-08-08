@@ -302,73 +302,6 @@ export const FuchsiaGradientBlack: React.FC<FuchsiaGradientProps> = ({ children 
 };
 
 
-interface IndigoGradientProps {
-  children?: React.ReactNode;
-}
-export const IndigoGradient: React.FC<IndigoGradientProps> = ({ children }) => {
-  return (
-    <div className="min-h-screen w-full relative overflow-hidden">
-      <motion.div
-        className="absolute inset-0 z-0"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.5, ease: "easeOut" }}
-        style={{
-          background: "radial-gradient(125% 125% at 50% 10%, #ffffff 40%, #6366f1 100%)",
-        }}
-      />
-      <div className="relative z-10">{children}</div>
-    </div>
-  );
-};
-export const IndigoGradientTop: React.FC<IndigoGradientProps> = ({ children }) => {
-  return (
-    <div className="min-h-screen w-full relative overflow-hidden">
-      <motion.div
-        className="absolute inset-0 z-0"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.5, ease: "easeOut" }}
-        style={{
-          background: "radial-gradient(125% 125% at 50% 90%, #ffffff 40%, #6366f1 100%)",
-        }}
-      />
-      <div className="relative z-10">{children}</div>
-    </div>
-  );
-};
-export const IndigoGradientBlackTop: React.FC<IndigoGradientProps> = ({ children }) => {
-  return (
-    <div className="min-h-screen w-full relative overflow-hidden">
-      <motion.div
-        className="absolute inset-0 z-0"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.5, ease: "easeOut" }}
-        style={{
-          background: "radial-gradient(125% 125% at 50% 90%, #0a0a0a 40%, #6366f1 100%)",
-        }}
-      />
-      <div className="relative z-10">{children}</div>
-    </div>
-  );
-};
-export const IndigoGradientBlack: React.FC<IndigoGradientProps> = ({ children }) => {
-  return (
-    <div className="min-h-screen w-full relative overflow-hidden">
-      <motion.div
-        className="absolute inset-0 z-0"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.5, ease: "easeOut" }}
-        style={{
-          background: "radial-gradient(125% 125% at 50% 10%, #0a0a0a 40%, #6366f1 100%)",
-        }}
-      />
-      <div className="relative z-10">{children}</div>
-    </div>
-  );
-};
 
 
 interface RedGradientProps {
@@ -404,7 +337,6 @@ export const RedGradientTop: React.FC<RedGradientProps> = ({ children }) => (
     <div className="relative z-10">{children}</div>
   </div>
 );
-
 export const RedGradientBlackTop: React.FC<RedGradientProps> = ({ children }) => (
   <div className="min-h-screen w-full relative overflow-hidden">
     <motion.div
@@ -419,7 +351,6 @@ export const RedGradientBlackTop: React.FC<RedGradientProps> = ({ children }) =>
     <div className="relative z-10">{children}</div>
   </div>
 );
-
 export const RedGradientBlack: React.FC<RedGradientProps> = ({ children }) => (
   <div className="min-h-screen w-full relative overflow-hidden">
     <motion.div

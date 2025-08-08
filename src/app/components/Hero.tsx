@@ -14,7 +14,7 @@ export default function Hero({ activePattern, setActivePattern, theme }: HeroPro
     const isPatternDark = theme === "dark";
 
     return (
-        <section className="h-screen flex items-center justify-center text-center px-4 sm:px-6 lg:px-8  md:pt-8 pt-14">
+        <section className="h-screen flex items-center justify-center text-center px-4 sm:px-6 lg:px-8  md:pt-8 pt-12">
             <div className="max-w-4xl w-full mx-auto relative pt-10  z-10">
                 {/* Main Heading */}
                 <div className="mb-6 sm:mb-8">

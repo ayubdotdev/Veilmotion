@@ -34,34 +34,44 @@ export default function HowToContributePage() {
     selectedManager: PackageManager,
     setSelectedManager: React.Dispatch<React.SetStateAction<PackageManager>>
   ) => (
-    <div className="relative bg-black text-white rounded-xl p-4 border border-white/10 shadow-lg">
+    <div className="relative bg-black text-white rounded-xl p-3 sm:p-4 border border-white/10 shadow-lg">
       {/* Icon + Tabs Row */}
-      <div className="flex items-center gap-2 mb-4 border-b border-white/10 text-sm text-white">
-        <Terminal className="h-4 w-4 text-white/80" />
-        {(["pnpm", "npm", "yarn", "bun"] as PackageManager[]).map((manager) => (
-          <button
-            key={manager}
-            onClick={() => setSelectedManager(manager)}
-            className={`px-4 py-2 text-sm border-b-2 transition-colors ${
-              selectedManager === manager
-                ? "border-white text-white"
-                : "border-transparent text-white/60 hover:text-white"
-            }`}
-          >
-            {manager}
-          </button>
-        ))}
+      <div className="flex items-center gap-2 mb-3 sm:mb-4 border-b border-white/10 text-sm text-white overflow-x-auto">
+        <Terminal className="h-5 w-5 sm:h-4 sm:w-4 text-white/80 flex-shrink-0" />
+        <div className="flex gap-1 sm:gap-0 min-w-max">
+          {(["pnpm", "npm", "yarn", "bun"] as PackageManager[]).map((manager) => (
+            <button
+              key={manager}
+              onClick={() => setSelectedManager(manager)}
+              className={`px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm border-b-2 transition-colors whitespace-nowrap ${
+                selectedManager === manager
+                  ? "border-white text-white"
+                  : "border-transparent text-white/60 hover:text-white"
+              }`}
+            >
+              {manager}
+            </button>
+          ))}
+        </div>
       </div>
-
-      {/* Command Box */}
-      <code className="block text-sm font-mono">{command}</code>
-
+  
+      {/* Command Box - text wraps on mobile */}
+      <div className="pr-10">
+        <code className="block text-xs sm:text-sm font-mono break-all sm:break-normal">
+          {command}
+        </code>
+      </div>
+  
       {/* Copy Button */}
       <button
         onClick={() => handleCopyCode(command, key)}
-        className="absolute right-3 top-3 text-white/50 hover:text-white"
+        className="absolute right-2 sm:right-3 top-2 sm:top-3 text-white/50 hover:text-white p-1"
       >
-        {copiedCode === key ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+        {copiedCode === key ? (
+          <Check className="w-4 h-4 sm:w-4 sm:h-4" />
+        ) : (
+          <Copy className="w-4 h-4 sm:w-4 sm:h-4" />
+        )}
       </button>
     </div>
   );
