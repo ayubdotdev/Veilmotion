@@ -12,8 +12,10 @@ interface Pattern {
   style: React.CSSProperties;
   component: React.FC;
   code: string;
-  isLightBackground?: boolean
+  isLightBackground?: boolean;
+  previewImage?: string; 
 }
+
 
 const patterns: Pattern[] = [
   //geometrics
@@ -136,7 +138,8 @@ export const DarkBg = () => {
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/DarkBg.png"
   },
   {
     id: "black-grid",
@@ -225,7 +228,9 @@ export const AnimatedBlackGridBackground = () => {
     //</div>
   //);
 //}
-`
+`,
+previewImage:"/BlackGrid.png"
+
   },
 
 
@@ -329,7 +334,8 @@ linear-gradient(
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/Cyber.png"
   },
   {
     id: "toxicpulse-grid",
@@ -431,7 +437,8 @@ linear-gradient(
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/Toxic.png"
   },
   {
     id: "cyanburst-grid",
@@ -532,7 +539,8 @@ export const CyanBurstGrid = () => {
     </div>
   );
 };
-`
+`,
+previewImage:"/Cyan.png"
   },
   {
 
@@ -633,7 +641,8 @@ export const IndigoGrid = () => {
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/IndigoMist.png"
   },
   {
     id: "magenta-flame-grid",
@@ -732,7 +741,8 @@ export const MagentaFlame = () => {
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/MagentaFlame.png"
   },
 
   //radial//
@@ -830,7 +840,8 @@ export const MagentaGrid = () => {
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/MagentRadial.png"
   },
   {
     id: "coolblue-grid",
@@ -930,7 +941,8 @@ export const CoolBlueGrid = () => {
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/CoolBlue.png"
   },
   {
     id: "warmamber-grid",
@@ -1031,7 +1043,8 @@ export const WarmAmberGrid = () => {
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/WarmAmber.png"
   },
   {
     id: "limefade-grid",
@@ -1108,7 +1121,7 @@ export const LimeFadeGrid = () => {
   );
 };
 
-"use client";
+//"use client";
 // //usage eg:
 // import React from "react";
 // import { LimeFadeGrid } from "./component/bg";
@@ -1132,7 +1145,8 @@ export const LimeFadeGrid = () => {
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/Lime.png"
   },
   {
     id: "greenpunch-grid",
@@ -1233,7 +1247,8 @@ export const GreenPunchGrid = () => {
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/GreenPunch.png"
   },
 
   //v1-bottom
@@ -1291,7 +1306,8 @@ export const IndigoGradientv1 = () => {
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/IndigoBtm.png"
   },
   {
     id: "indigo-gradient-v2",
@@ -1347,7 +1363,8 @@ export const IndigoGradientv2 = () => {
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/IndigoTop.png"
   },
   {
     id: "indigo-gradient-black-v2",
@@ -1406,7 +1423,8 @@ export const IndigoGradientBlackv2 = () => {
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/IndigoBTop.png"
   },
   {
     id: "indigo-gradient-black-v1",
@@ -1462,7 +1480,8 @@ export const IndigoGradientBlackv1 = () => {
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/IndigoBBtm.png"
   },
   
 
@@ -1520,7 +1539,8 @@ export const IndigoGradientBlackv1 = () => {
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/TealBtm.png"
   },
   {
     id: "teal-gradient-v2",
@@ -1576,7 +1596,8 @@ export const IndigoGradientBlackv1 = () => {
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/TealTop.png"
   },
   {
     id: "teal-gradient-black-v1",
@@ -1631,7 +1652,8 @@ export const IndigoGradientBlackv1 = () => {
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/TealBTop.png "
   },
   {
     id: "teal-gradient-black-v2",
@@ -1641,26 +1663,23 @@ export const IndigoGradientBlackv1 = () => {
     component: TealGradient,
     code: `"use client";
   
-  import React from "react";
-  import { motion } from "framer-motion";
-  
-  
-  export const TealBottom = () => {
-    return (
-      <div className="min-h-screen w-full relative overflow-hidden">
-        {/* Radial Gradient Background with Fade-in Animation */}
-        <motion.div
-          className="absolute inset-0 z-0"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
-          style={{
-            background: "radial-gradient(125% 125% at 50% 10%, #fff 40%, #14b8a6 100%)",
-          }}
-        />
-      </div>
-    );
-  };
+  import {motion} from "framer-motion"
+export const TealBlackBtm  = () => {
+  return (
+    <div className="min-h-screen w-full relative overflow-hidden">
+      {/* Radial Gradient Background with Fade-in Animation */}
+      <motion.div
+        className="absolute inset-0 z-0"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.5, ease: "easeOut" }}
+        style={{
+          background: "radial-gradient(125% 125% at 50% 10%, #0a0a0a 40%, #14b8a6 100%)",
+        }}
+      />
+    </div>
+  );
+};
   //"use client";
 // //usage eg:
 // import React from "react";
@@ -1685,7 +1704,8 @@ export const IndigoGradientBlackv1 = () => {
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/TealBBtm.png"
   },
 
   {
@@ -1741,7 +1761,8 @@ export const CyanBottom = () => {
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/CyanBtm.png"
   },
   {
     id: "cyan-gradient-v2",
@@ -1796,7 +1817,8 @@ export const CyanTop = () => {
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/CyanTop.png"
   },
   {
     id: "cyan-gradient-black-v1",
@@ -1850,7 +1872,8 @@ export const CyanTop = () => {
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/CyanBTop.png"
   },
   {
     id: "cyan-gradient-black-v2",
@@ -1904,7 +1927,8 @@ export const CyanBlackBottom = () => {
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/CyanBBtm.png"
   },
 
   {
@@ -1961,7 +1985,8 @@ export const CyanBlackBottom = () => {
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/FushBtm.png"
   },
   {
     id: "fuchsia-gradient-v2",
@@ -2017,7 +2042,8 @@ export const CyanBlackBottom = () => {
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/FushTop.png"
   },
   {
     id: "fuchsia-gradient-black-v1",
@@ -2071,7 +2097,8 @@ export const CyanBlackBottom = () => {
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/FushBTop.png"
   },
   {
     id: "fuchsia-gradient-black-v2",
@@ -2125,7 +2152,8 @@ export const CyanBlackBottom = () => {
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/FushBBtm.png"
   },
 
   {
@@ -2181,8 +2209,8 @@ export const RedBottom = () => {
 //     </div>
 //   );
 // }
-
-`
+`,
+previewImage:"/RedBtm.png"
   },
   {
     id: "red-gradient-v2",
@@ -2236,7 +2264,8 @@ export const RedTop = () => {
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/RedTop.png"
   },
   {
     id: "red-gradient-black-v1",
@@ -2289,7 +2318,8 @@ export const RedBlackTop = () => {
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/RedBTop.png"
   },
   {
     id: "red-gradient-black-v2",
@@ -2342,7 +2372,8 @@ export const RedBlackBottom = () => {
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/RedBBtm.png"
   },
 
 
@@ -3511,7 +3542,6 @@ export const GlowingParticles: React.FC<GalaxyProps> = ({ starCount = 200 }) => 
 // }
 `
   },
-  
 ];
 
 export { patterns };

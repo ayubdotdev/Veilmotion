@@ -10,11 +10,14 @@ import { useTheme } from "next-themes";
 interface Pattern {
   id: string;
   name: string;
-  category: "Grids" | "Gradients" | "Effects" | "Dots" 
+  category: "Grids" | "Gradients" | "Effects" | "Dots";
   style: React.CSSProperties;
-  component: React.FC; 
+  component: React.FC;
   code: string;
+  isLightBackground?: boolean;
+  previewImage?: string; // NEW - path to static preview image
 }
+
 
 
 export default function Home() {

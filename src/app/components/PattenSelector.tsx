@@ -1,5 +1,5 @@
 import { AnimatePresence } from "framer-motion";
-import { Check, Copy, Eye, X, Sun, Moon } from "lucide-react";
+import { Check, Copy, Eye, X, Sun, Moon, CheckCircle } from "lucide-react";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { motion } from "framer-motion";
 import { PatternComponents } from "../components/PatternComponents"
@@ -7,6 +7,8 @@ import { patterns } from "../utils/patterns";
 import { ReturnPreview, useReturnPreview } from "./Return";
 import Favorite from "./Favorites";
 import { useTheme } from "next-themes";
+import Image from "next/image";
+import { toast } from "sonner";
 
 interface Pattern {
   id: string;
@@ -15,19 +17,21 @@ interface Pattern {
   style: React.CSSProperties;
   component: React.FC;
   code: string;
-  isLightBackground?: boolean; 
+  isLightBackground?: boolean;
+  previewImage?: string; // NEW - path to static preview image
 }
+
 
 interface PatternSelectorProps {
   activePattern?: Pattern | null;
   setActivePattern?: Dispatch<SetStateAction<Pattern | null>>;
 }
 
-const categories = ["All", "Grids","Gradients", "Effects", "Dots", "Favorites"] as const;
+const categories = ["All", "Grids", "Gradients", "Effects", "Dots", "Favorites"] as const;
 type Category = (typeof categories)[number];
 
-export default function PatternSelector({ 
-  activePattern, 
+export default function PatternSelector({
+  activePattern,
   setActivePattern
 }: PatternSelectorProps) {
   const { theme, setTheme } = useTheme();
@@ -35,7 +39,7 @@ export default function PatternSelector({
   const [isCopied, setIsCopied] = useState<string | null>(null);
   const [previewPattern, setPreviewPattern] = useState<Pattern | null>(null);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
-  
+
   const {
     isPreviewActive,
     savePositionAndPreview,
@@ -61,11 +65,17 @@ export default function PatternSelector({
     event.preventDefault();
     event.stopPropagation();
 
+    const showCopiedToast = () => {
+      toast.success(`Copied "${pattern.name}" to clipboard`, {
+        icon: <CheckCircle className="text-green-500" size={20} />,
+      });
+    };
+
     try {
       await navigator.clipboard.writeText(pattern.code);
       setIsCopied(pattern.id);
       setTimeout(() => setIsCopied(null), 2000);
-      console.log('Code copied successfully!');
+      showCopiedToast();
     } catch (err) {
       console.error('Failed to copy code:', err);
       try {
@@ -79,10 +89,10 @@ export default function PatternSelector({
         document.body.removeChild(textArea);
         setIsCopied(pattern.id);
         setTimeout(() => setIsCopied(null), 2000);
-        console.log('Code copied using fallback method!');
+        showCopiedToast();
       } catch (fallbackErr) {
         console.error('Fallback copy failed:', fallbackErr);
-        alert('Failed to copy code. Please try again.');
+        toast.error('Failed to copy code');
       }
     }
   };
@@ -126,8 +136,8 @@ export default function PatternSelector({
   const filteredPatterns = activeCategory === "All"
     ? patterns
     : activeCategory === "Favorites"
-    ? patterns.filter((pattern: Pattern) => favorites.has(pattern.id))
-    : patterns.filter((pattern: Pattern) => pattern.category === activeCategory);
+      ? patterns.filter((pattern: Pattern) => favorites.has(pattern.id))
+      : patterns.filter((pattern: Pattern) => pattern.category === activeCategory);
 
   return (
     <div className="min-h-screen bg-black relative">
@@ -172,7 +182,7 @@ export default function PatternSelector({
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white">
-            Explore Stunning Animated Backgrounds
+              Explore Stunning Animated Backgrounds
             </h1>
             <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
               Choose from our collection of animated background patterns. <br />Preview them live and copy the React code for your projects.
@@ -181,30 +191,29 @@ export default function PatternSelector({
 
           {/* Category Tabs */}
           <div className="mb-10 flex justify-center">
-  <div className="grid grid-cols-3 sm:grid-cols-4 md:flex md:flex-wrap md:justify-center bg-gray-100 dark:bg-gray-800 p-1 rounded-xl gap-2 w-full max-w-sm sm:max-w-md lg:max-w-lg">
-    {categories.map((category) => (
-      <button
-        key={category}
-        onClick={() => setActiveCategory(category)}
-        className={`relative text-sm font-medium transition-all px-4 py-2 rounded-lg text-center ${
-          activeCategory === category
-            ? "text-white shadow-md"
-            : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-        }`}
-      >
-        {activeCategory === category && (
-          <motion.div
-            layoutId="activeTab"
-            className="absolute inset-0 bg-blue-500 rounded-lg"
-            initial={false}
-            transition={{ type: "spring", stiffness: 400, damping: 30 }}
-          />
-        )}
-        <span className="relative z-10">{category}</span>
-      </button>
-    ))}
-  </div>
-</div>
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:flex md:flex-wrap md:justify-center bg-gray-100 dark:bg-gray-800 p-1 rounded-xl gap-2 w-full max-w-sm sm:max-w-md lg:max-w-lg">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setActiveCategory(category)}
+                  className={`relative text-sm font-medium transition-all px-4 py-2 rounded-lg text-center ${activeCategory === category
+                    ? "text-white shadow-md"
+                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+                    }`}
+                >
+                  {activeCategory === category && (
+                    <motion.div
+                      layoutId="activeTab"
+                      className="absolute inset-0 bg-blue-500 rounded-lg"
+                      initial={false}
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    />
+                  )}
+                  <span className="relative z-10">{category}</span>
+                </button>
+              ))}
+            </div>
+          </div>
 
 
           {/* Empty Favorites Message */}
@@ -234,7 +243,6 @@ export default function PatternSelector({
                 exit={{ opacity: 0, y: 20 }}
                 className="group relative bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 w-full max-w-sm"
               >
-                
 
                 {/* Favorite Heart Icon */}
                 <Favorite
@@ -243,12 +251,26 @@ export default function PatternSelector({
                   onToggleFavorite={handleToggleFavorite}
                 />
 
-                {/* Pattern Preview Area */}
-                <div
-                  className="relative h-48 overflow-hidden"
-                  style={pattern.style}
-                >
-                  {React.createElement(pattern.component)}
+                {/* Pattern Preview Area (static image in grid) */}
+                <div className="relative h-48 overflow-hidden bg-gray-200 dark:bg-gray-700">
+                  {pattern.previewImage ? (
+                    <Image
+                      src={pattern.previewImage}
+                      alt={pattern.name}
+                      fill
+                      className="object-cover"
+                      quality={100}
+                      sizes="(max-width: 768px) 100vw,
+                           (max-width: 1200px) 50vw,
+                           25vw"
+                    />
+
+                  ) : (
+                    <div
+                      className="w-full h-full"
+                      style={pattern.style}
+                    />
+                  )}
 
                   {/* Hover Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center p-4">
@@ -279,9 +301,11 @@ export default function PatternSelector({
                           </>
                         )}
                       </button>
+
                     </div>
                   </div>
                 </div>
+
 
                 {/* Pattern Info */}
                 <div className="p-4">
