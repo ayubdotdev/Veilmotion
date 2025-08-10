@@ -1653,7 +1653,7 @@ previewImage:"/TealTop.png"
 //   );
 // }
 `,
-previewImage:"/TealBTop.png "
+previewImage:"/TealBTop.png"
   },
   {
     id: "teal-gradient-black-v2",
