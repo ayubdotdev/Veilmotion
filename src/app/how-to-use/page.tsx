@@ -125,30 +125,29 @@ export default function Demo() {
     );
   };
   
-//Example USAGE:
-//"use client";
-// import React from "react";
-// import { TealBlackTop } from "./component/bg";
+/*Example USAGE:
+"use client";
+ import React from "react";
+ import { TealBlackTop } from "./component/bg";
 
-// export default function HomePage() {
-//   return (
-//     <div className="h-screen relative overflow-hidden">
-//       <TealBlackTop/>
+ export default function HomePage() {
+   return (
+     <div className="h-screen relative overflow-hidden">
+       <TealBlackTop/>
 
-//       {/* Foreground Content */}
-//       <div className="absolute inset-0 z-10 flex items-center justify-center">
-//         {/* Your components goes here */}
-//         <div className="text-center">
-//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
-//           <p className="text-lg text-gray-300 mt-2">
-//             Replace this with any UI elements, cards, forms, etc.
-//           </p>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-`;
+       //Foreground Content
+       <div className="absolute inset-0 z-10 flex items-center justify-center">
+         // Your components goes here
+         <div className="text-center">
+           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+           <p className="text-lg text-gray-300 mt-2">
+             Replace this with any UI elements, cards, forms, etc.
+           </p>
+         </div>
+       </div>
+     </div>
+   );
+ }*/`;
 
 
   return (
@@ -306,7 +305,7 @@ export default function Demo() {
               <h3 className="font-semibold mb-3 text-center justify-center text-gray-800 dark:text-gray-200 flex items-center gap-2">
                 Demo Result              </h3>
               <p className="text-gray-600 text-center justify-center dark:text-gray-300 mb-4">
-                Here's what the TealBlackTop background pattern looks like when implemented
+                Here&apos;s what the TealBlackTop background pattern looks like when implemented
               </p>
               <div className="relative rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 shadow-lg">
                 <Demo />

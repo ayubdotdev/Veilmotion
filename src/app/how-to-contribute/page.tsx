@@ -76,7 +76,7 @@ export default function HowToContributePage() {
     </div>
   );
 
-  const examplePattern = `
+  const examplePattern = `//Step 1
 //src/bgs/
 "use client";
 import React from "react";
@@ -99,7 +99,8 @@ export const MyAwesomePattern = () => {
   );
 };`;
 
-  const patternRegistration = `// In src/app/utils/patterns.ts
+  const patternRegistration = `//Step 2  
+// In src/app/utils/patterns.ts
 import { MyAwesomePattern } from "@/bgs/YourCategory";
 
 const patterns: Pattern[] = [
@@ -115,6 +116,7 @@ const patterns: Pattern[] = [
   },
 ];
 
+//Step 3
 // In src/app/components/PatternComponents.tsx
 export const PatternComponents: Record<string, React.FC> = {
   // ... existing patterns
