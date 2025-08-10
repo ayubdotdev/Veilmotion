@@ -159,7 +159,7 @@ export default function Demo() {
           {/* Back Button */}
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 mb-8 group"
+            className="inline-flex items-center gap-1 text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-50 mb-8 group"
           >
             <ArrowLeft className="h-4 w-4 " />
             Back to Home

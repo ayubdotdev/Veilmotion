@@ -180,31 +180,32 @@ export default function PatternSelector({
           </div>
 
           {/* Category Tabs */}
-          <div className="mb-8 flex justify-center">
-            <div className="grid grid-cols-3 md:flex md:flex-wrap md:justify-center bg-gray-100 dark:bg-gray-800 p-1 rounded-xl gap-2 w-full max-w-md lg:max-w-2xl">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => setActiveCategory(category)}
-                  className={`relative text-sm font-medium transition-all px-4 py-2 rounded-lg text-center ${
-                    activeCategory === category
-                      ? "text-white shadow-md"
-                      : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-                  }`}
-                >
-                  {activeCategory === category && (
-                    <motion.div
-                      layoutId="activeTab"
-                      className="absolute inset-0 bg-blue-500 rounded-lg"
-                      initial={false}
-                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                    />
-                  )}
-                  <span className="relative z-10">{category}</span>
-                </button>
-              ))}
-            </div>
-          </div>
+          <div className="mb-10 flex justify-center">
+  <div className="grid grid-cols-3 sm:grid-cols-4 md:flex md:flex-wrap md:justify-center bg-gray-100 dark:bg-gray-800 p-1 rounded-xl gap-2 w-full max-w-sm sm:max-w-md lg:max-w-lg">
+    {categories.map((category) => (
+      <button
+        key={category}
+        onClick={() => setActiveCategory(category)}
+        className={`relative text-sm font-medium transition-all px-4 py-2 rounded-lg text-center ${
+          activeCategory === category
+            ? "text-white shadow-md"
+            : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+        }`}
+      >
+        {activeCategory === category && (
+          <motion.div
+            layoutId="activeTab"
+            className="absolute inset-0 bg-blue-500 rounded-lg"
+            initial={false}
+            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+          />
+        )}
+        <span className="relative z-10">{category}</span>
+      </button>
+    ))}
+  </div>
+</div>
+
 
           {/* Empty Favorites Message */}
           {activeCategory === "Favorites" && favorites.size === 0 && (

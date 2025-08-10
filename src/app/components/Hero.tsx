@@ -14,7 +14,7 @@ export default function Hero({ activePattern, setActivePattern, theme }: HeroPro
     const isPatternDark = theme === "dark";
 
     return (
-        <section className="h-screen flex items-center justify-center text-center px-4 sm:px-6 lg:px-8  md:pt-8 pt-12">
+        <section className="h-screen flex items-center justify-center text-center px-4 sm:px-6 lg:px-8 sm:pt-8 pt-10">
             <div className="max-w-4xl w-full mx-auto relative pt-10  z-10">
                 {/* Main Heading */}
                 <div className="mb-6 sm:mb-8">
@@ -30,8 +30,6 @@ export default function Hero({ activePattern, setActivePattern, theme }: HeroPro
                 <p className="text-base sm:text-lg mb-8 max-w-2xl mx-auto leading-relaxed text-gray dark:text-gray-200">
                     Discover hand-crafted, responsive background animations and CSS particle systems. Seamlessly plug them into any project — built with Tailwind CSS and powered by Framer Motion.
                 </p>
-
-
 
                 {/* Feature Highlights */}
                 <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 mb-10  ">
