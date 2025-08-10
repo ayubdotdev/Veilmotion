@@ -1,13 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowLeft, Copy, Check, Terminal, FileCode, Star, ExternalLink, Download, SearchCode, SearchSlash, SearchCheckIcon, SearchX, Code2Icon, EyeIcon, ExternalLinkIcon, View, GithubIcon } from "lucide-react";
+import { ArrowLeft, Copy, Check, Terminal, FileCode, Star, ExternalLink, Download, SearchCode, SearchSlash, SearchCheckIcon, SearchX, Code2Icon, EyeIcon, ExternalLinkIcon, View, GithubIcon, EyeOff, LucideScanEye } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { RainbowButton } from "../components/rainbow-button";
 import { InteractiveHoverButton } from "@/components/magicui/interactive-hover-button";
+import Image from "next/image";
+import Demo from "../components/Demo";
 
 type PackageManager = "pnpm" | "npm" | "yarn" | "bun";
 
@@ -26,8 +28,6 @@ const installationCommands = {
   },
 };
 
-
-
 export default function HowToUsePage() {
   const [selectedFramerManager, setSelectedFramerManager] = useState<PackageManager>("npm");
   const [selectedGsapManager, setSelectedGsapManager] = useState<PackageManager>("npm");
@@ -39,26 +39,6 @@ export default function HowToUsePage() {
     setCopiedCode(key);
     setTimeout(() => setCopiedCode(null), 2000);
   };
-
-  const renderTabs = (
-    selectedManager: PackageManager,
-    setSelectedManager: React.Dispatch<React.SetStateAction<PackageManager>>
-  ) => (
-    <div className="flex border-b border-white/10 text-sm text-white mb-4">
-      {(["pnpm", "npm", "yarn", "bun"] as PackageManager[]).map((manager) => (
-        <button
-          key={manager}
-          onClick={() => setSelectedManager(manager)}
-          className={`px-4 py-2  border-b-2 transition-colors ${selectedManager === manager
-            ? "border-white text-white"
-            : "border-transparent text-white/60 hover:text-white"
-            }`}
-        >
-          {manager}
-        </button>
-      ))}
-    </div>
-  );
 
   const renderCommandBox = (
     label: string,
@@ -100,63 +80,75 @@ export default function HowToUsePage() {
 
 
 
-  const exampleUsage = `import { PurpleGradient } from "./components/bg";
+  const exampleUsage = `"use client";
+import { TealGradientBlackTop } from "@/bgs/Gradients";
+import React from "react";
 
-export default function HomePage() {
+export default function Demo() {
   return (
-    <div className="relative min-h-screen">
-      {/* Your background animation */}
-      <PurpleGradient />
-      
-      {/* Your page content */}
-      <div className="relative z-10">
-        <h1>Your Content Here</h1>
-        <p>This content will appear over the animated background</p>
+    <div className="h-screen relative overflow-hidden">
+      <TealGradientBlackTop  />
+      {/* Foreground Content */}
+      <div className="absolute inset-0 z-10 flex items-center justify-center">
+        {/* Your components goes here */}
+        <div className="text-center">
+          <p className="text-4xl font-bold text-white">Your Components Goes Here</p>
+          <p className="text-lg text-gray-300 mt-2">
+            Replace this with any UI elements, cards, forms, etc.
+          </p>
+        </div>
       </div>
     </div>
   );
-}`;
-  const exampleBgComponent = `/* 
-USAGE EXAMPLE:
-import { PurpleGradient } from "./components/bg";
-
-export default function HomePage() {
-  return (
-    <PurpleGradient>
-      <h1>Your content goes here</h1>
-    </PurpleGradient>
-  );
 }
-*/
+`;
+  const exampleBgComponent = `
+  //components/bg.tsx
+  "use client";
+  import React from "react";
+  import { motion } from "framer-motion";
+  
+  export const TealBlackTop = () => {
+    return (
+      <div className="min-h-screen w-full relative overflow-hidden">
+        {/* Radial Gradient Background: near-black base fading to teal */}
+        <motion.div
+          className="absolute inset-0 z-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          style={{
+            background: "radial-gradient(125% 125% at 50% 90%, #0a0a0a 40%, #14b8a6 100%)",
+          }}
+        />
+      </div>
+    );
+  };
+  
+//Example USAGE:
+//"use client";
+// import React from "react";
+// import { TealBlackTop } from "./component/bg";
 
-"use client";
-// components/bg.tsx
-import React from "react";
-import { motion } from "framer-motion";
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       <TealBlackTop/>
 
-interface PurpleGradientProps {
-  children?: React.ReactNode;
-}
-
-export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
-  return (
-    <div className="min-h-screen w-full relative overflow-hidden">
-      {/* Radial Gradient Background with Fade-in Animation */}
-      <motion.div
-        className="absolute inset-0 z-0"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.5, ease: "easeOut" }}
-        style={{
-          background: "radial-gradient(125% 125% at 50% 10%, #fff 40%, #6366f1 100%)",
-        }}
-      />
-
-      {/* Your Foreground Content */}
-      <div className="relative z-10">{children}</div>
-    </div>
-  );
-};`;
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components goes here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`;
 
 
   return (
@@ -165,7 +157,7 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
       <div className="relative overflow-hidden bg-gradient-to-b from-indigo-50 to-white dark:from-gray-900 dark:to-black">
         <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
         <div className="max-w-4xl mx-auto px-4 py-16 relative z-10">
-        {/* Back Button */}
+          {/* Back Button */}
           <Link
             href="/"
             className="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 mb-8 group"
@@ -191,7 +183,7 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
       </div>
 
       {/* Content */}
-      <div className="max-w-4xl mx-auto px-4 py-12">
+      <div className="max-w-4xl mx-auto px-4 ">
         {/* Step 1: Installation */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
@@ -215,7 +207,7 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
               {/* Framer Motion */}
               <div className="pt-5">
                 <h3 className="font-semibold mb-2 flex items-center gap-2">
-                   Framer Motion <span className="text-green-300">(Mostly)</span>
+                  Framer Motion <span className="text-green-300">(Mostly)</span>
                 </h3>
 
                 {renderCommandBox(
@@ -231,7 +223,7 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
               {/* GSAP */}
               <div>
                 <h3 className="font-semibold mb-2 flex items-center gap-2 ">
-                   GSAP<span className="text-blue-400">(Rarely)</span>
+                  GSAP<span className="text-blue-400">(Rarely)</span>
                 </h3>
                 {renderCommandBox(
                   "GSAP",
@@ -276,7 +268,7 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
             {/* Example Code Block */}
             <div>
               <h3 className="font-semibold mb-3 flex items-center gap-2">
-                Example: Using the Purple Gradient Pattern
+                Example: Using the Teal Gradient
               </h3>
 
               <div className="relative">
@@ -308,6 +300,20 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
                 </button>
               </div>
             </div>
+
+            {/* Demo Preview */}
+            <div className="bg-gray-50 dark:bg-gray-900/20 border border-gray-200 dark:border-gray-800 rounded-lg p-6">
+              <h3 className="font-semibold mb-3 text-center justify-center text-gray-800 dark:text-gray-200 flex items-center gap-2">
+                Demo Result              </h3>
+              <p className="text-gray-600 text-center justify-center dark:text-gray-300 mb-4">
+                Here's what the TealBlackTop background pattern looks like when implemented
+              </p>
+              <div className="relative rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 shadow-lg">
+                <Demo />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+              </div>
+
+            </div>
           </div>
         </motion.section>
 
@@ -325,20 +331,20 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
             <h2 className="text-2xl font-bold">Understanding the Code Structure</h2>
           </div>
 
-          <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-6">
-            <h3 className="font-semibold mb-3 text-green-800 dark:text-green-200">
+          <div className="bg-teal-50 dark:bg-teal-900/20 border border-teal-200 dark:border-teal-800 rounded-lg p-6">
+            <h3 className="font-semibold mb-3 text-teal-800 dark:text-teal-200">
               Demo Usage in Comments
             </h3>
-            <p className="text-green-700 dark:text-green-300 mb-4">
-              Every pattern you copy will include a commented usage example at the top of the code. Look for sections like:
+            <p className="text-teal-700 dark:text-teal-300 mb-4">
+              Every pattern you copy will include a commented usage example at the top or bottom of the code. <br />Look for sections like:
             </p>
             <div className="bg-gray-900 text-gray-100 p-4 rounded text-sm font-mono">
-            <span className="text-green-400">{`/*`}</span><br />
-            <span className="text-green-400">USAGE EXAMPLE:</span><br />
+              <span className="text-green-400">{`/*`}</span><br />
+              <span className="text-green-400">USAGE EXAMPLE:</span><br />
               <span className="text-green-400">import &#123; PatternName &#125; from &quot;./components/bg&quot;;</span><br />
               <span className="text-green-400">{`*/`}</span>
-              </div>
-            <p className="text-green-700 dark:text-green-300 mt-4">
+            </div>
+            <p className="text-teal-700 dark:text-teal-300 mt-4">
               These comments show you exactly how to implement the pattern in your project!
             </p>
           </div>
@@ -364,8 +370,9 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
                 animate={{ rotate: [0, 10, -10, 0], scale: [1, 1.2, 1], opacity: [1, 0.9, 1] }}
                 transition={{ repeat: Infinity, duration: 2 }}
               >
-                <Star className="h-12 w-12 text-yellow-400 mx-auto mb-4 drop-shadow-[0_0_12px_rgba(250,204,21,0.8)]" />
-              </motion.div>              <h3 className="text-lg font-semibold mb-2">Love Veilmotion?</h3>
+                <Star className="h-12 w-12 text-yellow-400 fill-yellow-400 mx-auto mb-4 drop-shadow-[0_0_12px_rgba(250,204,21,0.8)]" />
+              </motion.div>             
+               <h3 className="text-lg font-semibold mb-2">Love Veilmotion?</h3>
               <p className="text-gray-600 dark:text-gray-300 mb-6">
                 If you find Veilmotion useful for your projects, please consider giving it a star on GitHub!
                 <br></br> It helps others discover these beautiful animations and supports the project&apos;s growth.
@@ -392,17 +399,17 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.6 }}
-          className="text-center"
+          className="text-center pb-8"
         >
           <InteractiveHoverButton>
 
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 "
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 "
             >
-            Browse More Motions!
-          </Link>
-            </InteractiveHoverButton>
+              Browse More Motions!
+            </Link>
+          </InteractiveHoverButton>
         </motion.div>
       </div>
     </div>

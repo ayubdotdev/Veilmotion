@@ -87,7 +87,7 @@ export default function Hero({ activePattern, setActivePattern, theme }: HeroPro
                 {/* Stats */}
                 <div className={`flex justify-center gap-8 pt-6 border-t ${isPatternDark ? "border-white/20" : "border-gray-300 dark:border-gray-700"}`}>
                     <div className="text-center">
-                        <div className="text-2xl font-bold text-black dark:text-white">100+</div>
+                        <div className="text-2xl font-bold text-black dark:text-white">50+</div>
                         <div className="text-sm  text-black dark:text-white">Backgrounds</div>
                     </div>
                     <div className="text-center">

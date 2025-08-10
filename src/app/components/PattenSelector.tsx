@@ -6,16 +6,7 @@ import { PatternComponents } from "../components/PatternComponents"
 import { patterns } from "../utils/patterns";
 import { ReturnPreview, useReturnPreview } from "./Return";
 import Favorite from "./Favorites";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
 import { useTheme } from "next-themes";
-import { Button } from "./ui/button";
 
 interface Pattern {
   id: string;
@@ -24,7 +15,7 @@ interface Pattern {
   style: React.CSSProperties;
   component: React.FC;
   code: string;
-  isLightBackground?: boolean; // New property to identify light backgrounds
+  isLightBackground?: boolean; 
 }
 
 interface PatternSelectorProps {
@@ -44,8 +35,6 @@ export default function PatternSelector({
   const [isCopied, setIsCopied] = useState<string | null>(null);
   const [previewPattern, setPreviewPattern] = useState<Pattern | null>(null);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
-  const [showLightModeModal, setShowLightModeModal] = useState(false);
-  const [pendingLightPattern, setPendingLightPattern] = useState<Pattern | null>(null);
   
   const {
     isPreviewActive,
@@ -54,7 +43,6 @@ export default function PatternSelector({
     clearPreview
   } = useReturnPreview();
 
-  // Handle toggling favorites
   const handleToggleFavorite = (patternId: string) => {
     setFavorites(prev => {
       const newFavorites = new Set(prev);
@@ -69,7 +57,6 @@ export default function PatternSelector({
     });
   };
 
-  // Handle copying with improved feedback and error handling
   const handleCopyCode = async (pattern: Pattern, event: React.MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
@@ -81,7 +68,6 @@ export default function PatternSelector({
       console.log('Code copied successfully!');
     } catch (err) {
       console.error('Failed to copy code:', err);
-      // Fallback for older browsers
       try {
         const textArea = document.createElement('textarea');
         textArea.value = pattern.code;
@@ -101,55 +87,27 @@ export default function PatternSelector({
     }
   };
 
-  // Handle preview with light mode check
   const handlePreview = (pattern: Pattern, event: React.MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
 
-    // Check if this is a light background pattern and user is in dark mode
-    if (pattern.isLightBackground && theme === "dark") {
-      setPendingLightPattern(pattern);
-      setShowLightModeModal(true);
-      return;
+    // Automatically switch theme based on pattern's isLightBackground property
+    if (pattern.isLightBackground) {
+      setTheme("light");
+      console.log('Switched to light mode for pattern:', pattern.name);
+    } else {
+      setTheme("dark");
+      console.log('Switched to dark mode for pattern:', pattern.name);
     }
 
-    // Proceed with normal preview
-    activatePreview(pattern);
-  };
-
-  // Activate preview without modal check
-  const activatePreview = (pattern: Pattern) => {
-    setPreviewPattern(pattern);
-    if (setActivePattern) {
-      setActivePattern(pattern);
-    }
-    savePositionAndPreview();
-    console.log('Preview activated for pattern:', pattern.name);
-  };
-
-  // Handle light mode modal actions
-  const handleSwitchToLightMode = () => {
-    setTheme("light");
-    setShowLightModeModal(false);
-    
-    // Activate preview after switching theme
-    if (pendingLightPattern) {
-      setTimeout(() => activatePreview(pendingLightPattern), 150);
-      setPendingLightPattern(null);
-    }
-  };
-
-  const handleContinueInDarkMode = () => {
-    setShowLightModeModal(false);
-    if (pendingLightPattern) {
-      activatePreview(pendingLightPattern);
-      setPendingLightPattern(null);
-    }
-  };
-
-  const handleCancelModal = () => {
-    setShowLightModeModal(false);
-    setPendingLightPattern(null);
+    setTimeout(() => {
+      setPreviewPattern(pattern);
+      if (setActivePattern) {
+        setActivePattern(pattern);
+      }
+      savePositionAndPreview();
+      console.log('Preview activated for pattern:', pattern.name);
+    }, 150);
   };
 
   // Clear preview
@@ -165,7 +123,6 @@ export default function PatternSelector({
     returnToSavedPosition();
   };
 
-  // Filter patterns based on category
   const filteredPatterns = activeCategory === "All"
     ? patterns
     : activeCategory === "Favorites"
@@ -190,38 +147,6 @@ export default function PatternSelector({
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Light Mode Recommendation Modal */}
-      <Dialog open={showLightModeModal} onOpenChange={setShowLightModeModal}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Sun className="h-5 w-5 text-yellow-500" />
-              Switch to Light Mode?
-            </DialogTitle>
-            <DialogDescription>
-              This background pattern looks best in light mode. Would you like to switch to light mode for the optimal viewing experience?
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="flex-col sm:flex-row gap-2">
-            <Button
-              variant="outline"
-              onClick={handleCancelModal}
-              className="w-full sm:w-auto"
-            >
-              Cancel
-            </Button>
-            
-            <Button
-              onClick={handleSwitchToLightMode}
-              className="w-full sm:w-auto bg-yellow-500 hover:bg-yellow-600 text-white"
-            >
-              <Sun className="h-4 w-4 " />
-              Switch to Light Mode
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
 
       {/* Clear Preview Button */}
       {previewPattern && (
@@ -298,7 +223,7 @@ export default function PatternSelector({
           )}
 
           {/* Patterns Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center">
             {filteredPatterns.map((pattern) => (
               <motion.div
                 key={pattern.id}
@@ -306,15 +231,9 @@ export default function PatternSelector({
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
-                className="group relative bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
+                className="group relative bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 w-full max-w-sm"
               >
-                {/* Light Background Indicator */}
-                {pattern.isLightBackground && (
-                  <div className="absolute top-2 right-2 z-10 bg-yellow-100 text-black px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
-                    <Sun size={12} />
-                    Best in Light
-                  </div>
-                )}
+                
 
                 {/* Favorite Heart Icon */}
                 <Favorite

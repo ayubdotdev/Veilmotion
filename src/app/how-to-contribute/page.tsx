@@ -76,16 +76,13 @@ export default function HowToContributePage() {
     </div>
   );
 
-  const examplePattern = `"use client";
-
+  const examplePattern = `
+//src/bgs/
+"use client";
 import React from "react";
 import { motion } from "framer-motion";
 
-interface MyAwesomePatternProps {
-  children?: React.ReactNode;
-}
-
-export const MyAwesomePattern: React.FC<MyAwesomePatternProps> = ({ children }) => {
+export const MyAwesomePattern = () => {
   return (
     <div className="min-h-screen w-full relative overflow-hidden">
       {/* Your creative background animation */}
@@ -98,9 +95,6 @@ export const MyAwesomePattern: React.FC<MyAwesomePatternProps> = ({ children }) 
           background: "your-amazing-gradient-or-pattern",
         }}
       />
-
-      {/* Foreground Content */}
-      <div className="relative z-10">{children}</div>
     </div>
   );
 };`;
@@ -160,7 +154,7 @@ export const PatternComponents: Record<string, React.FC> = {
       </div>
 
       {/* Content */}
-      <div className="max-w-4xl mx-auto px-4 py-12">
+      <div className="max-w-4xl mx-auto px-4 ">
     
 
         {/* Step 1: Setup */}
@@ -234,12 +228,12 @@ export const PatternComponents: Record<string, React.FC> = {
           </div>
 
           <div className="space-y-6">
-            <div className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-6">
-              <h3 className="font-semibold mb-3 text-purple-800 dark:text-purple-200">
+            <div className="bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-800 rounded-lg p-6">
+              <h3 className="font-semibold mb-3 text-indigo-800 dark:text-indigo-200">
                 Pattern Structure Guidelines:
               </h3>
-              <ul className="list-disc list-inside space-y-2 text-purple-700 dark:text-purple-300">
-                <li>Create patterns in the appropriate category folder: <code className="bg-purple-100 dark:bg-purple-800 px-2 py-1 rounded text-sm">src/bgs/</code></li>
+              <ul className="list-disc list-inside space-y-2 text-indigo-700 dark:text-indigo-300">
+                <li>Create patterns in the appropriate category folder: <code className="bg-indigo-100 dark:bg-indigo-800 px-2 py-1 rounded text-sm">src/bgs/</code></li>
                 <li>Use <strong>Framer Motion</strong> for animations (preferred)</li>
                 <li>Follow the existing naming conventions</li>
                 <li>Include proper TypeScript interfaces</li>
@@ -438,7 +432,7 @@ export const PatternComponents: Record<string, React.FC> = {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.7 }}
-          className="text-center"
+          className="text-center pb-8"
         >
           <InteractiveHoverButton>
             <Link href="/" className="inline-flex items-center gap-2">

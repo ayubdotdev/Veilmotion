@@ -1,5 +1,5 @@
-import { BlinkingDotsComponent, DotGridAnimations, DotNetworkComponent, DotNetworkComponentv2, FadeDotComponent, MovingDotsComponent } from "@/bgs/Dots";
-import { GlowOrbsComponent } from "@/bgs/Effects";
+import { BlinkingDotsComponent, DotNetworkComponent, DotNetworkComponentv2, FadeDotComponent, MovingDotsComponent ,WavyDots} from "@/bgs/Dots";
+import  {    GlowOrbsComponent, SmoothRainComponent, SnowAuroraComponent } from "@/bgs/Effects";
 import {  FloatingParticles, GlowingParticles, ParticlesBackgroundComponent,  } from "@/bgs/Dots";
 import { AnimatedBlackGridBackground, CoolBlueGrid, CyanBurstGrid, DarkBg, GreenPunchGrid, LimeFadeGrid, MagentaFlame, MagentaGrid, NeonShock, ToxicPulse, VioletMistGrid, WarmAmberGrid } from "@/bgs/Geometrics";
 import { CyanGradient, CyanGradientBlack, CyanGradientBlackTop, CyanGradientTop, FuchsiaGradient, FuchsiaGradientBlack, FuchsiaGradientBlackTop, FuchsiaGradientTop, PurpleGradient, PurpleGradientBlack, PurpleGradientBlackTop, PurpleGradientTop, RedGradient, RedGradientBlack, RedGradientBlackTop, RedGradientTop, TealGradient, TealGradientBlack, TealGradientBlackTop, TealGradientTop, } from "@/bgs/Gradients";
@@ -39,8 +39,10 @@ export const PatternComponents: Record<string, React.FC> = {
 
 
 
-
+  //effects
   "effect-glow-orbs": GlowOrbsComponent,
+  "smooth-rain":SmoothRainComponent,
+  "smooth-snow":SnowAuroraComponent,
 
 
 
@@ -53,8 +55,8 @@ export const PatternComponents: Record<string, React.FC> = {
   "dots-soft-network-v2": DotNetworkComponentv2,
   "moving-dots": MovingDotsComponent,
   "blinking-dots": BlinkingDotsComponent,
-  "dot-grid": DotGridAnimations,
   "fade-dot":FadeDotComponent,
+  "wavy-dots":WavyDots,
 
   //geometrics
   "black-grid": AnimatedBlackGridBackground,

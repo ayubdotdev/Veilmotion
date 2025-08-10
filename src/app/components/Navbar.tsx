@@ -23,15 +23,13 @@ export function Navbar() {
         </Link>
 
         {/* Right Side: Social Icons and Theme Toggle */}
-        <div className="flex items-center gap-2 sm:gap-4">
+        <div className="flex items-center right-2 gap-2 mr-2 sm:gap-4">
           <Link href="https://github.com/ayubdotdev" target="_blank" rel="noopener noreferrer">
             <Github className="h-6 w-6 text-zinc-700 transition-colors hover:text-indigo-500 dark:text-zinc-300 dark:hover:text-indigo-400" />
           </Link>
           <Link href="https://x.com/Ayyubdotdev" target="_blank" rel="noopener noreferrer">
             <Twitter className="h-6 w-6 text-zinc-700 transition-colors hover:text-indigo-500 dark:text-zinc-300 dark:hover:text-indigo-400" />
           </Link>
-          <div className="h-6 w-px bg-slate-300 dark:bg-slate-700" />
-          <ModeToggle  />
           </div>
       </nav>
     </header>

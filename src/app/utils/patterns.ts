@@ -1,7 +1,7 @@
 import React from "react";
-import { BlinkingDotsComponent, DotGridAnimations, DotNetworkComponent, DotNetworkComponentv2, FadeDotComponent, MovingDotsComponent } from "@/bgs/Dots";
-import { GlowOrbsComponent } from "@/bgs/Effects";
-import { FloatingParticles, GlowingParticles, ParticlesBackgroundComponent, } from "@/bgs/Dots";
+import { BlinkingDotsComponent, DotNetworkComponent, DotNetworkComponentv2, FadeDotComponent, MovingDotsComponent } from "@/bgs/Dots";
+import  {  GlowOrbsComponent, SmoothRainComponent, SnowAuroraComponent,  } from "@/bgs/Effects";
+import { FloatingParticles, GlowingParticles, ParticlesBackgroundComponent, WavyDots} from "@/bgs/Dots";
 import { AnimatedBlackGridBackground, MagentaGrid, DarkBg, CoolBlueGrid, WarmAmberGrid, LimeFadeGrid, CyanBurstGrid, VioletMistGrid, MagentaFlame, NeonShock, GreenPunchGrid, ToxicPulse, } from "@/bgs/Geometrics";
 import { CyanGradient, CyanGradientBlack, CyanGradientBlackTop, CyanGradientTop, FuchsiaGradient, FuchsiaGradientBlack, FuchsiaGradientBlackTop, FuchsiaGradientTop, PurpleGradient, PurpleGradientBlackTop, PurpleGradientTop, RedGradient, RedGradientBlack, RedGradientBlackTop, RedGradientTop, TealGradient, TealGradientBlackTop, TealGradientTop, } from "@/bgs/Gradients";
 
@@ -26,33 +26,44 @@ const patterns: Pattern[] = [
     },
     component: DarkBg,
     code: `
+"use client";
+
 import { motion } from "framer-motion";
-import clsx from "clsx";
-import { useRef, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+
 export const DarkBg = () => {
   const gridSize = 32;
-  const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 1920;
-  const screenHeight = typeof window !== 'undefined' ? window.innerHeight : 1080;
+  const [dimensions, setDimensions] = useState({ width: 1920, height: 1080 });
 
-  const verticalLines = Math.ceil(screenWidth / gridSize);
-  const horizontalLines = Math.ceil(screenHeight / gridSize);
+  useEffect(() => {
+    const updateSize = () => {
+      setDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    };
+
+    updateSize(); // set initial
+    window.addEventListener("resize", updateSize);
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
+
+  const verticalLines = Math.ceil(dimensions.width / gridSize);
+  const horizontalLines = Math.ceil(dimensions.height / gridSize);
 
   const allLines = [];
   for (let i = 0; i < horizontalLines; i++) {
-    allLines.push({ type: 'horizontal', index: i, position: i * gridSize, staggerIndex: i });
+    allLines.push({ type: "horizontal", index: i, position: i * gridSize, staggerIndex: i });
   }
   for (let i = 0; i < verticalLines; i++) {
-    allLines.push({ type: 'vertical', index: i, position: i * gridSize, staggerIndex: horizontalLines + i });
+    allLines.push({ type: "vertical", index: i, position: i * gridSize, staggerIndex: horizontalLines + i });
   }
 
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.12,
-        delayChildren: 0.3
-      }
+      transition: { staggerChildren: 0.12, delayChildren: 0.3 }
     }
   };
 
@@ -66,11 +77,7 @@ export const DarkBg = () => {
     visible: {
       scale: 1,
       opacity: 0.15,
-      transition: {
-        duration: 2.0,
-        ease: "easeOut" as const,
-        delay: 1.5
-      }
+      transition: { duration: 2.0, ease: "easeOut" as const, delay: 1.5 }
     }
   };
 
@@ -85,8 +92,8 @@ export const DarkBg = () => {
         {allLines.map((line) => (
           <motion.div
             key={\`\${line.type}-\${line.index}\`}
-            className={\`absolute \${line.type === 'vertical' ? 'top-0 h-full w-px' : 'left-0 w-full h-px'} bg-slate-600\`}
-            style={line.type === 'vertical' ? { left: \`\${line.position}px\` } : { top: \`\${line.position}px\` }}
+            className={\`absolute \${line.type === "vertical" ? "top-0 h-full w-px" : "left-0 w-full h-px"} bg-slate-600\`}
+            style={line.type === "vertical" ? { left: \`\${line.position}px\` } : { top: \`\${line.position}px\` }}
             variants={lineVariants}
             custom={line.staggerIndex}
             initial="hidden"
@@ -96,7 +103,9 @@ export const DarkBg = () => {
 
         <motion.div
           className="absolute inset-0"
-          style={{ background: \`radial-gradient(circle at 50% 50%, rgba(139,92,246,0.15) 0%, transparent 70%)\` }}
+          style={{
+            background: \`radial-gradient(circle at 50% 50%, rgba(139,92,246,0.15) 0%, transparent 70%)\`
+          }}
           variants={radialVariants}
           initial="hidden"
           animate="visible"
@@ -104,7 +113,30 @@ export const DarkBg = () => {
       </motion.div>
     </div>
   );
-};`
+};
+
+// "use client";
+
+// import React from "react";
+// import { DarkBg } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Animated Background */}
+//       <DarkBg />
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center text-center">
+//         <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//         <p className="text-lg text-gray-300 mt-2">
+//           Replace this with any UI elements, cards, forms, etc.
+//         </p>
+//       </div>
+//     </div>
+//   );
+// }
+`
   },
   {
     id: "black-grid",
@@ -114,60 +146,86 @@ export const DarkBg = () => {
       backgroundColor: "black",
     },
     component: AnimatedBlackGridBackground,
-    code: `
-    import { motion } from "framer-motion";
-    import clsx from "clsx";
-    import { useRef, useEffect, useState } from "react";
-    export const AnimatedBlackGridBackground = () => {
-      const gridSize = 40;
-      const lines = 100;
-      return (
-        <div className="min-h-screen w-full bg-black relative overflow-hidden">
-          <motion.div
-            className="absolute inset-0 z-0"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1 }}
-          >
-            {[...Array(lines)].map((_, i) => {
-              const offset = i - Math.floor(lines / 2);
-              return (
-                <motion.div
-                  key={\`h-\${i}\`}
-                  className="absolute left-0 w-full border-t border-slate-800"
-                  style={{ top: \`calc(50% + \${offset * gridSize}px)\` }}
-                  initial={{ scaleX: 0, originX: 0.5 }}
-                  animate={{ scaleX: 1 }}
-                  transition={{
-                    duration: 0.6,
-                    ease: "easeOut",
-                    delay: Math.abs(offset) * 0.01,
-                  }}
-                />
-              );
-            })}
-    
-            {[...Array(lines)].map((_, i) => {
-              const offset = i - Math.floor(lines / 2);
-              return (
-                <motion.div
-                  key={\`v-\${i}\`}
-                  className="absolute top-0 h-full border-l border-slate-800"
-                  style={{ left: \`calc(50% + \${offset * gridSize}px)\` }}
-                  initial={{ scaleY: 0, originY: 0.5 }}
-                  animate={{ scaleY: 1 }}
-                  transition={{
-                    duration: 0.6,
-                    ease: "easeOut",
-                    delay: Math.abs(offset) * 0.01,
-                  }}
-                />
-              );
-            })}
-          </motion.div>
-        </div>
-      );
-    };`
+    code: `"use client"
+import { motion } from "framer-motion";
+
+export const AnimatedBlackGridBackground = () => {
+  const gridSize = 40;
+  const lines = 100;
+  return (
+    <div className="min-h-screen w-full bg-black relative overflow-hidden">
+      <motion.div
+        className="absolute inset-0 z-0"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+        {[...Array(lines)].map((_, i) => {
+          const offset = i - Math.floor(lines / 2);
+          return (
+            <motion.div
+              key={\`h-\${i}\`}
+              className="absolute left-0 w-full border-t border-slate-800"
+              style={{ top: \`calc(50% + \${offset * gridSize}px)\` }}
+              initial={{ scaleX: 0, originX: 0.5 }}
+              animate={{ scaleX: 1 }}
+              transition={{
+                duration: 0.6,
+                ease: "easeOut",
+                delay: Math.abs(offset) * 0.01,
+              }}
+            />
+          );
+        })}
+
+        {[...Array(lines)].map((_, i) => {
+          const offset = i - Math.floor(lines / 2);
+          return (
+            <motion.div
+              key={\`v-\${i}\`}
+              className="absolute top-0 h-full border-l border-slate-800"
+              style={{ left: \`calc(50% + \${offset * gridSize}px)\` }}
+              initial={{ scaleY: 0, originY: 0.5 }}
+              animate={{ scaleY: 1 }}
+              transition={{
+                duration: 0.6,
+                ease: "easeOut",
+                delay: Math.abs(offset) * 0.01,
+              }}
+            />
+          );
+        })}
+      </motion.div>
+    </div>
+  );
+};
+
+//usage example
+//"use client";
+
+//import React from "react";
+//import { AnimatedBlackGridBackground } from "./component/bg";
+
+//export default function HomePage() {
+//  return (
+//    <div className="h-screen relative overflow-hidden">
+  //    {/* Background Animation */}
+     // <AnimatedBlackGridBackground />
+
+      {/* Foreground Content */}
+     // <div className="absolute inset-0 z-10 flex items-center justify-center">
+        {/* Your components go here */}
+       // <div className="text-center">
+         // <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+          //<p className="text-lg text-gray-300 mt-2">
+           // Replace this with any UI elements, cards, forms, etc.
+          //</p>
+        //</div>
+      //</div>
+    //</div>
+  //);
+//}
+`
   },
 
 
@@ -179,76 +237,99 @@ export const DarkBg = () => {
     style: {},
     component: NeonShock,
     code: `
-  "use client";
-  
-  import React from "react";
-  import { motion } from "framer-motion";
-  
-  export const NeonShock = () => {
-    const gridSize = 40;
-    const lines = 100;
-  
-    return (
-      <div className="min-h-screen w-full bg-[#081104] relative overflow-hidden">
+import { motion } from "framer-motion";
+export const NeonShock = () => {
+  const gridSize = 40;
+  const lines = 100;
+
+  return (
+    <div className="min-h-screen w-full bg-[#020617] relative overflow-hidden">
+      <motion.div
+        className="absolute inset-0 z-0"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+        {[...Array(lines)].map((_, i) => {
+          const offset = i - Math.floor(lines / 2);
+          return (
+            <motion.div
+              key={\`h-\${i}\`}
+        className="absolute left-0 w-full border-t border-slate-600/30"
+        style={{ top: \`calc(50% + \${offset * gridSize}px)\` }}
+        initial={{ scaleX: 0, originX: 0.5 }}
+        animate={{ scaleX: 1 }}
+        transition={{
+          duration: 0.6,
+          ease: "easeOut",
+          delay: Math.abs(offset) * 0.01,
+        }}
+              />
+        );
+          })}
+
+        {[...Array(lines)].map((_, i) => {
+          const offset = i - Math.floor(lines / 2);
+          return (
+            <motion.div
+              key={\`v-\${i}\`}
+        className="absolute top-0 h-full border-l  border-slate-600/30"
+        style={{ left: \`calc(50% + \${offset * gridSize}px)\` }}
+        initial={{ scaleY: 0, originY: 0.5 }}
+        animate={{ scaleY: 1 }}
+        transition={{
+          duration: 0.6,
+          ease: "easeOut",
+          delay: Math.abs(offset) * 0.01,
+        }}
+              />
+        );
+          })}
+
         <motion.div
-          className="absolute inset-0 z-0"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
-        >
-          {[...Array(lines)].map((_, i) => {
-            const offset = i - Math.floor(lines / 2);
-            return (
-              <motion.div
-                key={\`h-\${i}\`}
-                className="absolute left-0 w-full border-t border-lime-400/20"
-                style={{ top: \`calc(50% + \${offset * gridSize}px)\` }}
-                initial={{ scaleX: 0, originX: 0.5 }}
-                animate={{ scaleX: 1 }}
-                transition={{
-                  duration: 0.6,
-                  ease: "easeOut",
-                  delay: Math.abs(offset) * 0.01,
-                }}
-              />
-            );
-          })}
-  
-          {[...Array(lines)].map((_, i) => {
-            const offset = i - Math.floor(lines / 2);
-            return (
-              <motion.div
-                key={\`v-\${i}\`}
-                className="absolute top-0 h-full border-l border-lime-400/20"
-                style={{ left: \`calc(50% + \${offset * gridSize}px)\` }}
-                initial={{ scaleY: 0, originY: 0.5 }}
-                animate={{ scaleY: 1 }}
-                transition={{
-                  duration: 0.6,
-                  ease: "easeOut",
-                  delay: Math.abs(offset) * 0.01,
-                }}
-              />
-            );
-          })}
-  
-          <motion.div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: \`
+          className="absolute inset-0"
+          style={{
+            backgroundImage: \`
 linear-gradient(
   to top,
   rgba(0, 255, 200, 0.25),  /* teal neon */
   rgba(128, 0, 255, 0.15),  /* purple glow */
   rgba(0, 0, 0, 0.5) 70%    /* shadowed base */
-)                    \`,
-              backgroundSize: "100% 100%",
+)          \`,
+        backgroundSize: "100% 100%",
             }}
           />
-        </motion.div>
-      </div>
-    );
-  };`
+      </motion.div>
+    </div>
+  );
+}
+
+//usage example
+//"use client";
+
+// import React from "react";
+// import { NeonShock } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <NeonShock    />
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
   },
   {
     id: "toxicpulse-grid",
@@ -257,77 +338,100 @@ linear-gradient(
     style: {},
     component: ToxicPulse,
     code: `
-  "use client";
-  
-  import React from "react";
-  import { motion } from "framer-motion";
-  
-  export const CyanBurstGrid = () => {
-    const gridSize = 40;
-    const lines = 100;
-  
-    return (
-      <div className="min-h-screen w-full bg-[#0f0318] relative overflow-hidden">
+import { motion } from "framer-motion";
+
+export const ToxicPulse = () => {
+  const gridSize = 40;
+  const lines = 100;
+
+  return (
+    <div className="min-h-screen w-full bg-[#020617] relative overflow-hidden">
+      <motion.div
+        className="absolute inset-0 z-0"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+        {[...Array(lines)].map((_, i) => {
+          const offset = i - Math.floor(lines / 2);
+          return (
+            <motion.div
+              key={\`h-\${i}\`}
+        className="absolute left-0 w-full border-t border-slate-600/30"
+        style={{ top: \`calc(50% + \${offset * gridSize}px)\` }}
+        initial={{ scaleX: 0, originX: 0.5 }}
+        animate={{ scaleX: 1 }}
+        transition={{
+          duration: 0.6,
+          ease: "easeOut",
+          delay: Math.abs(offset) * 0.01,
+        }}
+              />
+        );
+          })}
+
+        {[...Array(lines)].map((_, i) => {
+          const offset = i - Math.floor(lines / 2);
+          return (
+            <motion.div
+              key={\`v-\${i}\`}
+        className="absolute top-0 h-full border-l  border-slate-600/30"
+        style={{ left: \`calc(50% + \${offset * gridSize}px)\` }}
+        initial={{ scaleY: 0, originY: 0.5 }}
+        animate={{ scaleY: 1 }}
+        transition={{
+          duration: 0.6,
+          ease: "easeOut",
+          delay: Math.abs(offset) * 0.01,
+        }}
+              />
+        );
+          })}
+
         <motion.div
-          className="absolute inset-0 z-0"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
-        >
-          {[...Array(lines)].map((_, i) => {
-            const offset = i - Math.floor(lines / 2);
-            return (
-              <motion.div
-                key={\`h-\${i}\`}
-                className="absolute left-0 w-full border-t border-fuchsia-500/20"
-                style={{ top: \`calc(50% + \${offset * gridSize}px)\` }}
-                initial={{ scaleX: 0, originX: 0.5 }}
-                animate={{ scaleX: 1 }}
-                transition={{
-                  duration: 0.6,
-                  ease: "easeOut",
-                  delay: Math.abs(offset) * 0.01,
-                }}
-              />
-            );
-          })}
-  
-          {[...Array(lines)].map((_, i) => {
-            const offset = i - Math.floor(lines / 2);
-            return (
-              <motion.div
-                key={\`v-\${i}\`}
-                className="absolute top-0 h-full border-l border-fuchsia-500/20"
-                style={{ left: \`calc(50% + \${offset * gridSize}px)\` }}
-                initial={{ scaleY: 0, originY: 0.5 }}
-                animate={{ scaleY: 1 }}
-                transition={{
-                  duration: 0.6,
-                  ease: "easeOut",
-                  delay: Math.abs(offset) * 0.01,
-                }}
-              />
-            );
-          })}
-  
-          <motion.div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: \`
- linear-gradient(
+          className="absolute inset-0"
+          style={{
+            backgroundImage: \`
+linear-gradient(
   to top,
   rgba(0, 153, 255, 0.25),   /* electric blue */
   rgba(204, 0, 255, 0.15),   /* magenta glow */
   rgba(0, 0, 0, 0.4) 70%     /* deep shadow base */
-)
-    \`,
-              backgroundSize: "100% 100%",
+)         \`,
+        backgroundSize: "100% 100%",
             }}
           />
-        </motion.div>
-      </div>
-    );
-  };`
+      </motion.div>
+    </div>
+  );
+}
+
+//usage eg:
+//"use client";
+
+// import React from "react";
+// import { ToxicPulse } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <ToxicPulse/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
   },
   {
     id: "cyanburst-grid",
@@ -335,7 +439,32 @@ linear-gradient(
     category: "Grids",
     style: {},
     component: CyanBurstGrid,
-    code: `
+    code: `//"use client";
+
+// import React from "react";
+// import { CyanBurstGrid } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <CyanBurstGrid  />
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+
 "use client";
 
 import React from "react";
@@ -402,7 +531,8 @@ export const CyanBurstGrid = () => {
       </motion.div>
     </div>
   );
-};`
+};
+`
   },
   {
 
@@ -417,7 +547,7 @@ export const CyanBurstGrid = () => {
 import React from "react";
 import { motion } from "framer-motion";
 
-export const MagentaGrid = () => {
+export const IndigoGrid = () => {
   const gridSize = 40;
   const lines = 100;
 
@@ -470,14 +600,40 @@ export const MagentaGrid = () => {
           style={{
              backgroundImage: \`
   linear-gradient(to top, rgba(79,70,229,0.5) 0%, transparent 65%)
-\`
+\`,
             backgroundSize: "100% 100%",
           }}
         />
       </motion.div>
     </div>
   );
-};`
+};
+
+//usage eg:
+//"use client";
+// import React from "react";
+// import { IndigoGrid } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <IndigoGrid/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
   },
   {
     id: "magenta-flame-grid",
@@ -486,71 +642,97 @@ export const MagentaGrid = () => {
     style: {},
     component: MagentaFlame,
     code: `
-  "use client";
-  
-  import React from "react";
-  import { motion } from "framer-motion";
-  
-  export const CyanBurstGrid = () => {
-    const gridSize = 40;
-    const lines = 100;
-  
-    return (
-      <div className="min-h-screen w-full bg-[#0f0318] relative overflow-hidden">
-        <motion.div
-          className="absolute inset-0 z-0"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
-        >
-          {[...Array(lines)].map((_, i) => {
-            const offset = i - Math.floor(lines / 2);
-            return (
-              <motion.div
-                key={\`h-\${i}\`}
-                className="absolute left-0 w-full border-t border-fuchsia-500/20"
-                style={{ top: \`calc(50% + \${offset * gridSize}px)\` }}
-                initial={{ scaleX: 0, originX: 0.5 }}
-                animate={{ scaleX: 1 }}
-                transition={{
-                  duration: 0.6,
-                  ease: "easeOut",
-                  delay: Math.abs(offset) * 0.01,
-                }}
-              />
-            );
-          })}
-  
-          {[...Array(lines)].map((_, i) => {
-            const offset = i - Math.floor(lines / 2);
-            return (
-              <motion.div
-                key={\`v-\${i}\`}
-                className="absolute top-0 h-full border-l border-fuchsia-500/20"
-                style={{ left: \`calc(50% + \${offset * gridSize}px)\` }}
-                initial={{ scaleY: 0, originY: 0.5 }}
-                animate={{ scaleY: 1 }}
-                transition={{
-                  duration: 0.6,
-                  ease: "easeOut",
-                  delay: Math.abs(offset) * 0.01,
-                }}
-              />
-            );
-          })}
-  
-          <motion.div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: \`
- linear-gradient(to top,  rgba(236,72,153,0.15) 0%, rgba(168,85,247,0.05) 40%, transparent 70%)              \`,
-              backgroundSize: "100% 100%",
-            }}
-          />
-        </motion.div>
-      </div>
-    );
-  };`
+"use client";
+import React from "react";
+import { motion } from "framer-motion";
+
+export const MagentaFlame = () => {
+  const lineCount = 100;
+  const spacing = 40;
+
+  return (
+    <div className="min-h-screen w-full bg-[#020617] relative overflow-hidden">
+      {/* Animated Grid */}
+      <motion.div
+        className="absolute inset-0 z-0"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+        {[...Array(lineCount)].map((_, i) => {
+          const offset = i - Math.floor(lineCount / 2);
+          return (
+            <motion.div
+              key={\`h-\${i}\`}
+              className="absolute left-0 w-full border-t border-slate-600/30"
+              style={{ top: \`calc(50% + \${offset * spacing}px)\` }}
+              initial={{ scaleX: 0, originX: 0.5 }}
+              animate={{ scaleX: 1 }}
+              transition={{
+                duration: 0.6,
+                ease: "easeOut",
+                delay: Math.abs(offset) * 0.01,
+              }}
+            />
+          );
+        })}
+
+        {[...Array(lineCount)].map((_, i) => {
+          const offset = i - Math.floor(lineCount / 2);
+          return (
+            <motion.div
+              key={\`v-\${i}\`}
+              className="absolute top-0 h-full border-l border-slate-600/30"
+              style={{ left: \`calc(50% + \${offset * spacing}px)\` }}
+              initial={{ scaleY: 0, originY: 0.5 }}
+              animate={{ scaleY: 1 }}
+              transition={{
+                duration: 0.6,
+                ease: "easeOut",
+                delay: Math.abs(offset) * 0.01,
+              }}
+            />
+          );
+        })}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: \`
+            linear-gradient(to top,  rgba(236,72,153,0.15) 0%, rgba(168,85,247,0.05) 40%, transparent 70%)
+          \`,
+            backgroundSize: "100% 100%",
+          }}
+        />
+      </motion.div>
+    </div>
+  );
+};
+
+//"use client";
+// //usage eg:
+// import React from "react";
+// import { MagentaFlame } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <MagentaFlame/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
   },
 
   //radial//
@@ -560,9 +742,7 @@ export const MagentaGrid = () => {
     category: "Grids",
     style: {},
     component: MagentaGrid,
-    code: `
-"use client";
-
+    code: `"use client";
 import React from "react";
 import { motion } from "framer-motion";
 
@@ -624,7 +804,33 @@ export const MagentaGrid = () => {
       </motion.div>
     </div>
   );
-};`
+};
+
+//"use client";
+// //usage eg:
+// import React from "react";
+// import { MagentaGrid } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <MagentaGrid/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
   },
   {
     id: "coolblue-grid",
@@ -698,7 +904,33 @@ export const CoolBlueGrid = () => {
       </motion.div>
     </div>
   );
-};`
+};
+
+//"use client";
+// //usage eg:
+// import React from "react";
+// import { CoolBlueGrid } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <CoolBlueGrid/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
   },
   {
     id: "warmamber-grid",
@@ -773,7 +1005,33 @@ export const WarmAmberGrid = () => {
       </motion.div>
     </div>
   );
-};`
+};
+
+//"use client";
+// //usage eg:
+// import React from "react";
+// import { WarmAmberGrid } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <WarmAmberGrid/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
   },
   {
     id: "limefade-grid",
@@ -848,7 +1106,33 @@ export const LimeFadeGrid = () => {
       </motion.div>
     </div>
   );
-};`
+};
+
+"use client";
+// //usage eg:
+// import React from "react";
+// import { LimeFadeGrid } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <LimeFadeGrid/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
   },
   {
     id: "greenpunch-grid",
@@ -862,7 +1146,7 @@ export const LimeFadeGrid = () => {
 import React from "react";
 import { motion } from "framer-motion";
 
-export const PinkRoseGrid = () => {
+export const GreenPunchGrid = () => {
   const gridSize = 40;
   const lines = 100;
 
@@ -923,22 +1207,68 @@ export const PinkRoseGrid = () => {
       </motion.div>
     </div>
   );
-};`
+};
+
+//"use client";
+// //usage eg:
+// import React from "react";
+// import { GreenPunchGrid } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <GreenPunchGrid/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
   },
 
   //v1-bottom
   //gradients
   {
     id: "indigo-gradient-v1",
-    name: "Indigo Gradient v1",
+    name: "Indigo Bottom",
     category: "Gradients",
     style: {
     },
     isLightBackground: true,
     component: PurpleGradient,
-    code: `
-    //"use client";
-// //usage eg:
+    code: `"use client";
+
+import React from "react";
+import { motion } from "framer-motion";
+
+export const IndigoGradientv1 = () => {
+  return (
+    <div className="min-h-screen w-full relative overflow-hidden">
+      {/* Radial Gradient Background with Fade-in Animation */}
+      <motion.div
+        className="absolute inset-0 z-0"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.5, ease: "easeOut" }}
+        style={{
+          background: "radial-gradient(125% 125% at 50% 10%, #fff 40%, #6366f1 100%)",
+        }}
+      />
+    </div>
+  );
+};
+//"use client";
+// usage eg:
 // import React from "react";
 // import {  IndigoGradientv1 } from "./component/bg";
 
@@ -961,33 +1291,11 @@ export const PinkRoseGrid = () => {
 //     </div>
 //   );
 // }
-    
-    "use client";
-
-import React from "react";
-import { motion } from "framer-motion";
-
-export const IndigoBottom = () => {
-  return (
-    <div className="min-h-screen w-full relative overflow-hidden">
-      {/* Radial Gradient Background with Fade-in Animation */}
-      <motion.div
-        className="absolute inset-0 z-0"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.5, ease: "easeOut" }}
-        style={{
-          background: "radial-gradient(125% 125% at 50% 10%, #fff 40%, #6366f1 100%)",
-        }}
-      />
-    </div>
-  );
-};
 `
   },
   {
     id: "indigo-gradient-v2",
-    name: "Indigo Gradient v2",
+    name: "Indigo Top",
     category: "Gradients",
     style: {
     },
@@ -999,14 +1307,9 @@ export const IndigoBottom = () => {
 import React from "react";
 import { motion } from "framer-motion";
 
-interface PurpleGradientTopProps {
-  children?: React.ReactNode;
-}
-
-export const PurpleGradientTop: React.FC<PurpleGradientTopProps> = ({ children }) => {
+export const IndigoGradientv2 = () => {
   return (
     <div className="min-h-screen w-full relative overflow-hidden">
-      {/* Radial Gradient Background: purple at top fading to white */}
       <motion.div
         className="absolute inset-0 z-0"
         initial={{ opacity: 0 }}
@@ -1016,31 +1319,51 @@ export const PurpleGradientTop: React.FC<PurpleGradientTopProps> = ({ children }
           background: "radial-gradient(125% 125% at 50% 90%, #fff 40%, #6366f1 100%)",
         }}
       />
-
-      {/* Foreground Content */}
-      <div className="relative z-10">{children}</div>
     </div>
   );
 };
+
+//"use client";
+// //usage eg:
+// import React from "react";
+// import {   IndigoGradientv2 } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <IndigoGradientv2/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
 `
   },
   {
-    id: "indigo-gradient-black-v1",
-    name: "Indigo Gradient Black v1 ",
+    id: "indigo-gradient-black-v2",
+    name: "Indigo Black Top",
     category: "Gradients",
     style: {
     },
-    component: PurpleGradientTop,
+    component: PurpleGradientBlackTop,
     code: `"use client";
 
 import React from "react";
 import { motion } from "framer-motion";
 
-interface PurpleGradientProps {
-  children?: React.ReactNode;
-}
 
-export const PurpleGradientTop: React.FC<PurpleGradientProps> = ({ children }) => {
+
+export const IndigoGradientBlackv2 = () => {
   return (
     <div className="min-h-screen w-full relative overflow-hidden">
       {/* Radial Gradient Background: near-black base fading to purple */}
@@ -1055,32 +1378,52 @@ export const PurpleGradientTop: React.FC<PurpleGradientProps> = ({ children }) =
       />
 
       {/* Foreground Content */}
-      <div className="relative z-10">{children}</div>
     </div>
   );
 };
 
+//"use client";
+// //usage eg:
+// import React from "react";
+// import {   IndigoGradientBlackv2 } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <IndigoGradientBlackv2/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
 `
   },
   {
-    id: "indigo-gradient-black-v2",
-    name: "Indigo Gradient Black v2",
+    id: "indigo-gradient-black-v1",
+    name: "Indigo Black Bottom",
     category: "Gradients",
     style: {
     },
-    component: PurpleGradientBlackTop,
+    component: PurpleGradientTop,
     code: `"use client";
 
 import React from "react";
 import { motion } from "framer-motion";
 
-interface PurpleGradientProps {
-  children?: React.ReactNode;
-}
-export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
+
+export const IndigoGradientBlackv1 = () => {
   return (
     <div className="min-h-screen w-full relative overflow-hidden">
-      {/* Radial Gradient Background with Fade-in Animation */}
       <motion.div
         className="absolute inset-0 z-0"
         initial={{ opacity: 0 }}
@@ -1091,16 +1434,41 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
         }}
       />
 
-      {/* Your Foreground Content */}
-      <div className="relative z-10">{children}</div>
     </div>
   );
-};`
+};
+
+//"use client";
+// //usage eg:
+// import React from "react";
+// import {   IndigoGradientBlackv1 } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <IndigoGradientBlackv1/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
   },
+  
 
   {
     id: "teal-gradient-v1",
-    name: "Teal Gradient v1",
+    name: "Teal Bottom",
     category: "Gradients",
     style: {},
     component: TealGradient,
@@ -1111,10 +1479,8 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
   import React from "react";
   import { motion } from "framer-motion";
   
-  interface TealGradientProps {
-    children?: React.ReactNode;
-  }
-  export const TealGradient: React.FC<TealGradientProps> = ({ children }) => {
+  
+  export const TealBottom = () => {
     return (
       <div className="min-h-screen w-full relative overflow-hidden">
         {/* Radial Gradient Background with Fade-in Animation */}
@@ -1127,14 +1493,38 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
             background: "radial-gradient(125% 125% at 50% 10%, #fff 40%, #14b8a6 100%)",
           }}
         />
-        <div className="relative z-10">{children}</div>
       </div>
     );
-  };`
+  };
+  //"use client";
+// //usage eg:
+// import React from "react";
+// import {   TealBottom } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <TealBottom/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
   },
   {
     id: "teal-gradient-v2",
-    name: "Teal Gradient v2",
+    name: "Teal Top",
     category: "Gradients",
     isLightBackground: true,
 
@@ -1144,12 +1534,8 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
   
   import React from "react";
   import { motion } from "framer-motion";
-  
-  interface TealGradientTopProps {
-    children?: React.ReactNode;
-  }
-  
-  export const TealGradientTop: React.FC<TealGradientTopProps> = ({ children }) => {
+ 
+  export const TealTop = () => {
     return (
       <div className="min-h-screen w-full relative overflow-hidden">
         {/* Radial Gradient Background: teal at top fading to white */}
@@ -1162,14 +1548,39 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
             background: "radial-gradient(125% 125% at 50% 90%, #fff 40%, #14b8a6 100%)",
           }}
         />
-        <div className="relative z-10">{children}</div>
       </div>
     );
-  };`
+  };
+  
+  //"use client";
+// //usage eg:
+// import React from "react";
+// import {   TealTop } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <TealTop/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
   },
   {
     id: "teal-gradient-black-v1",
-    name: "Teal Gradient Black v1",
+    name: "Teal Black Top",
     category: "Gradients",
     style: {},
     component: TealGradientBlackTop,
@@ -1178,11 +1589,8 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
   import React from "react";
   import { motion } from "framer-motion";
   
-  interface TealGradientProps {
-    children?: React.ReactNode;
-  }
   
-  export const TealGradientBlackTop: React.FC<TealGradientProps> = ({ children }) => {
+  export const TealBlackTop = () => {
     return (
       <div className="min-h-screen w-full relative overflow-hidden">
         {/* Radial Gradient Background: near-black base fading to teal */}
@@ -1195,14 +1603,39 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
             background: "radial-gradient(125% 125% at 50% 90%, #0a0a0a 40%, #14b8a6 100%)",
           }}
         />
-        <div className="relative z-10">{children}</div>
       </div>
     );
-  };`
+  };
+  
+  //"use client";
+// //usage eg:
+// import React from "react";
+// import {   TealBlackTop } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <TealBlackTop/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
   },
   {
     id: "teal-gradient-black-v2",
-    name: "Teal Gradient Black v2",
+    name: "Teal Black Bottom",
     category: "Gradients",
     style: {},
     component: TealGradient,
@@ -1211,10 +1644,8 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
   import React from "react";
   import { motion } from "framer-motion";
   
-  interface TealGradientProps {
-    children?: React.ReactNode;
-  }
-  export const TealGradient: React.FC<TealGradientProps> = ({ children }) => {
+  
+  export const TealBottom = () => {
     return (
       <div className="min-h-screen w-full relative overflow-hidden">
         {/* Radial Gradient Background with Fade-in Animation */}
@@ -1224,18 +1655,42 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
           animate={{ opacity: 1 }}
           transition={{ duration: 1.5, ease: "easeOut" }}
           style={{
-            background: "radial-gradient(125% 125% at 50% 10%, #0a0a0a 40%, #14b8a6 100%)",
+            background: "radial-gradient(125% 125% at 50% 10%, #fff 40%, #14b8a6 100%)",
           }}
         />
-        <div className="relative z-10">{children}</div>
       </div>
     );
-  };`
+  };
+  //"use client";
+// //usage eg:
+// import React from "react";
+// import {   TealBottom } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <TealBottom/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
   },
 
   {
     id: "cyan-gradient-v1",
-    name: "Cyan Gradient v1",
+    name: "Cyan Bottom",
     category: "Gradients",
     isLightBackground: true,
 
@@ -1246,10 +1701,7 @@ export const PurpleGradient: React.FC<PurpleGradientProps> = ({ children }) => {
 import React from "react";
 import { motion } from "framer-motion";
 
-interface CyanGradientProps {
-  children?: React.ReactNode;
-}
-export const CyanGradient: React.FC<CyanGradientProps> = ({ children }) => {
+export const CyanBottom = () => {
   return (
     <div className="min-h-screen w-full relative overflow-hidden">
       {/* Radial Gradient Background with Fade-in Animation */}
@@ -1262,14 +1714,38 @@ export const CyanGradient: React.FC<CyanGradientProps> = ({ children }) => {
           background: "radial-gradient(125% 125% at 50% 10%, #fff 40%, #06b6d4 100%)",
         }}
       />
-      <div className="relative z-10">{children}</div>
     </div>
   );
-};`
+};
+//"use client";
+// //usage eg:
+// import React from "react";
+// import {   CyanBottom } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <CyanBottom/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
   },
   {
     id: "cyan-gradient-v2",
-    name: "Cyan Gradient v2",
+    name: "Cyan Top",
     category: "Gradients",
     isLightBackground: true,
 
@@ -1280,11 +1756,7 @@ export const CyanGradient: React.FC<CyanGradientProps> = ({ children }) => {
 import React from "react";
 import { motion } from "framer-motion";
 
-interface CyanGradientTopProps {
-  children?: React.ReactNode;
-}
-
-export const CyanGradientTop: React.FC<CyanGradientTopProps> = ({ children }) => {
+export const CyanTop = () => {
   return (
     <div className="min-h-screen w-full relative overflow-hidden">
       {/* Radial Gradient Background: cyan at top fading to white */}
@@ -1297,47 +1769,92 @@ export const CyanGradientTop: React.FC<CyanGradientTopProps> = ({ children }) =>
           background: "radial-gradient(125% 125% at 50% 90%, #fff 40%, #06b6d4 100%)",
         }}
       />
-      <div className="relative z-10">{children}</div>
     </div>
   );
-};`
+};
+//"use client";
+// //usage eg:
+// import React from "react";
+// import {  CyanTop } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <CyanTop/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
   },
   {
     id: "cyan-gradient-black-v1",
-    name: "Cyan Gradient Black v1",
+    name: "Cyan Black Top",
     category: "Gradients",
     style: {},
     component: CyanGradientBlackTop,
-    code: `"use client";
+    code: `  "use client";
 
-import React from "react";
-import { motion } from "framer-motion";
+  import React from "react";
+  import { motion } from "framer-motion";
 
-interface CyanGradientProps {
-  children?: React.ReactNode;
-}
+  export const CyanBlackTop = () => {
+    return (
+      <div className="min-h-screen w-full relative overflow-hidden">
+        {/* Radial Gradient Background: near-black base fading to cyan */}
+        <motion.div
+          className="absolute inset-0 z-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          style={{
+            background: "radial-gradient(125% 125% at 50% 90%, #0a0a0a 40%, #06b6d4 100%)",
+          }}
+        />
+      </div>
+    );
+  };
+  
+  //"use client";
+// //usage eg:
+// import React from "react";
+// import {  CyanBlackTop } from "./component/bg";
 
-export const CyanGradientBlackTop: React.FC<CyanGradientProps> = ({ children }) => {
-  return (
-    <div className="min-h-screen w-full relative overflow-hidden">
-      {/* Radial Gradient Background: near-black base fading to cyan */}
-      <motion.div
-        className="absolute inset-0 z-0"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.5, ease: "easeOut" }}
-        style={{
-          background: "radial-gradient(125% 125% at 50% 90%, #0a0a0a 40%, #06b6d4 100%)",
-        }}
-      />
-      <div className="relative z-10">{children}</div>
-    </div>
-  );
-};`
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <CyanBlackTop/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
   },
   {
     id: "cyan-gradient-black-v2",
-    name: "Cyan Gradient Black v2",
+    name: "Cyan Black Bottom",
     category: "Gradients",
     style: {},
     component: CyanGradientBlack,
@@ -1346,10 +1863,8 @@ export const CyanGradientBlackTop: React.FC<CyanGradientProps> = ({ children }) 
 import React from "react";
 import { motion } from "framer-motion";
 
-interface CyanGradientProps {
-  children?: React.ReactNode;
-}
-export const CyanGradient: React.FC<CyanGradientProps> = ({ children }) => {
+
+export const CyanBlackBottom = () => {
   return (
     <div className="min-h-screen w-full relative overflow-hidden">
       {/* Radial Gradient Background with Fade-in Animation */}
@@ -1362,15 +1877,39 @@ export const CyanGradient: React.FC<CyanGradientProps> = ({ children }) => {
           background: "radial-gradient(125% 125% at 50% 10%, #0a0a0a 40%, #06b6d4 100%)",
         }}
       />
-      <div className="relative z-10">{children}</div>
     </div>
   );
-};`
+};
+//"use client";
+// //usage eg:
+// import React from "react";
+// import {  CyanBlackBottom } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <CyanBlackBottom/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
   },
 
   {
     id: "fuchsia-gradient-v1",
-    name: "Fuchsia Gradient v1",
+    name: "Fuchsia Bottom",
     category: "Gradients",
     isLightBackground: true,
 
@@ -1381,10 +1920,8 @@ export const CyanGradient: React.FC<CyanGradientProps> = ({ children }) => {
   import React from "react";
   import { motion } from "framer-motion";
   
-  interface FuchsiaGradientProps {
-    children?: React.ReactNode;
-  }
-  export const FuchsiaGradient: React.FC<FuchsiaGradientProps> = ({ children }) => {
+  
+  export const FuchsiaBottom = () => {
     return (
       <div className="min-h-screen w-full relative overflow-hidden">
         {/* Radial Gradient Background with Fade-in Animation */}
@@ -1397,14 +1934,38 @@ export const CyanGradient: React.FC<CyanGradientProps> = ({ children }) => {
             background: "radial-gradient(125% 125% at 50% 10%, #fff 40%, #d946ef 100%)",
           }}
         />
-        <div className="relative z-10">{children}</div>
       </div>
     );
-  };`
+  };
+  //"use client";
+// //usage eg:
+// import React from "react";
+// import {  FuchsiaBottom } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <FuchsiaBottom/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
   },
   {
     id: "fuchsia-gradient-v2",
-    name: "Fuchsia Gradient v2",
+    name: "Fuchsia Top",
     category: "Gradients",
     isLightBackground: true,
 
@@ -1415,11 +1976,8 @@ export const CyanGradient: React.FC<CyanGradientProps> = ({ children }) => {
   import React from "react";
   import { motion } from "framer-motion";
   
-  interface FuchsiaGradientTopProps {
-    children?: React.ReactNode;
-  }
-  
-  export const FuchsiaGradientTop: React.FC<FuchsiaGradientTopProps> = ({ children }) => {
+
+  export const FuchsiaTop = () => {
     return (
       <div className="min-h-screen w-full relative overflow-hidden">
         {/* Radial Gradient Background: fuchsia at top fading to white */}
@@ -1432,14 +1990,38 @@ export const CyanGradient: React.FC<CyanGradientProps> = ({ children }) => {
             background: "radial-gradient(125% 125% at 50% 90%, #fff 40%, #d946ef 100%)",
           }}
         />
-        <div className="relative z-10">{children}</div>
       </div>
     );
-  };`
+  };
+ // "use client";
+// //usage eg:
+// import React from "react";
+// import {  FuchsiaTop } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <FuchsiaTop/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
   },
   {
     id: "fuchsia-gradient-black-v1",
-    name: "Fuchsia Gradient Black v1",
+    name: "Fuchsia Black Top",
     category: "Gradients",
     style: {},
     component: FuchsiaGradientBlackTop,
@@ -1448,11 +2030,8 @@ export const CyanGradient: React.FC<CyanGradientProps> = ({ children }) => {
   import React from "react";
   import { motion } from "framer-motion";
   
-  interface FuchsiaGradientProps {
-    children?: React.ReactNode;
-  }
-  
-  export const FuchsiaGradientBlackTop: React.FC<FuchsiaGradientProps> = ({ children }) => {
+ 
+  export const FuchsiaBlackTop = () => {
     return (
       <div className="min-h-screen w-full relative overflow-hidden">
         {/* Radial Gradient Background: near-black base fading to fuchsia */}
@@ -1465,14 +2044,38 @@ export const CyanGradient: React.FC<CyanGradientProps> = ({ children }) => {
             background: "radial-gradient(125% 125% at 50% 90%, #0a0a0a 40%, #d946ef 100%)",
           }}
         />
-        <div className="relative z-10">{children}</div>
       </div>
     );
-  };`
+  };
+ // "use client";
+// //usage eg:
+// import React from "react";
+// import { FuchsiaBlackTop } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <FuchsiaBlackTop/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
   },
   {
     id: "fuchsia-gradient-black-v2",
-    name: "Fuchsia Gradient Black v2",
+    name: "Fuchsia Black Bottom",
     category: "Gradients",
     style: {},
     component: FuchsiaGradientBlack,
@@ -1481,10 +2084,8 @@ export const CyanGradient: React.FC<CyanGradientProps> = ({ children }) => {
   import React from "react";
   import { motion } from "framer-motion";
   
-  interface FuchsiaGradientProps {
-    children?: React.ReactNode;
-  }
-  export const FuchsiaGradient: React.FC<FuchsiaGradientProps> = ({ children }) => {
+  
+  export const FuchsiaBlackBottom = () => {
     return (
       <div className="min-h-screen w-full relative overflow-hidden">
         {/* Radial Gradient Background with Fade-in Animation */}
@@ -1497,148 +2098,252 @@ export const CyanGradient: React.FC<CyanGradientProps> = ({ children }) => {
             background: "radial-gradient(125% 125% at 50% 10%, #0a0a0a 40%, #d946ef 100%)",
           }}
         />
-        <div className="relative z-10">{children}</div>
       </div>
     );
-  };`
+  };
+  //"use client";
+// //usage eg:
+// import React from "react";
+// import { FuchsiaBlackBottom } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <FuchsiaBlackBottom/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
   },
 
   {
     id: "red-gradient-v1",
-    name: "Red Gradient v1",
+    name: "Red Bottom",
     category: "Gradients",
     isLightBackground: true,
 
     style: {},
     component: RedGradient,
     code: `"use client";
-    
-    import React from "react";
-    import { motion } from "framer-motion";
-    
-    interface RedGradientProps {
-      children?: React.ReactNode;
-    }
-    export const RedGradient: React.FC<RedGradientProps> = ({ children }) => {
-      return (
-        <div className='min-h-screen w-full relative overflow-hidden'>
-          <motion.div
-            className='absolute inset-0 z-0'
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1.5, ease: "easeOut" }}
-            style={{
-              background: "radial-gradient(125% 125% at 50% 10%, #ffffff 40%, #ef4444 100%)"
-            }}
-          />
-          <div className='relative z-10'>{children}</div>
-        </div>
-      );
-    };`
+
+import React from "react";
+import { motion } from "framer-motion";
+
+
+export const RedBottom = () => {
+  return (
+    <div className='min-h-screen w-full relative overflow-hidden'>
+      <motion.div
+        className='absolute inset-0 z-0'
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.5, ease: "easeOut" }}
+        style={{
+          background: "radial-gradient(125% 125% at 50% 10%, #ffffff 40%, #ef4444 100%)"
+        }}
+      />
+    </div>
+  );
+};
+//"use client";
+// //usage eg:
+// import React from "react";
+// import { RedBottom } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <RedBottom/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+`
   },
   {
     id: "red-gradient-v2",
-    name: "Red Gradient v2",
+    name: "Red Top",
     category: "Gradients",
     isLightBackground: true,
 
     style: {},
     component: RedGradientTop,
     code: `"use client";
-    
-    import React from "react";
-    import { motion } from "framer-motion";
-    
-    interface RedGradientProps {
-      children?: React.ReactNode;
-    }
-    export const RedGradientTop: React.FC<RedGradientProps> = ({ children }) => {
-      return (
-        <div className='min-h-screen w-full relative overflow-hidden'>
-          <motion.div
-            className='absolute inset-0 z-0'
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1.5, ease: "easeOut" }}
-            style={{
-              background: "radial-gradient(125% 125% at 50% 90%, #ffffff 40%, #ef4444 100%)"
-            }}
-          />
-          <div className='relative z-10'>{children}</div>
-        </div>
-      );
-    };`
+
+import React from "react";
+import { motion } from "framer-motion";
+
+export const RedTop = () => {
+  return (
+    <div className='min-h-screen w-full relative overflow-hidden'>
+      <motion.div
+        className='absolute inset-0 z-0'
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.5, ease: "easeOut" }}
+        style={{
+          background: "radial-gradient(125% 125% at 50% 90%, #ffffff 40%, #ef4444 100%)"
+        }}
+      />
+    </div>
+  );
+};
+//"use client";
+// //usage eg:
+// import React from "react";
+// import { RedTop } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <RedTop/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
   },
   {
     id: "red-gradient-black-v1",
-    name: "Red Gradient Black v1",
+    name: "Red Black Top",
     category: "Gradients",
     style: {},
     component: RedGradientBlackTop,
     code: `"use client";
-    
-    import React from "react";
-    import { motion } from "framer-motion";
-    
-    interface RedGradientProps {
-      children?: React.ReactNode;
-    }
-    export const RedGradientBlackTop: React.FC<RedGradientProps> = ({ children }) => {
-      return (
-        <div className='min-h-screen w-full relative overflow-hidden'>
-          <motion.div
-            className='absolute inset-0 z-0'
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1.5, ease: "easeOut" }}
-            style={{
-              background: "radial-gradient(125% 125% at 50% 90%, #0a0a0a 40%, #ef4444 100%)"
-            }}
-          />
-          <div className='relative z-10'>{children}</div>
-        </div>
-      );
-    };`
+
+import React from "react";
+import { motion } from "framer-motion";
+
+
+export const RedBlackTop = () => {
+  return (
+    <div className='min-h-screen w-full relative overflow-hidden'>
+      <motion.div
+        className='absolute inset-0 z-0'
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.5, ease: "easeOut" }}
+        style={{
+          background: "radial-gradient(125% 125% at 50% 90%, #0a0a0a 40%, #ef4444 100%)"
+        }}
+      />
+    </div>
+  );
+};
+//"use client";
+// //usage eg:
+// import React from "react";
+// import { RedBlackTop } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <RedBlackTop/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
   },
   {
     id: "red-gradient-black-v2",
-    name: "Red Gradient Black v2",
+    name: "Red Black Bottom",
     category: "Gradients",
     style: {},
     component: RedGradientBlack,
     code: `"use client";
-    
-    import React from "react";
-    import { motion } from "framer-motion";
-    
-    interface RedGradientProps {
-      children?: React.ReactNode;
-    }
-    export const RedGradientBlack: React.FC<RedGradientProps> = ({ children }) => {
-      return (
-        <div className='min-h-screen w-full relative overflow-hidden'>
-          <motion.div
-            className='absolute inset-0 z-0'
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1.5, ease: "easeOut" }}
-            style={{
-              background: "radial-gradient(125% 125% at 50% 10%, #0a0a0a 40%, #ef4444 100%)"
-            }}
-          />
-          <div className='relative z-10'>{children}</div>
-        </div>
-      );
-    };`
+
+import React from "react";
+import { motion } from "framer-motion";
+
+
+export const RedBlackBottom = () => {
+  return (
+    <div className='min-h-screen w-full relative overflow-hidden'>
+      <motion.div
+        className='absolute inset-0 z-0'
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.5, ease: "easeOut" }}
+        style={{
+          background: "radial-gradient(125% 125% at 50% 10%, #0a0a0a 40%, #ef4444 100%)"
+        }}
+      />
+    </div>
+  );
+};
+//"use client";
+// //usage eg:
+// import React from "react";
+// import {  RedBlackBottom } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <RedBlackBottom/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
   },
-
-
-
-
-
-
-
-
 
 
 
@@ -1654,31 +2359,438 @@ export const CyanGradient: React.FC<CyanGradientProps> = ({ children }) => {
       backgroundColor: "black",
     },
     component: GlowOrbsComponent,
-    code: `import { motion } from "framer-motion";
-
-export const FloatingGlowOrbs = () => {
-  return (
-    <div className="absolute inset-0 overflow-hidden bg-slate-900">
-      {[...Array(6)].map((_, i) => (
+    code: `
+import {motion} from "framer-motion"
+export const GlowOrbsComponent = () => (
+    <div className="absolute inset-0 overflow-hidden">
+      {[...Array(3)].map((_, i) => (
         <motion.div
           key={i}
-          className="absolute w-20 h-20 bg-pink-500 rounded-full blur-2xl opacity-50"
+          className="absolute w-14 h-14 bg-cyan-500 rounded-full blur-lg opacity-50"
           style={{
-            top: \`\${Math.random() * 80}%\`,
-            left: \`\${Math.random() * 80}%\`,
+            top: \`\${20 + i * 30}%\`,
+            left: \`\${20 + i * 25}%\`,
           }}
-          animate={{ y: [0, -40, 0] }}
+          animate={{ y: [0, -20, 0] }}
           transition={{
             repeat: Infinity,
-            duration: 6 + Math.random() * 4,
+            duration: 4 + i,
             ease: "easeInOut",
           }}
         />
       ))}
     </div>
-  );
-};`
+  )
+    //EXAMPLE USAGE
+// "use client";
+
+// import React from "react";
+// import {  GlowOrbsComponent  } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <GlowOrbsComponent  />
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Goes Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// } 
+  `
   },
+  {
+    id: "smooth-rain",
+    name: "Smooth Rain",
+    category: "Effects",
+    style: {
+      backgroundColor: "black",
+    },
+    component: SmoothRainComponent,
+    code: `
+    //EXAMPLE USAGE
+// "use client";
+// import React from "react";
+// import {  SmoothRainComponent } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <SmoothRainComponent />
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components goes here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Goes Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+'use client';
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+
+export const SmoothRainComponent = () => {
+  const [raindrops, setRaindrops] = useState<any[]>([]);
+  const [ripples, setRipples] = useState<any[]>([]);
+
+  useEffect(() => {
+    // Generate random values only after mount
+    const generatedRaindrops = [...Array(150)].map((_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      startY: -20 - Math.random() * 50,
+      length: 8 + Math.random() * 25,
+      width: 0.5 + Math.random() * 1.5,
+      speed: 3 + Math.random() * 2,
+      opacity: 0.25 + Math.random() * 0.25,
+      delay: Math.random() * 5,
+      angle: -2 + Math.random() * 4,
+    }));
+
+    const generatedRipples = [...Array(20)].map((_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: 85 + Math.random() * 15,
+      delay: Math.random() * 6,
+      duration: 1.8 + Math.random() * 1.5,
+      maxScale: 2 + Math.random() * 2,
+    }));
+
+    setRaindrops(generatedRaindrops);
+    setRipples(generatedRipples);
+  }, []);
+
+  if (raindrops.length === 0) return null; // Avoid mismatched initial render
+
+  return (
+    <div className="h-screen absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Background rain atmosphere */}
+      <div className="absolute inset-0 bg-gradient-to-b from-gray-900/20 via-gray-800/10 to-gray-700/30 opacity-60" />
+
+      {/* Heavy rain drops */}
+      {raindrops.map((drop) => (
+        <motion.div
+          key={\`heavy-drop-\${drop.id}\`}
+          className="absolute"
+          style={{
+            left: \`\${drop.x}%\`,
+            top: \`\${drop.startY}%\`,
+            width: \`\${drop.width}px\`,
+            height: \`\${drop.length}px\`,
+            background: \`linear-gradient(180deg, 
+              rgba(255,255,255,\${drop.opacity}) 0%, 
+              rgba(200,230,255,\${drop.opacity * 0.8}) 50%, 
+              rgba(150,200,255,\${drop.opacity * 0.5}) 100%)\`,
+            borderRadius: "50px",
+            transform: \`rotate(\${drop.angle}deg)\`,
+            filter: "blur(0.3px)",
+          }}
+          animate={{
+            y: ["0vh", "120vh"],
+            opacity: [0, drop.opacity, drop.opacity, 0],
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: drop.speed,
+            delay: drop.delay,
+            ease: "easeIn",
+          }}
+        />
+      ))}
+
+      {/* Light mist drops */}
+      {[...Array(80)].map((_, i) => {
+        const mistDrop = {
+          x: Math.random() * 100,
+          y: Math.random() * 100,
+          size: 0.5 + Math.random() * 1,
+          opacity: 0.08 + Math.random() * 0.15,
+          duration: 4 + Math.random() * 2, // slower
+          delay: Math.random() * 5,
+        };
+
+        return (
+          <motion.div
+            key={\`mist-\${i}\`}
+            className="absolute rounded-full"
+            style={{
+              left: \`\${mistDrop.x}%\`,
+              top: \`\${mistDrop.y}%\`,
+              width: \`\${mistDrop.size}px\`,
+              height: \`\${mistDrop.size}px\`,
+              background: \`rgba(255, 255, 255, \${mistDrop.opacity})\`,
+              filter: "blur(0.5px)",
+            }}
+            animate={{
+              y: ["-20px", "100vh"],
+              x: [0, (Math.random() - 0.5) * 30],
+              opacity: [0, mistDrop.opacity, 0],
+            }}
+            transition={{
+              repeat: Infinity,
+              duration: mistDrop.duration,
+              delay: mistDrop.delay,
+              ease: "easeInOut",
+            }}
+          />
+        );
+      })}
+
+      {/* Ground splash ripples */}
+      {ripples.map((ripple) => (
+        <motion.div
+          key={\`\ripple-\${ripple.id}\`}
+          className="absolute border border-white/15 rounded-full"
+          style={{
+            left: \`\${ripple.x}%\`,
+            top: \`\${ripple.y}%\`,
+            width: "4px",
+            height: "2px",
+          }}
+          animate={{
+            width: ["4px", \`\${ripple.maxScale * 15}px\`],
+            height: ["2px", \`\${ripple.maxScale * 8}px\`],
+            opacity: [0.4, 0.2, 0],
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: ripple.duration + 0.5,
+            delay: ripple.delay,
+            ease: "easeOut",
+          }}
+        />
+      ))}
+
+      {/* Water puddle reflections */}
+      {[...Array(8)].map((_, i) => {
+        const puddle = {
+          x: Math.random() * 80 + 10,
+          y: 88 + Math.random() * 8,
+          width: 20 + Math.random() * 40,
+          delay: Math.random() * 3,
+        };
+
+        return (
+          <motion.div
+            key={\`puddle-\${i}\`}
+            className="absolute rounded-full"
+            style={{
+              left: \`\${puddle.x}%\`,
+              top: \`\${puddle.y}%\`,
+              width: \`\${puddle.width}px\`,
+              height: "3px",
+              background:
+                "linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)",
+              filter: "blur(1px)",
+            }}
+            animate={{
+              opacity: [0.1, 0.25, 0.1],
+              scaleX: [0.9, 1.1, 0.9],
+            }}
+            transition={{
+              repeat: Infinity,
+              duration: 3 + Math.random() * 1.5,
+              delay: puddle.delay,
+              ease: "easeInOut",
+            }}
+          />
+        );
+      })}
+
+      {/* Lightning flash */}
+      <motion.div
+        className="absolute inset-0 bg-white/5 pointer-events-none"
+        animate={{
+          opacity: [0, 0, 0, 0.25, 0, 0, 0.08, 0],
+        }}
+        transition={{
+          repeat: Infinity,
+          duration: 10,
+          times: [0, 0.7, 0.72, 0.73, 0.74, 0.76, 0.77, 1],
+        }}
+      />
+    </div>
+  );
+};
+  `
+  },
+  {
+    id: "smooth-snow",
+    name: "Smooth Snow",
+    category: "Effects",
+    style: {
+      backgroundColor: "black",
+    },
+    component: SnowAuroraComponent,
+    code:`//EXAMPLE USAGE
+// "use client";
+// import React from "react";
+// import {  SnowAuroraComponent  } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <SnowAuroraComponent  />
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components goes here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Goes Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+
+"use client";
+import { motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
+
+export const SnowAuroraComponent = () => {
+  const [snowflakes, setSnowflakes] = useState<any[]>([]);
+  const [clouds, setC louds] = useState<any[]>([]);
+
+  useEffect(() => {
+    setSnowflakes([...Array(120)].map((_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: 1 + Math.random() * 3,
+      opacity: 0.3 + Math.random() * 0.7,
+      speed: 6 + Math.random() * 6,
+      drift: (Math.random() - 0.5) * 40,
+      delay: Math.random() * 6,
+    })));
+
+    setClouds([...Array(5)].map((_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      width: 150 + Math.random() * 200,
+      height: 40 + Math.random() * 20,
+      opacity: 0.1 + Math.random() * 0.08,
+      delay: Math.random() * 10,
+    })));
+  }, []);
+
+  return (
+    <div className="h-screen absolute inset-0 overflow-hidden pointer-events-none bg-gradient-to-b from-[#020617] via-[#0f172a] to-[#1e293b]">
+      {/* Aurora glow */}
+      <motion.div
+        className="absolute inset-x-0 top-0 h-1/2"
+        style={{
+          background:
+            "radial-gradient(ellipse at top, rgba(80,200,170,0.3) 0%, transparent 60%), radial-gradient(ellipse at 30% 10%, rgba(100,160,255,0.25) 0%, transparent 50%)",
+          filter: "blur(50px)",
+        }}
+        animate={{
+          backgroundPosition: ["0% 0%", "100% 0%", "0% 0%"],
+        }}
+        transition={{
+          repeat: Infinity,
+          duration: 30,
+          ease: "linear",
+        }}
+      />
+
+      {/* Clouds */}
+      {clouds.map((cloud) => (
+        <motion.div
+          key={\`cloud-\${cloud.id}\`}
+          className="absolute top-0 rounded-full"
+          style={{
+            left: \`\${cloud.x}%\`,
+            width: \`\${cloud.width}px\`,
+            height: \`\${cloud.height}px\`,
+            background:
+              "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.25), transparent 70%)",
+            filter: "blur(25px)",
+            opacity: cloud.opacity,
+          }}
+          animate={{
+            x: ["0%", "15%", "0%"],
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: 70,
+            delay: cloud.delay,
+            ease: "linear",
+          }}
+        />
+      ))}
+
+      {/* Snowflakes */}
+      {snowflakes.map((flake) => (
+        <motion.div
+          key={\`snow-\${flake.id}\`}
+          className="absolute rounded-full"
+          style={{
+            left: \`\${flake.x}%\`,
+            top: \`\${flake.y}%\`,
+            width: \`\${flake.size}px\`,
+            height: \`\${flake.size}px\`,
+            background: \`rgba(255,255,255,\${flake.opacity})\`,
+            filter: "blur(0.5px)",
+          }}
+          animate={{
+            y: ["-10vh", "110vh"],
+            x: [0, flake.drift],
+            opacity: [0, flake.opacity, flake.opacity, 0],
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: flake.speed,
+            delay: flake.delay,
+            ease: "linear",
+          }}
+        />
+      ))}
+
+      {/* Ground frost shimmer */}
+      <motion.div
+        className="absolute bottom-0 left-0 w-full h-16"
+        style={{
+          background:
+            "linear-gradient(to top, rgba(255,255,255,0.08), transparent)",
+        }}
+        animate={{
+          opacity: [0.05, 0.15, 0.05],
+        }}
+        transition={{
+          repeat: Infinity,
+          duration: 5,
+          ease: "easeInOut",
+        }}
+      />
+    </div>
+  );
+};
+
+` 
+  },
+  
 
   //floatings
   {
@@ -1693,7 +2805,7 @@ export const FloatingGlowOrbs = () => {
 
 export const SoftDotNetwork = () => {
   return (
-    <div className="absolute inset-0 grid grid-cols-12 grid-rows-6 gap-4 p-4 bg-slate-800">
+    <div className="absolute inset-0 grid grid-cols-12 grid-rows-6 gap-4 p-4 bg-black">
       {[...Array(72)].map((_, i) => (
         <motion.div
           key={i}
@@ -1711,7 +2823,32 @@ export const SoftDotNetwork = () => {
       ))}
     </div>
   );
-};`
+};
+//"use client";
+// //usage eg:
+// import React from "react";
+// import {  SoftDotNetwork } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <SoftDotNetwork/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
   },
   {
     id: "dots-soft-network-v2",
@@ -1723,7 +2860,7 @@ export const SoftDotNetwork = () => {
     component: DotNetworkComponentv2,
     code: `import { motion } from "framer-motion";
 
-export const DotNetworkComponent = () => (
+export const SoftDotNetworkv2 = () => (
   <div className="absolute inset-0 grid grid-cols-16 grid-rows-8 gap-2 p-2">
     {[...Array(128)].map((_, i) => {
       const row = Math.floor(i / 16); // Get the row number (0–7)
@@ -1742,7 +2879,32 @@ export const DotNetworkComponent = () => (
       );
     })}
   </div>
-);`
+);
+//"use client";
+// //usage eg:
+// import React from "react";
+// import {  SoftDotNetworkv2 } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <SoftDotNetworkv2/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
   },
   {
     id: "moving-dots",
@@ -1752,24 +2914,62 @@ export const DotNetworkComponent = () => (
       backgroundColor: "black",
     },
     component: MovingDotsComponent,
-    code: `  export const MovingDotsComponent = () => (
-      <div className="absolute inset-0 grid grid-cols-8 grid-rows-4 gap-2 p-2 overflow-hidden">
-        {[...Array(32)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="w-1 h-1 bg-white/30 rounded-full"
-            animate={{ x: ["0%", "100%"] }}
-            transition={{
-              duration: 4,
-              repeat: Infinity,
-              repeatType: "loop",
-              ease: "linear",
-              delay: (i % 8) * 0.2, // stagger horizontally
-            }}
-          />
-        ))}
-      </div>
-    );`
+    code: `
+import {motion} from "framer-motion"
+
+export const MovingDotsComponent = () => (
+  <div className="absolute inset-0 grid grid-cols-16 grid-rows-8 gap-4 p-4">
+    {[...Array(128)].map((_, i) => {
+      const randomX = Math.random() * 20 - 10;
+      const randomY = Math.random() * 20 - 10;
+
+      return (
+        <motion.div
+          key={i}
+          className="w-2 h-2 bg-white/40 rounded-full"
+          animate={{
+            x: [0, randomX, -randomX, 0],
+            y: [0, randomY, -randomY, 0],
+            opacity: [0.4, 1, 0.4],
+            scale: [1, 1.3, 1],
+          }}
+          transition={{
+            duration: 4,
+            repeat: Infinity,
+            repeatType: "mirror",
+            ease: "easeInOut",
+            delay: (i % 12) * 0.1,
+          }}
+        />
+      );
+    })}
+  </div>
+);
+//"use client";
+// //usage eg:
+// import React from "react";
+// import {  MovingDotsComponent } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <MovingDotsComponent/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
   },
   {
     id: "fade-dot",
@@ -1779,7 +2979,8 @@ export const DotNetworkComponent = () => (
       backgroundColor: "black",
     },
     component: FadeDotComponent,
-    code: ` import React from 'react';
+    code: ` "use client"
+import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 
 export const FadeDotComponent = () => {
@@ -1821,7 +3022,7 @@ export const FadeDotComponent = () => {
 
   return (
     <div
-      className="absolute    inset-0 grid bg-black"
+      className="absolute   inset-0 grid bg-black"
       style={{
         gridTemplateColumns: \`repeat(\${gridSize.cols}, \${DOT_SIZE}px)\`,
         gap: \`\${GAP_SIZE}px\`,
@@ -1853,9 +3054,146 @@ export const FadeDotComponent = () => {
       ))}
     </div>
   );
-};`
-  },
+};
 
+//"use client";
+// //usage eg:
+// import React from "react";
+// import {  FadeDotComponent } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <FadeDotComponent/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
+  },
+  {
+    id: "wavy-dots",
+    name: "Wavy Dots",
+    category: "Dots",
+    style: {
+      backgroundColor: "black",
+    },
+    component: WavyDots,
+    code: ` 
+    "use client";
+import { motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
+
+export const WavyDots = () => {
+  const gridSize = 20;
+  const [cols, setCols] = useState(0);
+  const [rows, setRows] = useState(0);
+
+  useEffect(() => {
+    // Only run in browser
+    const updateGrid = () => {
+      setCols(Math.floor(window.innerWidth / gridSize));
+      setRows(Math.floor(window.innerHeight / gridSize));
+    };
+
+    updateGrid(); // initial
+    window.addEventListener("resize", updateGrid);
+    return () => window.removeEventListener("resize", updateGrid);
+  }, []);
+
+  return (
+    <div className="absolute inset-0 bg-black overflow-hidden">
+      {/* Grid lines */}
+      {[...Array(cols)].map((_, i) => (
+        <motion.div
+          key={\`v-\${i}\`}
+          className="absolute top-0 h-full border-l border-slate-700/30"
+          style={{ left: \`\${i * gridSize}px\` }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.3 }}
+          transition={{ delay: i * 0.02 }}
+        />
+      ))}
+      {[...Array(rows)].map((_, i) => (
+        <motion.div
+          key={\`h-\${i}\`}
+          className="absolute left-0 w-full border-t border-slate-700/30"
+          style={{ top: \`\${i * gridSize}px\` }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.3 }}
+          transition={{ delay: i * 0.02 }}
+        />
+      ))}
+
+      {/* Pulsing dots */}
+      {[...Array(cols * rows)].map((_, i) => {
+        const col = i % cols;
+        const row = Math.floor(i / cols);
+        return (
+          <motion.div
+            key={i}
+            className="absolute rounded-full bg-cyan-400"
+            style={{
+              width: 3,
+              height: 3,
+              left: col * gridSize + gridSize / 2,
+              top: row * gridSize + gridSize / 2,
+            }}
+            animate={{
+              opacity: [0.1, 1, 0.1],
+              scale: [1, 1.5, 1],
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              delay: (col + row) * 0.05,
+            }}
+          />
+        );
+      })}
+    </div>
+  );
+};
+
+
+//"use client";
+// //usage eg:
+// import React from "react";
+// import {  WavyDots } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <WavyDots/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
+  },
+  
   {
     id: "blinking-dots",
     name: "Blinking Dots",
@@ -1864,42 +3202,69 @@ export const FadeDotComponent = () => {
       backgroundColor: "black",
     },
     component: BlinkingDotsComponent,
-    code: `export const BlinkingDotsComponent = () => {
-    const gridSize = 8;
-    const dots = Array.from({ length: gridSize * gridSize }, (_, i) => ({
-      id: i,
-      x: (i % gridSize) * (100 / gridSize),
-      y: Math.floor(i / gridSize) * (100 / gridSize),
-      delay: Math.random() * 3
-    }));
-  
-    return (
-      <div className="fixed inset-0 overflow-hidden pointer-events-none bg-gradient-to-tr from-gray-900 to-slate-800">
-        {dots.map((dot) => (
-          <motion.div
-            key={dot.id}
-            className="absolute w-2 h-2 bg-cyan-400 rounded-full"
-            style={{
-              left: \`\${dot.x}%\`,
-              top: \`\${dot.y}%\`,
-            }}
-            animate={{
-              scale: [0, 1, 0],
-              opacity: [0, 1, 0]
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              delay: dot.delay,
-              ease: "easeInOut"
-            }}
-          />
-        ))}
-      </div>
-    );
-  };`
-  },
+    code: `
+import {motion } from "framer-motion"
 
+export const BlinkingDotsComponent = () => {
+  const gridSize = 8;
+  const dots = Array.from({ length: gridSize * gridSize }, (_, i) => ({
+    id: i,
+    x: (i % gridSize) * (100 / gridSize),
+    y: Math.floor(i / gridSize) * (100 / gridSize),
+    delay: Math.random() * 3
+  }));
+
+  return (
+    <div className="fixed inset-0 overflow-hidden pointer-events-none bg-black">
+      {dots.map((dot) => (
+        <motion.div
+          key={dot.id}
+          className="absolute w-2 h-2 bg-cyan-400 rounded-full"
+          style={{
+            left: \`\${dot.x}%\`,
+            top: \`\${dot.y}%\`,
+          }}
+          animate={{
+            scale: [0, 1, 0],
+            opacity: [0, 1, 0]
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            delay: dot.delay,
+            ease: "easeInOut"
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+//"use client";
+// //usage eg:
+// import React from "react";
+// import {  BlinkingDotsComponent  } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <BlinkingDotsComponent  />
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
+  },
   {
     id: "moving-particles",
     name: "Moving Particles",
@@ -1910,6 +3275,7 @@ export const FadeDotComponent = () => {
     component: ParticlesBackgroundComponent,
     code: `import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+
 
 interface Particle {
   id: number;
@@ -2012,7 +3378,32 @@ export const ParticlesBackgroundComponent = () => {
       ))}
     </div>
   );
-};`
+};
+//"use client";
+// //usage eg:
+// import React from "react";
+// import {  ParticlesBackgroundComponent  } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <ParticlesBackgroundComponent  />
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
   },
   {
     id: "glowing-particles",
@@ -2023,8 +3414,9 @@ export const ParticlesBackgroundComponent = () => {
     },
     component: GlowingParticles,
     code: `
-    // globals.css
-    .galaxy-container {
+   "use client";
+// copy below classes at the bottom of globals.css
+   /* .galaxy-container {
       position: absolute;
       inset: 0;
       overflow: hidden;
@@ -2043,349 +3435,83 @@ export const ParticlesBackgroundComponent = () => {
     @keyframes twinkle {
       0%, 100% { opacity: 0.3; transform: scale(1); }
       50% { opacity: 1; transform: scale(1.5); }
-    }
-  
-    // main component
-    interface GalaxyProps {
-      starCount?: number;
-    }
-  
-    export const GlowingParticles: React.FC<GalaxyProps> = ({ starCount = 200 }) => {
-      const stars = Array.from({ length: starCount }, (_, i) => ({
-        id: i,
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        size: Math.random() * 2 + 1,
-        delay: Math.random() * 5,
-      }));
-  
-      return (
-        <div className="galaxy-container">
-          {stars.map((star) => (
-            <div
-              key={star.id}
-              className="star"
-              style={{
-                left: \`\${star.x}%\`,
-                top: \`\${star.y}%\`,
-                width: \`\${star.size}px\`,
-                height: \`\${star.size}px\`,
-                animationDelay: \`\${star.delay}s\`,
-              }}
-            />
-          ))}
-        </div>
-      );
-    };`
+    }*/
+import React, { useEffect, useState } from "react";
+
+interface Star {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  delay: number;
+}
+
+interface GalaxyProps {
+  starCount?: number;
+}
+
+export const GlowingParticles: React.FC<GalaxyProps> = ({ starCount = 200 }) => {
+  const [stars, setStars] = useState<Star[] | null>(null);
+
+  useEffect(() => {
+    // generate only on the client after mount
+    const generated = Array.from({ length: starCount }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 2 + 1,
+      delay: Math.random() * 5,
+    }));
+    // tiny timeout to allow a smooth fade-in (optional)
+    setTimeout(() => setStars(generated), 0);
+  }, [starCount]);
+
+  return (
+    <div className={\`galaxy-container \${stars ? "loaded" : ""}\`} aria-hidden>
+      {stars?.map((s) => (
+        <div
+          key={s.id}
+          className="star"
+          style={{
+            left: \`\${s.x}%\`,
+            top: \`\${s.y}%\`,
+            width: \`\${s.size}px\`,
+            height: \`\${s.size}px\`,
+            animationDelay: \`\${s.delay}s\`,
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+//"use client";
+// usage eg:
+
+// import React from "react";
+// import {  GlowingParticles  } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <GlowingParticles  />
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`
   },
-  {
-    id: "dot-grid",
-    name: "React-Bits Dot Grid",
-    category: "Dots",
-    style: {
-      backgroundColor: "black"
-    },
-    component: DotGridAnimations,
-    code: `import { motion } from "framer-motion";
-  import React, { useRef, useEffect, useCallback, useMemo } from "react";
-  import { gsap } from "gsap";
-  import { InertiaPlugin } from "gsap/InertiaPlugin";
   
-  gsap.registerPlugin(InertiaPlugin);
-  
-  const throttle = (func: (...args: any[]) => void, limit: number) => {
-    let lastCall = 0;
-    return function (this: any, ...args: any[]) {
-      const now = performance.now();
-      if (now - lastCall >= limit) {
-        lastCall = now;
-        func.apply(this, args);
-      }
-    };
-  };
-  
-  interface Dot {
-    cx: number;
-    cy: number;
-    xOffset: number;
-    yOffset: number;
-    _inertiaApplied: boolean;
-  }
-  
-  export interface DotGridProps {
-    dotSize?: number;
-    gap?: number;
-    baseColor?: string;
-    activeColor?: string;
-    proximity?: number;
-    speedTrigger?: number;
-    shockRadius?: number;
-    shockStrength?: number;
-    maxSpeed?: number;
-    resistance?: number;
-    returnDuration?: number;
-    className?: string;
-    style?: React.CSSProperties;
-  }
-  
-  function hexToRgb(hex: string) {
-    const m = hex.match(/^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$/i);
-    if (!m) return { r: 0, g: 0, b: 0 };
-    return {
-      r: parseInt(m[1], 16),
-      g: parseInt(m[2], 16),
-      b: parseInt(m[3], 16),
-    };
-  }
-  
-  export const DotGridAnimations: React.FC<DotGridProps> = ({
-    dotSize = 16,
-    gap = 32,
-    baseColor = "#5227FF",
-    activeColor = "#5227FF",
-    proximity = 150,
-    speedTrigger = 100,
-    shockRadius = 250,
-    shockStrength = 5,
-    maxSpeed = 5000,
-    resistance = 750,
-    returnDuration = 1.5,
-    className = "",
-    style,
-  }) => {
-    const wrapperRef = useRef<HTMLDivElement>(null);
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-    const dotsRef = useRef<Dot[]>([]);
-    const pointerRef = useRef({
-      x: 0,
-      y: 0,
-      vx: 0,
-      vy: 0,
-      speed: 0,
-      lastTime: 0,
-      lastX: 0,
-      lastY: 0,
-    });
-  
-    const baseRgb = useMemo(() => hexToRgb(baseColor), [baseColor]);
-    const activeRgb = useMemo(() => hexToRgb(activeColor), [activeColor]);
-  
-    const circlePath = useMemo(() => {
-      if (typeof window === "undefined" || !window.Path2D) return null;
-      const p = new Path2D();
-      p.arc(0, 0, dotSize / 2, 0, Math.PI * 2);
-      return p;
-    }, [dotSize]);
-  
-    const buildGrid = useCallback(() => {
-      const wrap = wrapperRef.current;
-      const canvas = canvasRef.current;
-      if (!wrap || !canvas) return;
-  
-      const { width, height } = wrap.getBoundingClientRect();
-      const dpr = window.devicePixelRatio || 1;
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
-      canvas.style.width = \`\${width}px\`;
-      canvas.style.height = \`\${height}px\`;
-      const ctx = canvas.getContext("2d");
-      if (ctx) ctx.scale(dpr, dpr);
-  
-      const cols = Math.floor((width + gap) / (dotSize + gap));
-      const rows = Math.floor((height + gap) / (dotSize + gap));
-      const cell = dotSize + gap;
-  
-      const gridW = cell * cols - gap;
-      const gridH = cell * rows - gap;
-  
-      const extraX = width - gridW;
-      const extraY = height - gridH;
-  
-      const startX = extraX / 2 + dotSize / 2;
-      const startY = extraY / 2 + dotSize / 2;
-  
-      const dots: Dot[] = [];
-      for (let y = 0; y < rows; y++) {
-        for (let x = 0; x < cols; x++) {
-          const cx = startX + x * cell;
-          const cy = startY + y * cell;
-          dots.push({ cx, cy, xOffset: 0, yOffset: 0, _inertiaApplied: false });
-        }
-      }
-      dotsRef.current = dots;
-    }, [dotSize, gap]);
-  
-    useEffect(() => {
-      if (!circlePath) return;
-      let rafId: number;
-      const proxSq = proximity * proximity;
-      const draw = () => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        const { x: px, y: py } = pointerRef.current;
-        for (const dot of dotsRef.current) {
-          const ox = dot.cx + dot.xOffset;
-          const oy = dot.cy + dot.yOffset;
-          const dx = dot.cx - px;
-          const dy = dot.cy - py;
-          const dsq = dx * dx + dy * dy;
-  
-          let style = baseColor;
-          if (dsq <= proxSq) {
-            const dist = Math.sqrt(dsq);
-            const t = 1 - dist / proximity;
-            const r = Math.round(baseRgb.r + (activeRgb.r - baseRgb.r) * t);
-            const g = Math.round(baseRgb.g + (activeRgb.g - baseRgb.g) * t);
-            const b = Math.round(baseRgb.b + (activeRgb.b - baseRgb.b) * t);
-            style = \`rgb(\${r},\${g},\${b})\`;
-          }
-  
-          ctx.save();
-          ctx.translate(ox, oy);
-          ctx.fillStyle = style;
-          ctx.fill(circlePath);
-          ctx.restore();
-        }
-  
-        rafId = requestAnimationFrame(draw);
-      };
-      draw();
-      return () => cancelAnimationFrame(rafId);
-    }, [proximity, baseColor, activeRgb, baseRgb, circlePath]);
-  
-    useEffect(() => {
-      buildGrid();
-      let ro: ResizeObserver | null = null;
-      if ("ResizeObserver" in window) {
-        ro = new ResizeObserver(buildGrid);
-        wrapperRef.current && ro.observe(wrapperRef.current);
-      } else {
-        window.addEventListener("resize", buildGrid);
-      }
-      return () => {
-        if (ro) ro.disconnect();
-        else window.removeEventListener("resize", buildGrid);
-      };
-    }, [buildGrid]);
-  
-    useEffect(() => {
-      const onMove = (e: MouseEvent) => {
-        const now = performance.now();
-        const pr = pointerRef.current;
-        const dt = pr.lastTime ? now - pr.lastTime : 16;
-        const dx = e.clientX - pr.lastX;
-        const dy = e.clientY - pr.lastY;
-        let vx = (dx / dt) * 1000;
-        let vy = (dy / dt) * 1000;
-        let speed = Math.hypot(vx, vy);
-        if (speed > maxSpeed) {
-          const scale = maxSpeed / speed;
-          vx *= scale;
-          vy *= scale;
-          speed = maxSpeed;
-        }
-        pr.lastTime = now;
-        pr.lastX = e.clientX;
-        pr.lastY = e.clientY;
-        pr.vx = vx;
-        pr.vy = vy;
-        pr.speed = speed;
-  
-        const rect = canvasRef.current!.getBoundingClientRect();
-        pr.x = e.clientX - rect.left;
-        pr.y = e.clientY - rect.top;
-  
-        for (const dot of dotsRef.current) {
-          const dist = Math.hypot(dot.cx - pr.x, dot.cy - pr.y);
-          if (speed > speedTrigger && dist < proximity && !dot._inertiaApplied) {
-            dot._inertiaApplied = true;
-            gsap.killTweensOf(dot);
-            const pushX = dot.cx - pr.x + vx * 0.005;
-            const pushY = dot.cy - pr.y + vy * 0.005;
-            gsap.to(dot, {
-              inertia: { xOffset: pushX, yOffset: pushY, resistance },
-              onComplete: () => {
-                gsap.to(dot, {
-                  xOffset: 0,
-                  yOffset: 0,
-                  duration: returnDuration,
-                  ease: "elastic.out(1,0.75)",
-                });
-                dot._inertiaApplied = false;
-              },
-            });
-          }
-        }
-      };
-  
-      const onClick = (e: MouseEvent) => {
-        const rect = canvasRef.current!.getBoundingClientRect();
-        const cx = e.clientX - rect.left;
-        const cy = e.clientY - rect.top;
-        for (const dot of dotsRef.current) {
-          const dist = Math.hypot(dot.cx - cx, dot.cy - cy);
-          if (dist < shockRadius && !dot._inertiaApplied) {
-            dot._inertiaApplied = true;
-            gsap.killTweensOf(dot);
-            const falloff = Math.max(0, 1 - dist / shockRadius);
-            const pushX = (dot.cx - cx) * shockStrength * falloff;
-            const pushY = (dot.cy - cy) * shockStrength * falloff;
-            gsap.to(dot, {
-              inertia: { xOffset: pushX, yOffset: pushY, resistance },
-              onComplete: () => {
-                gsap.to(dot, {
-                  xOffset: 0,
-                  yOffset: 0,
-                  duration: returnDuration,
-                  ease: "elastic.out(1,0.75)",
-                });
-                dot._inertiaApplied = false;
-              },
-            });
-          }
-        }
-      };
-  
-      const throttledMove = throttle(onMove, 50);
-      window.addEventListener("mousemove", throttledMove, { passive: true });
-      window.addEventListener("click", onClick);
-      return () => {
-        window.removeEventListener("mousemove", throttledMove);
-        window.removeEventListener("click", onClick);
-      };
-    }, [
-      maxSpeed,
-      speedTrigger,
-      proximity,
-      resistance,
-      returnDuration,
-      shockRadius,
-      shockStrength,
-    ]);
-  
-    return (
-      <section
-        className={\`p-4 flex items-center justify-center h-full w-full relative \${className}\`}
-        style={style}
-      >
-        <div ref={wrapperRef} className="w-full h-full relative">
-          <canvas
-            ref={canvasRef}
-            className="absolute inset-0 w-full h-full pointer-events-none"
-          />
-        </div>
-      </section>
-    );
-  };
-  `
-  },
-
-
-
-
 ];
 
 export { patterns };
