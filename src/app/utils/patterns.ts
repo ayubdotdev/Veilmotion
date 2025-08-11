@@ -1,6 +1,6 @@
 import React from "react";
 import { BlinkingDotsComponent, DotNetworkComponent, DotNetworkComponentv2, FadeDotComponent, MovingDotsComponent } from "@/bgs/Dots";
-import  {  GlowOrbsComponent, SmoothRainComponent, SnowAuroraComponent,  } from "@/bgs/Effects";
+import  {  GlowOrbsComponent, NightSakuraComponent, SmoothRainComponent, SnowAuroraComponent,  } from "@/bgs/Effects";
 import { FloatingParticles, GlowingParticles, ParticlesBackgroundComponent, WavyDots} from "@/bgs/Dots";
 import { AnimatedBlackGridBackground, MagentaGrid, DarkBg, CoolBlueGrid, WarmAmberGrid, LimeFadeGrid, CyanBurstGrid, VioletMistGrid, MagentaFlame, NeonShock, GreenPunchGrid, ToxicPulse, } from "@/bgs/Geometrics";
 import { CyanGradient, CyanGradientBlack, CyanGradientBlackTop, CyanGradientTop, FuchsiaGradient, FuchsiaGradientBlack, FuchsiaGradientBlackTop, FuchsiaGradientTop, PurpleGradient, PurpleGradientBlackTop, PurpleGradientTop, RedGradient, RedGradientBlack, RedGradientBlackTop, RedGradientTop, TealGradient, TealGradientBlackTop, TealGradientTop, } from "@/bgs/Gradients";
@@ -2437,7 +2437,8 @@ export const GlowOrbsComponent = () => (
 //     </div>
 //   );
 // } 
-  `
+  `,
+  previewImage:"/GlowOrbs.png"
   },
   {
     id: "smooth-rain",
@@ -2660,7 +2661,8 @@ export const SmoothRainComponent = () => {
     </div>
   );
 };
-  `
+  `,
+  previewImage:"/Rain.png"
   },
   {
     id: "smooth-snow",
@@ -2702,7 +2704,7 @@ import React, { useEffect, useState } from "react";
 
 export const SnowAuroraComponent = () => {
   const [snowflakes, setSnowflakes] = useState<any[]>([]);
-  const [clouds, setC louds] = useState<any[]>([]);
+  const [clouds, setClouds] = useState<any[]>([]);
 
   useEffect(() => {
     setSnowflakes([...Array(120)].map((_, i) => ({
@@ -2818,8 +2820,155 @@ export const SnowAuroraComponent = () => {
     </div>
   );
 };
+` ,
+previewImage:"/Snow.png"
+  },
+  {
+    id: "cheryy-blossom",
+    name: "Night Sakura",
+    category: "Effects",
+    style: {
+      backgroundColor: "black",
+    },
+    component: NightSakuraComponent,
+    code:`
+    //EXAMPLE USAGE
+// "use client";
+// import React from "react";
+// import { NightSakuraComponent } from "./component/bg";
 
-` 
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <NightSakuraComponent />
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+        
+//       </div>
+//     </div>
+//   );
+// }
+
+    
+    "use client";
+import { motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
+
+interface Petal {
+  id: number;
+  x: number;       // percentage position horizontally
+  y: number;       // percentage position vertically
+  size: number;    // pixel size
+  rotation: number;
+  opacity: number;
+  speed: number;   // fall duration
+  drift: number;   // horizontal drift amplitude
+  delay: number;   // animation delay
+}
+
+export const NightSakuraComponent = () => {
+  const petalImage = "/images/petal.png";
+
+  const [petals, setPetals] = useState<Petal[]>([]);
+
+  useEffect(() => {
+    setPetals(
+      [...Array(50)].map((_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        y: -10 - Math.random() * 100, // some start above the screen
+        size: 16 + Math.random() * 18,
+        rotation: Math.random() * 360,
+        opacity: 0.5 + Math.random() * 0.5,
+        speed: 12 + Math.random() * 8,
+        drift: 20 + Math.random() * 60, // sway amplitude
+        delay: Math.random() * 8,
+      }))
+    );
+  }, []);
+
+  return (
+    <div className="h-screen absolute inset-0 overflow-hidden pointer-events-none bg-gradient-to-b from-[#0a0320] via-[#15052f] to-[#1a0f2f]">
+      {/* Moon glow */}
+      <motion.div
+        className="absolute inset-x-0 top-0 h-1/2"
+        style={{
+          background:
+            "radial-gradient(ellipse at top, rgba(255,182,193,0.15) 0%, transparent 70%), radial-gradient(ellipse at 70% 20%, rgba(200,150,255,0.1) 0%, transparent 60%)",
+          filter: "blur(80px)",
+        }}
+        animate={{
+          backgroundPosition: ["0% 0%", "100% 0%", "0% 0%"],
+        }}
+        transition={{
+          repeat: Infinity,
+          duration: 50,
+          ease: "linear",
+        }}
+      />
+
+      {/* Petals */}
+      {petals.map((petal) => (
+  <motion.img
+    key={\`petal-\${petal.id}\`}
+    src="/petal.png"
+    alt="Sakura Petal"
+    className="absolute"
+    style={{
+      left: \`\${petal.x}%\`,
+      top: \`\${petal.y}%\`,
+      width: \`\${petal.size}px\`,
+      height: "auto",
+      opacity: petal.opacity,
+      filter: \`drop-shadow(0 0 6px rgba(255,182,193,0.8)) drop-shadow(0 0 12px rgba(255,105,180,0.6))\`,
+    }}
+    animate={{
+      y: ["-10vh", "110vh"],
+      x: [0, petal.drift, -petal.drift, 0],
+      rotate: [
+        petal.rotation,
+        petal.rotation + 180,
+        petal.rotation + 360,
+      ],
+      opacity: [0, petal.opacity, petal.opacity, 0],
+      filter: [
+        \`drop-shadow(0 0 6px rgba(255,182,193,0.8)) drop-shadow(0 0 12px rgba(255,105,180,0.6))\`,
+        \`drop-shadow(0 0 12px rgba(255,182,193,1)) drop-shadow(0 0 20px rgba(255,105,180,0.8))\`,
+        \`drop-shadow(0 0 6px rgba(255,182,193,0.8)) drop-shadow(0 0 12px rgba(255,105,180,0.6))\`,
+      ],
+    }}
+    transition={{
+      repeat: Infinity,
+      duration: petal.speed,
+      delay: petal.delay,
+      ease: "easeInOut",
+    }}
+  />
+))}
+
+      {/* Ground shimmer */}
+      <motion.div
+        className="absolute bottom-0 left-0 w-full h-20"
+        style={{
+          background:
+            "linear-gradient(to top, rgba(255,192,203,0.08), transparent)",
+        }}
+        animate={{
+          opacity: [0.05, 0.15, 0.05],
+        }}
+        transition={{
+          repeat: Infinity,
+          duration: 6,
+          ease: "easeInOut",
+        }}
+      />
+    </div>
+  );
+};
+` ,
+previewImage:"/Sakura.png"
   },
   
 
@@ -2879,7 +3028,8 @@ export const SoftDotNetwork = () => {
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/SoftD1.png"
   },
   {
     id: "dots-soft-network-v2",
@@ -2935,72 +3085,106 @@ export const SoftDotNetworkv2 = () => (
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/sdv2.png"
   },
   {
     id: "moving-dots",
-    name: "Moving Dots",
+    name: "Moving Gradient Dots",
     category: "Dots",
     style: {
       backgroundColor: "black",
     },
     component: MovingDotsComponent,
     code: `
-import {motion} from "framer-motion"
+    import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
-export const MovingDotsComponent = () => (
-  <div className="absolute inset-0 grid grid-cols-16 grid-rows-8 gap-4 p-4">
-    {[...Array(128)].map((_, i) => {
+const generateColorCycle = (baseHue: number) => [
+  \`hsl(\${baseHue}, 80%, 70%)\`,
+  \`hsl(\${(baseHue + 60) % 360}, 80%, 70%)\`,
+  \`hsl(\${(baseHue + 120) % 360}, 80%, 70%)\`,
+  \`hsl(\${(baseHue + 180) % 360}, 80%, 70%)\`,
+];
+
+export const MovingDotsComponent = () => {
+  const [dots, setDots] = useState<
+    { randomX: number; randomY: number; colorCycle: string[] }[]
+  >([]);
+
+  useEffect(() => {
+    // generate dots only on client side after mount
+    const generatedDots = [...Array(128)].map(() => {
       const randomX = Math.random() * 20 - 10;
       const randomY = Math.random() * 20 - 10;
+      const baseHue = Math.floor(Math.random() * 360);
+      const colorCycle = generateColorCycle(baseHue);
+      return { randomX, randomY, colorCycle };
+    });
+    setDots(generatedDots);
+  }, []);
 
-      return (
-        <motion.div
-          key={i}
-          className="w-2 h-2 bg-white/40 rounded-full"
-          animate={{
-            x: [0, randomX, -randomX, 0],
-            y: [0, randomY, -randomY, 0],
-            opacity: [0.4, 1, 0.4],
-            scale: [1, 1.3, 1],
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            repeatType: "mirror",
-            ease: "easeInOut",
-            delay: (i % 12) * 0.1,
-          }}
-        />
-      );
-    })}
+  if (dots.length === 0) {
+    // Optionally, render nothing or a placeholder on first render (server or initial client)
+    return null;
+  }
+
+ return (
+  <div className="absolute inset-0 grid grid-cols-16 grid-rows-8 gap-2">
+    {dots.map(({ randomX, randomY, colorCycle }, i) => (
+      <motion.div
+        key={i}
+        className="w-4 h-4 rounded-full"
+        style={{
+          background: \`radial-gradient(circle at center, \${colorCycle[0]} 0%, transparent 70%)\`,
+        }}
+        animate={{
+          x: [0, randomX, -randomX, 0],
+          y: [0, randomY, -randomY, 0],
+          opacity: [0.4, 1, 0.4],
+          scale: [1, 1.3, 1],
+          backgroundImage: [
+            \`radial-gradient(circle at center, \${colorCycle[0]} 0%, transparent 70%)\`,
+            \`radial-gradient(circle at center, \${colorCycle[1]} 0%, transparent 70%)\`,
+            \`radial-gradient(circle at center, \${colorCycle[2]} 0%, transparent 70%)\`,
+            \`radial-gradient(circle at center, \${colorCycle[3]} 0%, transparent 70%)\`,
+            \`radial-gradient(circle at center, \${colorCycle[0]} 0%, transparent 70%)\`,
+          ],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          repeatType: "loop",
+          ease: "easeInOut",
+          delay: (i % 12) * 0.15,
+        }}
+      />
+    ))}
   </div>
 );
-//"use client";
-// //usage eg:
+};
+
+//EXAMPLE USAGE
+// "use client";
 // import React from "react";
-// import {  MovingDotsComponent } from "./component/bg";
+// import { MovingDotsComponent } from "./component/bg";
 
 // export default function HomePage() {
 //   return (
 //     <div className="h-screen relative overflow-hidden">
 //       {/* Background Animation */}
-//       <MovingDotsComponent/>
+//       <MovingDotsComponent />
 
 //       {/* Foreground Content */}
 //       <div className="absolute inset-0 z-10 flex items-center justify-center">
-//         {/* Your components go here */}
-//         <div className="text-center">
-//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
-//           <p className="text-lg text-gray-300 mt-2">
-//             Replace this with any UI elements, cards, forms, etc.
-//           </p>
-//         </div>
+        
 //       </div>
 //     </div>
 //   );
 // }
-`
+
+`,
+previewImage:"/movgrddot.png"
   },
   {
     id: "fade-dot",
@@ -3111,119 +3295,10 @@ export const FadeDotComponent = () => {
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/FadeD.png"
   },
-  {
-    id: "wavy-dots",
-    name: "Wavy Dots",
-    category: "Dots",
-    style: {
-      backgroundColor: "black",
-    },
-    component: WavyDots,
-    code: ` 
-    "use client";
-import { motion } from "framer-motion";
-import React, { useEffect, useState } from "react";
-
-export const WavyDots = () => {
-  const gridSize = 20;
-  const [cols, setCols] = useState(0);
-  const [rows, setRows] = useState(0);
-
-  useEffect(() => {
-    // Only run in browser
-    const updateGrid = () => {
-      setCols(Math.floor(window.innerWidth / gridSize));
-      setRows(Math.floor(window.innerHeight / gridSize));
-    };
-
-    updateGrid(); // initial
-    window.addEventListener("resize", updateGrid);
-    return () => window.removeEventListener("resize", updateGrid);
-  }, []);
-
-  return (
-    <div className="absolute inset-0 bg-black overflow-hidden">
-      {/* Grid lines */}
-      {[...Array(cols)].map((_, i) => (
-        <motion.div
-          key={\`v-\${i}\`}
-          className="absolute top-0 h-full border-l border-slate-700/30"
-          style={{ left: \`\${i * gridSize}px\` }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.3 }}
-          transition={{ delay: i * 0.02 }}
-        />
-      ))}
-      {[...Array(rows)].map((_, i) => (
-        <motion.div
-          key={\`h-\${i}\`}
-          className="absolute left-0 w-full border-t border-slate-700/30"
-          style={{ top: \`\${i * gridSize}px\` }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.3 }}
-          transition={{ delay: i * 0.02 }}
-        />
-      ))}
-
-      {/* Pulsing dots */}
-      {[...Array(cols * rows)].map((_, i) => {
-        const col = i % cols;
-        const row = Math.floor(i / cols);
-        return (
-          <motion.div
-            key={i}
-            className="absolute rounded-full bg-cyan-400"
-            style={{
-              width: 3,
-              height: 3,
-              left: col * gridSize + gridSize / 2,
-              top: row * gridSize + gridSize / 2,
-            }}
-            animate={{
-              opacity: [0.1, 1, 0.1],
-              scale: [1, 1.5, 1],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              delay: (col + row) * 0.05,
-            }}
-          />
-        );
-      })}
-    </div>
-  );
-};
-
-
-//"use client";
-// //usage eg:
-// import React from "react";
-// import {  WavyDots } from "./component/bg";
-
-// export default function HomePage() {
-//   return (
-//     <div className="h-screen relative overflow-hidden">
-//       {/* Background Animation */}
-//       <WavyDots/>
-
-//       {/* Foreground Content */}
-//       <div className="absolute inset-0 z-10 flex items-center justify-center">
-//         {/* Your components go here */}
-//         <div className="text-center">
-//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
-//           <p className="text-lg text-gray-300 mt-2">
-//             Replace this with any UI elements, cards, forms, etc.
-//           </p>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-`
-  },
+  
   
   {
     id: "blinking-dots",
@@ -3294,7 +3369,8 @@ export const BlinkingDotsComponent = () => {
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/blinkd.png"
   },
   {
     id: "moving-particles",
@@ -3434,7 +3510,8 @@ export const ParticlesBackgroundComponent = () => {
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/movp.png"
   },
   {
     id: "glowing-particles",
@@ -3540,7 +3617,8 @@ export const GlowingParticles: React.FC<GalaxyProps> = ({ starCount = 200 }) => 
 //     </div>
 //   );
 // }
-`
+`,
+previewImage:"/glowp.png"
   },
 ];
 

@@ -48,34 +48,69 @@ export const DotNetworkComponentv2 = () => (
     })}
   </div>
 );
-export const MovingDotsComponent = () => (
-  <div className="absolute inset-0 grid grid-cols-16 grid-rows-8 gap-4 p-4">
-    {[...Array(128)].map((_, i) => {
+const generateColorCycle = (baseHue: number) => [
+  `hsl(${baseHue}, 80%, 70%)`,
+  `hsl(${(baseHue + 60) % 360}, 80%, 70%)`,
+  `hsl(${(baseHue + 120) % 360}, 80%, 70%)`,
+  `hsl(${(baseHue + 180) % 360}, 80%, 70%)`,
+];
+export const MovingDotsComponent = () => {
+  const [dots, setDots] = useState<
+    { randomX: number; randomY: number; colorCycle: string[] }[]
+  >([]);
+
+  useEffect(() => {
+    // generate dots only on client side after mount
+    const generatedDots = [...Array(128)].map(() => {
       const randomX = Math.random() * 20 - 10;
       const randomY = Math.random() * 20 - 10;
+      const baseHue = Math.floor(Math.random() * 360);
+      const colorCycle = generateColorCycle(baseHue);
+      return { randomX, randomY, colorCycle };
+    });
+    setDots(generatedDots);
+  }, []);
 
-      return (
-        <motion.div
-          key={i}
-          className="w-2 h-2 bg-white/40 rounded-full"
-          animate={{
-            x: [0, randomX, -randomX, 0],
-            y: [0, randomY, -randomY, 0],
-            opacity: [0.4, 1, 0.4],
-            scale: [1, 1.3, 1],
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            repeatType: "mirror",
-            ease: "easeInOut",
-            delay: (i % 12) * 0.1,
-          }}
-        />
-      );
-    })}
+  if (dots.length === 0) {
+    // Optionally, render nothing or a placeholder on first render (server or initial client)
+    return null;
+  }
+
+ return (
+  <div className="absolute inset-0 grid grid-cols-16 grid-rows-8 gap-2">
+    {dots.map(({ randomX, randomY, colorCycle }, i) => (
+      <motion.div
+        key={i}
+        className="w-4 h-4 rounded-full"
+        style={{
+          background: `radial-gradient(circle at center, ${colorCycle[0]} 0%, transparent 70%)`,
+        }}
+        animate={{
+          x: [0, randomX, -randomX, 0],
+          y: [0, randomY, -randomY, 0],
+          opacity: [0.4, 1, 0.4],
+          scale: [1, 1.3, 1],
+          backgroundImage: [
+            `radial-gradient(circle at center, ${colorCycle[0]} 0%, transparent 70%)`,
+            `radial-gradient(circle at center, ${colorCycle[1]} 0%, transparent 70%)`,
+            `radial-gradient(circle at center, ${colorCycle[2]} 0%, transparent 70%)`,
+            `radial-gradient(circle at center, ${colorCycle[3]} 0%, transparent 70%)`,
+            `radial-gradient(circle at center, ${colorCycle[0]} 0%, transparent 70%)`,
+          ],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          repeatType: "loop",
+          ease: "easeInOut",
+          delay: (i % 12) * 0.15,
+        }}
+      />
+    ))}
   </div>
 );
+};
+
 export const BlinkingDotsComponent = () => {
   const gridSize = 8;
   const dots = Array.from({ length: gridSize * gridSize }, (_, i) => ({

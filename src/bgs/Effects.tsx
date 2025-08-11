@@ -1,5 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 export const GlowOrbsComponent = () => (
   <div className="absolute inset-0 overflow-hidden">
@@ -194,45 +195,64 @@ export const SmoothRainComponent = () => {
   );
 };
 export const SnowAuroraComponent = () => {
-  const snowflakes = [...Array(120)].map((_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    size: 1 + Math.random() * 3,
-    opacity: 0.3 + Math.random() * 0.7,
-    speed: 6 + Math.random() * 6,
-    drift: (Math.random() - 0.5) * 40,
-    delay: Math.random() * 6,
-  }));
+  const [snowflakes, setSnowflakes] = useState<any[]>([]);
+  const [clouds, setClouds] = useState<any[]>([]);
 
-  const clouds = [...Array(5)].map((_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    width: 150 + Math.random() * 200,
-    height: 40 + Math.random() * 20,
-    opacity: 0.15 + Math.random() * 0.1,
-    delay: Math.random() * 10,
-  }));
+  useEffect(() => {
+    setSnowflakes([...Array(120)].map((_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: 1 + Math.random() * 3,
+      opacity: 0.3 + Math.random() * 0.7,
+      speed: 6 + Math.random() * 6,
+      drift: (Math.random() - 0.5) * 40,
+      delay: Math.random() * 6,
+    })));
+
+    setClouds([...Array(5)].map((_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      width: 150 + Math.random() * 200,
+      height: 40 + Math.random() * 20,
+      opacity: 0.1 + Math.random() * 0.08,
+      delay: Math.random() * 10,
+    })));
+  }, []);
 
   return (
-    <div className="h-screen absolute inset-0 overflow-hidden pointer-events-none bg-gradient-to-b from-slate-900 via-slate-800 to-slate-700">
+    <div className="h-screen absolute inset-0 overflow-hidden pointer-events-none bg-gradient-to-b from-[#020617] via-[#0f172a] to-[#1e293b]">
       {/* Aurora glow */}
       <motion.div
         className="absolute inset-x-0 top-0 h-1/2"
         style={{
           background:
-            "radial-gradient(ellipse at top, rgba(100,255,200,0.3) 0%, transparent 60%), radial-gradient(ellipse at 30% 10%, rgba(150,200,255,0.25) 0%, transparent 50%)",
-          filter: "blur(40px)",
+            "radial-gradient(ellipse at top, rgba(80,200,170,0.3) 0%, transparent 60%), " +
+            "radial-gradient(ellipse at 30% 10%, rgba(100,160,255,0.25) 0%, transparent 50%)",
+          filter: "blur(50px)",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "150% 150%, 120% 120%",
+          backgroundPosition: "50% 0%, 30% 10%",
         }}
         animate={{
-          backgroundPosition: ["0% 0%", "100% 0%", "0% 0%"],
+          backgroundPosition: [
+            "50% 0%, 30% 10%",   // start
+            "50% 10%, 35% 15%",  // shift the second gradient slightly diagonally
+            "50% 0%, 30% 10%",   // back to start
+          ],
+          backgroundSize: [
+            "150% 150%, 120% 120%",
+            "150% 150%, 130% 130%",  // gently increase the second gradient size
+            "150% 150%, 120% 120%",
+          ],
         }}
         transition={{
           repeat: Infinity,
           duration: 30,
-          ease: "linear",
+          ease: "easeInOut",
         }}
       />
+
 
       {/* Clouds */}
       {clouds.map((cloud) => (
@@ -244,16 +264,16 @@ export const SnowAuroraComponent = () => {
             width: `${cloud.width}px`,
             height: `${cloud.height}px`,
             background:
-              "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.4), transparent 70%)",
-            filter: "blur(20px)",
+              "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.25), transparent 70%)",
+            filter: "blur(25px)",
             opacity: cloud.opacity,
           }}
           animate={{
-            x: ["0%", "20%", "0%"],
+            x: ["0%", "15%", "0%"],
           }}
           transition={{
             repeat: Infinity,
-            duration: 60,
+            duration: 70,
             delay: cloud.delay,
             ease: "linear",
           }}
@@ -292,14 +312,126 @@ export const SnowAuroraComponent = () => {
         className="absolute bottom-0 left-0 w-full h-16"
         style={{
           background:
-            "linear-gradient(to top, rgba(255,255,255,0.15), transparent)",
+            "linear-gradient(to top, rgba(255,255,255,0.08), transparent)",
         }}
         animate={{
-          opacity: [0.1, 0.2, 0.1],
+          opacity: [0.05, 0.15, 0.05],
         }}
         transition={{
           repeat: Infinity,
           duration: 5,
+          ease: "easeInOut",
+        }}
+      />
+    </div>
+  );
+};
+
+interface Petal {
+  id: number;
+  x: number;       // percentage position horizontally
+  y: number;       // percentage position vertically
+  size: number;    // pixel size
+  rotation: number;
+  opacity: number;
+  speed: number;   // fall duration
+  drift: number;   // horizontal drift amplitude
+  delay: number;   // animation delay
+}
+
+export const NightSakuraComponent = () => {
+  const petalImage = "/images/petal.png";
+
+  const [petals, setPetals] = useState<Petal[]>([]);
+
+  useEffect(() => {
+    setPetals(
+      [...Array(50)].map((_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        y: -10 - Math.random() * 100, // some start above the screen
+        size: 16 + Math.random() * 18,
+        rotation: Math.random() * 360,
+        opacity: 0.5 + Math.random() * 0.5,
+        speed: 12 + Math.random() * 8,
+        drift: 20 + Math.random() * 60, // sway amplitude
+        delay: Math.random() * 8,
+      }))
+    );
+  }, []);
+
+  return (
+    <div className="h-screen absolute inset-0 overflow-hidden pointer-events-none bg-gradient-to-b from-[#0a0320] via-[#15052f] to-[#1a0f2f]">
+      {/* Moon glow */}
+      <motion.div
+        className="absolute inset-x-0 top-0 h-1/2"
+        style={{
+          background:
+            "radial-gradient(ellipse at top, rgba(255,182,193,0.15) 0%, transparent 70%), radial-gradient(ellipse at 70% 20%, rgba(200,150,255,0.1) 0%, transparent 60%)",
+          filter: "blur(80px)",
+        }}
+        animate={{
+          backgroundPosition: ["0% 0%", "100% 0%", "0% 0%"],
+        }}
+        transition={{
+          repeat: Infinity,
+          duration: 50,
+          ease: "linear",
+        }}
+      />
+
+      {/* Petals */}
+      {petals.map((petal) => (
+  <motion.img
+    key={`petal-${petal.id}`}
+    src="/petal.png"
+    alt="Sakura Petal"
+    className="absolute"
+    style={{
+      left: `${petal.x}%`,
+      top: `${petal.y}%`,
+      width: `${petal.size}px`,
+      height: "auto",
+      opacity: petal.opacity,
+      filter: `drop-shadow(0 0 6px rgba(255,182,193,0.8)) drop-shadow(0 0 12px rgba(255,105,180,0.6))`,
+    }}
+    animate={{
+      y: ["-10vh", "110vh"],
+      x: [0, petal.drift, -petal.drift, 0],
+      rotate: [
+        petal.rotation,
+        petal.rotation + 180,
+        petal.rotation + 360,
+      ],
+      opacity: [0, petal.opacity, petal.opacity, 0],
+      filter: [
+        `drop-shadow(0 0 6px rgba(255,182,193,0.8)) drop-shadow(0 0 12px rgba(255,105,180,0.6))`,
+        `drop-shadow(0 0 12px rgba(255,182,193,1)) drop-shadow(0 0 20px rgba(255,105,180,0.8))`,
+        `drop-shadow(0 0 6px rgba(255,182,193,0.8)) drop-shadow(0 0 12px rgba(255,105,180,0.6))`,
+      ],
+    }}
+    transition={{
+      repeat: Infinity,
+      duration: petal.speed,
+      delay: petal.delay,
+      ease: "easeInOut",
+    }}
+  />
+))}
+
+      {/* Ground shimmer */}
+      <motion.div
+        className="absolute bottom-0 left-0 w-full h-20"
+        style={{
+          background:
+            "linear-gradient(to top, rgba(255,192,203,0.08), transparent)",
+        }}
+        animate={{
+          opacity: [0.05, 0.15, 0.05],
+        }}
+        transition={{
+          repeat: Infinity,
+          duration: 6,
           ease: "easeInOut",
         }}
       />
