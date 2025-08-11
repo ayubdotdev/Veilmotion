@@ -194,9 +194,30 @@ export const SmoothRainComponent = () => {
     </div>
   );
 };
+
+
+interface Snowflake {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  opacity: number;
+  speed: number;
+  drift: number;
+  delay: number;
+}
+
+interface Cloud {
+  id: number;
+  x: number;
+  width: number;
+  height: number;
+  opacity: number;
+  delay: number;
+}
 export const SnowAuroraComponent = () => {
-  const [snowflakes, setSnowflakes] = useState<any[]>([]);
-  const [clouds, setClouds] = useState<any[]>([]);
+  const [snowflakes, setSnowflakes] = useState<Snowflake[]>([]);
+  const [clouds, setClouds] = useState<Cloud[]>([]);
 
   useEffect(() => {
     setSnowflakes([...Array(120)].map((_, i) => ({
@@ -327,6 +348,9 @@ export const SnowAuroraComponent = () => {
   );
 };
 
+
+
+
 interface Petal {
   id: number;
   x: number;       // percentage position horizontally
@@ -338,7 +362,6 @@ interface Petal {
   drift: number;   // horizontal drift amplitude
   delay: number;   // animation delay
 }
-
 export const NightSakuraComponent = () => {
   const petalImage = "/images/petal.png";
 

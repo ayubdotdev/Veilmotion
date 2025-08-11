@@ -2702,9 +2702,29 @@ export const SmoothRainComponent = () => {
 import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 
+interface Snowflake {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  opacity: number;
+  speed: number;
+  drift: number;
+  delay: number;
+}
+
+interface Cloud {
+  id: number;
+  x: number;
+  width: number;
+  height: number;
+  opacity: number;
+  delay: number;
+}
+
 export const SnowAuroraComponent = () => {
-  const [snowflakes, setSnowflakes] = useState<any[]>([]);
-  const [clouds, setClouds] = useState<any[]>([]);
+  const [snowflakes, setSnowflakes] = useState<Snowflake[]>([]);
+  const [clouds, setClouds] = useState<Cloud[]>([]);
 
   useEffect(() => {
     setSnowflakes([...Array(120)].map((_, i) => ({
