@@ -415,6 +415,63 @@ export const GlowingParticles: React.FC<GlowingProps> = ({ starCount = 200 }) =>
 };
 
 
+interface StreamParticle {
+  id: number;
+  x: number;
+  y: number;
+  length: number;
+  hue: number;
+  delay: number;
+  duration: number;
+}
+export const VerticalStreamParticles = () => {
+  const [particles, setParticles] = useState<StreamParticle[]>([]);
+
+  useEffect(() => {
+    setParticles(
+      [...Array(35)].map((_, i) => ({
+        id: i,
+        x: Math.random() * 100, // % position horizontally
+        y: Math.random() * 120 - 20, // start slightly above or below
+        length: 20 + Math.random() * 60,
+        hue: Math.floor(Math.random() * 360),
+        delay: Math.random() * 5, // longer delay spread
+        duration: 5 + Math.random() * 5, // slower overall
+      }))
+    );
+  }, []);
+
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden bg-gradient-to-b from-[#05010a] via-[#090015] to-[#02010a]">
+      {particles.map((p) => (
+        <motion.div
+          key={p.id}
+          className="absolute"
+          style={{
+            left: `${p.x}%`,
+            top: `${p.y}%`,
+            width: `2px`,
+            height: `${p.length}px`,
+            background: `linear-gradient(to bottom, hsla(${p.hue}, 100%, 70%, 0), hsla(${p.hue}, 100%, 70%, 0.8))`,
+          }}
+          initial={{ opacity: 0 }}
+          animate={{
+            y: ["-20%", "120%"], // start well above, exit well below
+            opacity: [0, 1, 1, 0], // fade in & fade out smoothly
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: p.duration,
+            delay: p.delay,
+            ease: "linear", // no easing bumps
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+
 
 
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { BlinkingDotsComponent, DotNetworkComponent, DotNetworkComponentv2, FadeDotComponent, MovingDotsComponent } from "@/bgs/Dots";
+import { BlinkingDotsComponent, DotNetworkComponent, DotNetworkComponentv2, FadeDotComponent, MovingDotsComponent, VerticalStreamParticles } from "@/bgs/Dots";
 import { CyberpunkHologramComponent, DesertMirageComponent, FireflyForestComponent, NightSakuraComponent, OceanGlowComponent, SmoothRainComponent, SnowAuroraComponent, VolcanicEmberStormComponent, } from "@/bgs/Effects";
 import { FloatingParticles, GlowingParticles, ParticlesBackgroundComponent, WavyDots } from "@/bgs/Dots";
 import { AnimatedBlackGridBackground, MagentaGrid, DarkBg, CoolBlueGrid, WarmAmberGrid, LimeFadeGrid, CyanBurstGrid, VioletMistGrid, MagentaFlame, NeonShock, GreenPunchGrid, ToxicPulse, } from "@/bgs/Geometrics";
@@ -3721,6 +3721,530 @@ export const SmoothRainComponent = () => {
 
   //floatings
   {
+    id: "fade-dot",
+    name: "Fade Dots",
+    category: "Dots",
+    style: {
+      backgroundColor: "black",
+    },
+    component: FadeDotComponent,
+    code: ` "use client"
+import React, { useEffect, useMemo, useState } from 'react';
+import { motion } from 'framer-motion';
+
+export const FadeDotComponent = () => {
+  const DOT_SIZE = 2; // px
+  const GAP_SIZE = 16; // px
+
+  const [gridSize, setGridSize] = useState({ cols: 0, rows: 0 });
+
+  useEffect(() => {
+    const updateGridSize = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+
+      const cols = Math.floor(width / (DOT_SIZE + GAP_SIZE));
+      const rows = Math.floor(height / (DOT_SIZE + GAP_SIZE));
+      setGridSize({ cols, rows });
+    };
+
+    updateGridSize();
+    window.addEventListener("resize", updateGridSize);
+    return () => window.removeEventListener("resize", updateGridSize);
+  }, []);
+
+  const dots = useMemo(() => {
+    const { cols, rows } = gridSize;
+    const centerX = (cols - 1) / 2;
+    const centerY = (rows - 1) / 2;
+    const maxDist = Math.sqrt(centerX ** 2 + centerY ** 2);
+
+    return Array.from({ length: cols * rows }, (_, i) => {
+      const col = i % cols;
+      const row = Math.floor(i / cols);
+      const dist = Math.sqrt((col - centerX) ** 2 + (row - centerY) ** 2);
+      const opacity = Math.max(0.1, 1 - (dist / maxDist) ** 2);
+      const delay = Math.random() * 2;
+      return { opacity, delay };
+    });
+  }, [gridSize]);
+
+  return (
+    <div
+      className="absolute   inset-0 grid bg-black"
+      style={{
+        gridTemplateColumns: \`repeat(\${gridSize.cols}, \${DOT_SIZE}px)\`,
+        gap: \`\${GAP_SIZE}px\`,
+        justifyContent: "center",
+        alignContent: "center",
+      }}
+    >
+      {dots.map((dot, i) => (
+        <motion.div
+          key={i}
+          className="rounded-full bg-white/60"
+          style={{
+            width: DOT_SIZE,
+            height: DOT_SIZE,
+          }}
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{
+            opacity: dot.opacity,
+            scale: [1, 1.25, 1],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            repeatType: "mirror",
+            delay: dot.delay,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+//"use client";
+// //usage eg:
+// import React from "react";
+// import {  FadeDotComponent } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <FadeDotComponent/>
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`,
+    previewImage: "/FadeD.png"
+  },
+  {
+    id: "moving-particles",
+    name: "Moving Particles",
+    category: "Dots",
+    style: {
+      backgroundColor: "black",
+    },
+    component: ParticlesBackgroundComponent,
+    code: `import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+
+
+interface Particle {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  opacity: number;
+  speedX: number;
+  speedY: number;
+}
+
+export const ParticlesBackgroundComponent = () => {
+  const [particles, setParticles] = useState<Particle[]>([]);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const [hasMounted, setHasMounted] = useState(false);
+
+  // Set initial dimensions and indicate that component has mounted
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+      setHasMounted(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!hasMounted) return;
+
+    // Create initial particles
+    const initialParticles = Array.from({ length: 50 }, (_, i) => ({
+      id: i,
+      x: Math.random() * dimensions.width,
+      y: Math.random() * dimensions.height,
+      size: Math.random() * 2 + 1,
+      opacity: Math.random() * 0.5 + 0.1,
+      speedX: (Math.random() - 0.5) * 0.5,
+      speedY: (Math.random() - 0.5) * 0.5,
+    }));
+
+    setParticles(initialParticles);
+
+    // Resize handler
+    const handleResize = () => {
+      setDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Particle animation
+    const animateInterval = setInterval(() => {
+      setParticles(prevParticles =>
+        prevParticles.map(particle => {
+          let newX = particle.x + particle.speedX;
+          let newY = particle.y + particle.speedY;
+
+          if (newX < 0 || newX > dimensions.width) {
+            newX = Math.random() * dimensions.width;
+          }
+          if (newY < 0 || newY > dimensions.height) {
+            newY = Math.random() * dimensions.height;
+          }
+
+          return {
+            ...particle,
+            x: newX,
+            y: newY,
+          };
+        })
+      );
+    }, 50);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      clearInterval(animateInterval);
+    };
+  }, [hasMounted, dimensions.width, dimensions.height]);
+
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {particles.map(particle => (
+        <motion.div
+          key={particle.id}
+          animate={{
+            x: particle.x,
+            y: particle.y,
+            transition: { duration: 5, ease: "linear" },
+          }}
+          className="absolute rounded-full bg-white"
+          style={{
+            width: particle.size,
+            height: particle.size,
+            opacity: particle.opacity,
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+//"use client";
+// //usage eg:
+// import React from "react";
+// import {  ParticlesBackgroundComponent  } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <ParticlesBackgroundComponent  />
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`,
+    previewImage: "/movp.png"
+  },
+  {
+    id: "vertical-stream",
+    name: "Vertical Streams",
+    category: "Dots",
+    style: {
+      backgroundColor: "black",
+    },
+    component: VerticalStreamParticles,
+    code: `//EXAMPLE USAGE
+// "use client";
+// import React from "react";
+// import { VerticalStreamParticles   } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <VerticalStreamParticles    />
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+        
+//       </div>
+//     </div>
+//   );
+// }
+
+"use client";
+
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+
+interface StreamParticle {
+  id: number;
+  x: number;
+  y: number;
+  length: number;
+  hue: number;
+  delay: number;
+  duration: number;
+}
+
+export const VerticalStreamParticles = () => {
+  const [particles, setParticles] = useState<StreamParticle[]>([]);
+
+  useEffect(() => {
+    setParticles(
+      [...Array(35)].map((_, i) => ({
+        id: i,
+        x: Math.random() * 100, // % position horizontally
+        y: Math.random() * 120 - 20, // start slightly above or below
+        length: 20 + Math.random() * 60,
+        hue: Math.floor(Math.random() * 360),
+        delay: Math.random() * 5, // longer delay spread
+        duration: 5 + Math.random() * 5, // slower overall
+      }))
+    );
+  }, []);
+
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden bg-gradient-to-b from-[#05010a] via-[#090015] to-[#02010a]">
+      {particles.map((p) => (
+        <motion.div
+          key={p.id}
+          className="absolute"
+          style={{
+            left: \`\${p.x}%\`,
+            top: \`\${p.y}%\`,
+            width: \`2px\`,
+            height: \`\${p.length}px\`,
+            background: \`linear-gradient(to bottom, hsla(\${p.hue}, 100%, 70%, 0), hsla(\${p.hue}, 100%, 70%, 0.8))\`,
+          }}
+          initial={{ opacity: 0 }}
+          animate={{
+            y: ["-20%", "120%"], // start well above, exit well below
+            opacity: [0, 1, 1, 0], // fade in & fade out smoothly
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: p.duration,
+            delay: p.delay,
+            ease: "linear", // no easing bumps
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+`,
+    previewImage: "/vert.png"
+  },
+  {
+    id: "glowing-particles",
+    name: "Glowing Particles",
+    category: "Dots",
+    style: {
+      backgroundColor: "black",
+    },
+    component: GlowingParticles,
+    code: `
+   "use client";
+// copy below classes at the bottom of globals.css
+   /* .galaxy-container {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: radial-gradient(ellipse at center, #000014 0%, #000000 100%);
+      z-index: 0;
+    }
+  
+    .star {
+      position: absolute;
+      background-color: white;
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: twinkle 2s infinite ease-in-out;
+    }
+  
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.5); }
+    }*/
+import React, { useEffect, useState } from "react";
+
+interface Star {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  delay: number;
+}
+
+interface GalaxyProps {
+  starCount?: number;
+}
+
+export const GlowingParticles: React.FC<GalaxyProps> = ({ starCount = 200 }) => {
+  const [stars, setStars] = useState<Star[] | null>(null);
+
+  useEffect(() => {
+    // generate only on the client after mount
+    const generated = Array.from({ length: starCount }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 2 + 1,
+      delay: Math.random() * 5,
+    }));
+    // tiny timeout to allow a smooth fade-in (optional)
+    setTimeout(() => setStars(generated), 0);
+  }, [starCount]);
+
+  return (
+    <div className={\`galaxy-container \${stars ? "loaded" : ""}\`} aria-hidden>
+      {stars?.map((s) => (
+        <div
+          key={s.id}
+          className="star"
+          style={{
+            left: \`\${s.x}%\`,
+            top: \`\${s.y}%\`,
+            width: \`\${s.size}px\`,
+            height: \`\${s.size}px\`,
+            animationDelay: \`\${s.delay}s\`,
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+//"use client";
+// usage eg:
+
+// import React from "react";
+// import {  GlowingParticles  } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <GlowingParticles  />
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`,
+    previewImage: "/glowp.png"
+  },
+  {
+    id: "blinking-dots",
+    name: "Blinking Dots",
+    category: "Dots",
+    style: {
+      backgroundColor: "black",
+    },
+    component: BlinkingDotsComponent,
+    code: `
+import {motion } from "framer-motion"
+
+export const BlinkingDotsComponent = () => {
+  const gridSize = 8;
+  const dots = Array.from({ length: gridSize * gridSize }, (_, i) => ({
+    id: i,
+    x: (i % gridSize) * (100 / gridSize),
+    y: Math.floor(i / gridSize) * (100 / gridSize),
+    delay: Math.random() * 3
+  }));
+
+  return (
+    <div className="fixed inset-0 overflow-hidden pointer-events-none bg-black">
+      {dots.map((dot) => (
+        <motion.div
+          key={dot.id}
+          className="absolute w-2 h-2 bg-cyan-400 rounded-full"
+          style={{
+            left: \`\${dot.x}%\`,
+            top: \`\${dot.y}%\`,
+          }}
+          animate={{
+            scale: [0, 1, 0],
+            opacity: [0, 1, 0]
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            delay: dot.delay,
+            ease: "easeInOut"
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+//"use client";
+// //usage eg:
+// import React from "react";
+// import {  BlinkingDotsComponent  } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <BlinkingDotsComponent  />
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components go here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+`,
+    previewImage: "/blinkd.png"
+  },
+  {
     id: "dots-soft-network",
     name: "Soft Dot Network",
     category: "Dots",
@@ -3933,440 +4457,15 @@ export const MovingDotsComponent = () => {
 `,
     previewImage: "/movgrddot.png"
   },
-  {
-    id: "fade-dot",
-    name: "Fade Dots",
-    category: "Dots",
-    style: {
-      backgroundColor: "black",
-    },
-    component: FadeDotComponent,
-    code: ` "use client"
-import React, { useEffect, useMemo, useState } from 'react';
-import { motion } from 'framer-motion';
-
-export const FadeDotComponent = () => {
-  const DOT_SIZE = 2; // px
-  const GAP_SIZE = 16; // px
-
-  const [gridSize, setGridSize] = useState({ cols: 0, rows: 0 });
-
-  useEffect(() => {
-    const updateGridSize = () => {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-
-      const cols = Math.floor(width / (DOT_SIZE + GAP_SIZE));
-      const rows = Math.floor(height / (DOT_SIZE + GAP_SIZE));
-      setGridSize({ cols, rows });
-    };
-
-    updateGridSize();
-    window.addEventListener("resize", updateGridSize);
-    return () => window.removeEventListener("resize", updateGridSize);
-  }, []);
-
-  const dots = useMemo(() => {
-    const { cols, rows } = gridSize;
-    const centerX = (cols - 1) / 2;
-    const centerY = (rows - 1) / 2;
-    const maxDist = Math.sqrt(centerX ** 2 + centerY ** 2);
-
-    return Array.from({ length: cols * rows }, (_, i) => {
-      const col = i % cols;
-      const row = Math.floor(i / cols);
-      const dist = Math.sqrt((col - centerX) ** 2 + (row - centerY) ** 2);
-      const opacity = Math.max(0.1, 1 - (dist / maxDist) ** 2);
-      const delay = Math.random() * 2;
-      return { opacity, delay };
-    });
-  }, [gridSize]);
-
-  return (
-    <div
-      className="absolute   inset-0 grid bg-black"
-      style={{
-        gridTemplateColumns: \`repeat(\${gridSize.cols}, \${DOT_SIZE}px)\`,
-        gap: \`\${GAP_SIZE}px\`,
-        justifyContent: "center",
-        alignContent: "center",
-      }}
-    >
-      {dots.map((dot, i) => (
-        <motion.div
-          key={i}
-          className="rounded-full bg-white/60"
-          style={{
-            width: DOT_SIZE,
-            height: DOT_SIZE,
-          }}
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{
-            opacity: dot.opacity,
-            scale: [1, 1.25, 1],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            repeatType: "mirror",
-            delay: dot.delay,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
-    </div>
-  );
-};
-
-//"use client";
-// //usage eg:
-// import React from "react";
-// import {  FadeDotComponent } from "./component/bg";
-
-// export default function HomePage() {
-//   return (
-//     <div className="h-screen relative overflow-hidden">
-//       {/* Background Animation */}
-//       <FadeDotComponent/>
-
-//       {/* Foreground Content */}
-//       <div className="absolute inset-0 z-10 flex items-center justify-center">
-//         {/* Your components go here */}
-//         <div className="text-center">
-//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
-//           <p className="text-lg text-gray-300 mt-2">
-//             Replace this with any UI elements, cards, forms, etc.
-//           </p>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-`,
-    previewImage: "/FadeD.png"
-  },
+ 
 
 
-  {
-    id: "blinking-dots",
-    name: "Blinking Dots",
-    category: "Dots",
-    style: {
-      backgroundColor: "black",
-    },
-    component: BlinkingDotsComponent,
-    code: `
-import {motion } from "framer-motion"
-
-export const BlinkingDotsComponent = () => {
-  const gridSize = 8;
-  const dots = Array.from({ length: gridSize * gridSize }, (_, i) => ({
-    id: i,
-    x: (i % gridSize) * (100 / gridSize),
-    y: Math.floor(i / gridSize) * (100 / gridSize),
-    delay: Math.random() * 3
-  }));
-
-  return (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none bg-black">
-      {dots.map((dot) => (
-        <motion.div
-          key={dot.id}
-          className="absolute w-2 h-2 bg-cyan-400 rounded-full"
-          style={{
-            left: \`\${dot.x}%\`,
-            top: \`\${dot.y}%\`,
-          }}
-          animate={{
-            scale: [0, 1, 0],
-            opacity: [0, 1, 0]
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            delay: dot.delay,
-            ease: "easeInOut"
-          }}
-        />
-      ))}
-    </div>
-  );
-};
-//"use client";
-// //usage eg:
-// import React from "react";
-// import {  BlinkingDotsComponent  } from "./component/bg";
-
-// export default function HomePage() {
-//   return (
-//     <div className="h-screen relative overflow-hidden">
-//       {/* Background Animation */}
-//       <BlinkingDotsComponent  />
-
-//       {/* Foreground Content */}
-//       <div className="absolute inset-0 z-10 flex items-center justify-center">
-//         {/* Your components go here */}
-//         <div className="text-center">
-//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
-//           <p className="text-lg text-gray-300 mt-2">
-//             Replace this with any UI elements, cards, forms, etc.
-//           </p>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-`,
-    previewImage: "/blinkd.png"
-  },
-  {
-    id: "moving-particles",
-    name: "Moving Particles",
-    category: "Dots",
-    style: {
-      backgroundColor: "black",
-    },
-    component: ParticlesBackgroundComponent,
-    code: `import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-
-
-interface Particle {
-  id: number;
-  x: number;
-  y: number;
-  size: number;
-  opacity: number;
-  speedX: number;
-  speedY: number;
-}
-
-export const ParticlesBackgroundComponent = () => {
-  const [particles, setParticles] = useState<Particle[]>([]);
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  const [hasMounted, setHasMounted] = useState(false);
-
-  // Set initial dimensions and indicate that component has mounted
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setDimensions({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-      setHasMounted(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!hasMounted) return;
-
-    // Create initial particles
-    const initialParticles = Array.from({ length: 50 }, (_, i) => ({
-      id: i,
-      x: Math.random() * dimensions.width,
-      y: Math.random() * dimensions.height,
-      size: Math.random() * 2 + 1,
-      opacity: Math.random() * 0.5 + 0.1,
-      speedX: (Math.random() - 0.5) * 0.5,
-      speedY: (Math.random() - 0.5) * 0.5,
-    }));
-
-    setParticles(initialParticles);
-
-    // Resize handler
-    const handleResize = () => {
-      setDimensions({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    // Particle animation
-    const animateInterval = setInterval(() => {
-      setParticles(prevParticles =>
-        prevParticles.map(particle => {
-          let newX = particle.x + particle.speedX;
-          let newY = particle.y + particle.speedY;
-
-          if (newX < 0 || newX > dimensions.width) {
-            newX = Math.random() * dimensions.width;
-          }
-          if (newY < 0 || newY > dimensions.height) {
-            newY = Math.random() * dimensions.height;
-          }
-
-          return {
-            ...particle,
-            x: newX,
-            y: newY,
-          };
-        })
-      );
-    }, 50);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      clearInterval(animateInterval);
-    };
-  }, [hasMounted, dimensions.width, dimensions.height]);
-
-  return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden">
-      {particles.map(particle => (
-        <motion.div
-          key={particle.id}
-          animate={{
-            x: particle.x,
-            y: particle.y,
-            transition: { duration: 5, ease: "linear" },
-          }}
-          className="absolute rounded-full bg-white"
-          style={{
-            width: particle.size,
-            height: particle.size,
-            opacity: particle.opacity,
-          }}
-        />
-      ))}
-    </div>
-  );
-};
-//"use client";
-// //usage eg:
-// import React from "react";
-// import {  ParticlesBackgroundComponent  } from "./component/bg";
-
-// export default function HomePage() {
-//   return (
-//     <div className="h-screen relative overflow-hidden">
-//       {/* Background Animation */}
-//       <ParticlesBackgroundComponent  />
-
-//       {/* Foreground Content */}
-//       <div className="absolute inset-0 z-10 flex items-center justify-center">
-//         {/* Your components go here */}
-//         <div className="text-center">
-//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
-//           <p className="text-lg text-gray-300 mt-2">
-//             Replace this with any UI elements, cards, forms, etc.
-//           </p>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-`,
-    previewImage: "/movp.png"
-  },
-  {
-    id: "glowing-particles",
-    name: "Glowing Particles",
-    category: "Dots",
-    style: {
-      backgroundColor: "black",
-    },
-    component: GlowingParticles,
-    code: `
-   "use client";
-// copy below classes at the bottom of globals.css
-   /* .galaxy-container {
-      position: absolute;
-      inset: 0;
-      overflow: hidden;
-      background: radial-gradient(ellipse at center, #000014 0%, #000000 100%);
-      z-index: 0;
-    }
   
-    .star {
-      position: absolute;
-      background-color: white;
-      border-radius: 50%;
-      opacity: 0.8;
-      animation: twinkle 2s infinite ease-in-out;
-    }
   
-    @keyframes twinkle {
-      0%, 100% { opacity: 0.3; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.5); }
-    }*/
-import React, { useEffect, useState } from "react";
+ 
+  
 
-interface Star {
-  id: number;
-  x: number;
-  y: number;
-  size: number;
-  delay: number;
-}
 
-interface GalaxyProps {
-  starCount?: number;
-}
-
-export const GlowingParticles: React.FC<GalaxyProps> = ({ starCount = 200 }) => {
-  const [stars, setStars] = useState<Star[] | null>(null);
-
-  useEffect(() => {
-    // generate only on the client after mount
-    const generated = Array.from({ length: starCount }, (_, i) => ({
-      id: i,
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      size: Math.random() * 2 + 1,
-      delay: Math.random() * 5,
-    }));
-    // tiny timeout to allow a smooth fade-in (optional)
-    setTimeout(() => setStars(generated), 0);
-  }, [starCount]);
-
-  return (
-    <div className={\`galaxy-container \${stars ? "loaded" : ""}\`} aria-hidden>
-      {stars?.map((s) => (
-        <div
-          key={s.id}
-          className="star"
-          style={{
-            left: \`\${s.x}%\`,
-            top: \`\${s.y}%\`,
-            width: \`\${s.size}px\`,
-            height: \`\${s.size}px\`,
-            animationDelay: \`\${s.delay}s\`,
-          }}
-        />
-      ))}
-    </div>
-  );
-};
-//"use client";
-// usage eg:
-
-// import React from "react";
-// import {  GlowingParticles  } from "./component/bg";
-
-// export default function HomePage() {
-//   return (
-//     <div className="h-screen relative overflow-hidden">
-//       {/* Background Animation */}
-//       <GlowingParticles  />
-
-//       {/* Foreground Content */}
-//       <div className="absolute inset-0 z-10 flex items-center justify-center">
-//         {/* Your components go here */}
-//         <div className="text-center">
-//           <p className="text-4xl font-bold text-white">Your Components Go Here</p>
-//           <p className="text-lg text-gray-300 mt-2">
-//             Replace this with any UI elements, cards, forms, etc.
-//           </p>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-`,
-    previewImage: "/glowp.png"
-  },
 ];
 
 export { patterns };

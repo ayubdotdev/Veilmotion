@@ -1,4 +1,4 @@
-import { BlinkingDotsComponent, DotNetworkComponent, DotNetworkComponentv2, FadeDotComponent, MovingDotsComponent ,WavyDots} from "@/bgs/Dots";
+import { BlinkingDotsComponent, DotNetworkComponent, DotNetworkComponentv2, FadeDotComponent, MovingDotsComponent ,VerticalStreamParticles,WavyDots} from "@/bgs/Dots";
 import  {    CyberpunkHologramComponent, DesertMirageComponent, FireflyForestComponent,  NightSakuraComponent, OceanGlowComponent, SmoothRainComponent, SnowAuroraComponent, VolcanicEmberStormComponent } from "@/bgs/Effects";
 import {  FloatingParticles, GlowingParticles, ParticlesBackgroundComponent,  } from "@/bgs/Dots";
 import { AnimatedBlackGridBackground, CoolBlueGrid, CyanBurstGrid, DarkBg, GreenPunchGrid, LimeFadeGrid, MagentaFlame, MagentaGrid, NeonShock, ToxicPulse, VioletMistGrid, WarmAmberGrid } from "@/bgs/Geometrics";
@@ -62,6 +62,7 @@ export const PatternComponents: Record<string, React.FC> = {
   "blinking-dots": BlinkingDotsComponent,
   "fade-dot":FadeDotComponent,
   "wavy-dots":WavyDots,
+  "vertical-stream":VerticalStreamParticles,
 
   //geometrics
   "black-grid": AnimatedBlackGridBackground,
