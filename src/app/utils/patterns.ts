@@ -1,7 +1,7 @@
 import React from "react";
 import { BlinkingDotsComponent, DotNetworkComponent, DotNetworkComponentv2, FadeDotComponent, MovingDotsComponent } from "@/bgs/Dots";
-import  {  GlowOrbsComponent, NightSakuraComponent, SmoothRainComponent, SnowAuroraComponent,  } from "@/bgs/Effects";
-import { FloatingParticles, GlowingParticles, ParticlesBackgroundComponent, WavyDots} from "@/bgs/Dots";
+import { CyberpunkHologramComponent, DesertMirageComponent, FireflyForestComponent, NightSakuraComponent, OceanGlowComponent, SmoothRainComponent, SnowAuroraComponent, VolcanicEmberStormComponent, } from "@/bgs/Effects";
+import { FloatingParticles, GlowingParticles, ParticlesBackgroundComponent, WavyDots } from "@/bgs/Dots";
 import { AnimatedBlackGridBackground, MagentaGrid, DarkBg, CoolBlueGrid, WarmAmberGrid, LimeFadeGrid, CyanBurstGrid, VioletMistGrid, MagentaFlame, NeonShock, GreenPunchGrid, ToxicPulse, } from "@/bgs/Geometrics";
 import { CyanGradient, CyanGradientBlack, CyanGradientBlackTop, CyanGradientTop, FuchsiaGradient, FuchsiaGradientBlack, FuchsiaGradientBlackTop, FuchsiaGradientTop, PurpleGradient, PurpleGradientBlackTop, PurpleGradientTop, RedGradient, RedGradientBlack, RedGradientBlackTop, RedGradientTop, TealGradient, TealGradientBlackTop, TealGradientTop, } from "@/bgs/Gradients";
 
@@ -13,7 +13,7 @@ interface Pattern {
   component: React.FC;
   code: string;
   isLightBackground?: boolean;
-  previewImage?: string; 
+  previewImage?: string;
 }
 
 
@@ -139,7 +139,7 @@ export const DarkBg = () => {
 //   );
 // }
 `,
-previewImage:"/DarkBg.png"
+    previewImage: "/DarkBg.png"
   },
   {
     id: "black-grid",
@@ -229,7 +229,7 @@ export const AnimatedBlackGridBackground = () => {
   //);
 //}
 `,
-previewImage:"/BlackGrid.png"
+    previewImage: "/BlackGrid.png"
 
   },
 
@@ -335,7 +335,7 @@ linear-gradient(
 //   );
 // }
 `,
-previewImage:"/Cyber.png"
+    previewImage: "/Cyber.png"
   },
   {
     id: "toxicpulse-grid",
@@ -438,7 +438,7 @@ linear-gradient(
 //   );
 // }
 `,
-previewImage:"/Toxic.png"
+    previewImage: "/Toxic.png"
   },
   {
     id: "cyanburst-grid",
@@ -540,7 +540,7 @@ export const CyanBurstGrid = () => {
   );
 };
 `,
-previewImage:"/Cyan.png"
+    previewImage: "/Cyan.png"
   },
   {
 
@@ -642,7 +642,7 @@ export const IndigoGrid = () => {
 //   );
 // }
 `,
-previewImage:"/IndigoMist.png"
+    previewImage: "/IndigoMist.png"
   },
   {
     id: "magenta-flame-grid",
@@ -742,7 +742,7 @@ export const MagentaFlame = () => {
 //   );
 // }
 `,
-previewImage:"/MagentaFlame.png"
+    previewImage: "/MagentaFlame.png"
   },
 
   //radial//
@@ -841,7 +841,7 @@ export const MagentaGrid = () => {
 //   );
 // }
 `,
-previewImage:"/MagentRadial.png"
+    previewImage: "/MagentRadial.png"
   },
   {
     id: "coolblue-grid",
@@ -942,7 +942,7 @@ export const CoolBlueGrid = () => {
 //   );
 // }
 `,
-previewImage:"/CoolBlue.png"
+    previewImage: "/CoolBlue.png"
   },
   {
     id: "warmamber-grid",
@@ -1044,7 +1044,7 @@ export const WarmAmberGrid = () => {
 //   );
 // }
 `,
-previewImage:"/WarmAmber.png"
+    previewImage: "/WarmAmber.png"
   },
   {
     id: "limefade-grid",
@@ -1146,7 +1146,7 @@ export const LimeFadeGrid = () => {
 //   );
 // }
 `,
-previewImage:"/Lime.png"
+    previewImage: "/Lime.png"
   },
   {
     id: "greenpunch-grid",
@@ -1248,7 +1248,7 @@ export const GreenPunchGrid = () => {
 //   );
 // }
 `,
-previewImage:"/GreenPunch.png"
+    previewImage: "/GreenPunch.png"
   },
 
   //v1-bottom
@@ -1307,7 +1307,7 @@ export const IndigoGradientv1 = () => {
 //   );
 // }
 `,
-previewImage:"/IndigoBtm.png"
+    previewImage: "/IndigoBtm.png"
   },
   {
     id: "indigo-gradient-v2",
@@ -1364,7 +1364,7 @@ export const IndigoGradientv2 = () => {
 //   );
 // }
 `,
-previewImage:"/IndigoTop.png"
+    previewImage: "/IndigoTop.png"
   },
   {
     id: "indigo-gradient-black-v2",
@@ -1424,7 +1424,7 @@ export const IndigoGradientBlackv2 = () => {
 //   );
 // }
 `,
-previewImage:"/IndigoBTop.png"
+    previewImage: "/IndigoBTop.png"
   },
   {
     id: "indigo-gradient-black-v1",
@@ -1481,9 +1481,9 @@ export const IndigoGradientBlackv1 = () => {
 //   );
 // }
 `,
-previewImage:"/IndigoBBtm.png"
+    previewImage: "/IndigoBBtm.png"
   },
-  
+
 
   {
     id: "teal-gradient-v1",
@@ -1540,7 +1540,7 @@ previewImage:"/IndigoBBtm.png"
 //   );
 // }
 `,
-previewImage:"/TealBtm.png"
+    previewImage: "/TealBtm.png"
   },
   {
     id: "teal-gradient-v2",
@@ -1597,7 +1597,7 @@ previewImage:"/TealBtm.png"
 //   );
 // }
 `,
-previewImage:"/TealTop.png"
+    previewImage: "/TealTop.png"
   },
   {
     id: "teal-gradient-black-v1",
@@ -1653,7 +1653,7 @@ previewImage:"/TealTop.png"
 //   );
 // }
 `,
-previewImage:"/TealBTop.png"
+    previewImage: "/TealBTop.png"
   },
   {
     id: "teal-gradient-black-v2",
@@ -1705,7 +1705,7 @@ export const TealBlackBtm  = () => {
 //   );
 // }
 `,
-previewImage:"/TealBBtm.png"
+    previewImage: "/TealBBtm.png"
   },
 
   {
@@ -1762,7 +1762,7 @@ export const CyanBottom = () => {
 //   );
 // }
 `,
-previewImage:"/CyanBtm.png"
+    previewImage: "/CyanBtm.png"
   },
   {
     id: "cyan-gradient-v2",
@@ -1818,7 +1818,7 @@ export const CyanTop = () => {
 //   );
 // }
 `,
-previewImage:"/CyanTop.png"
+    previewImage: "/CyanTop.png"
   },
   {
     id: "cyan-gradient-black-v1",
@@ -1873,7 +1873,7 @@ previewImage:"/CyanTop.png"
 //   );
 // }
 `,
-previewImage:"/CyanBTop.png"
+    previewImage: "/CyanBTop.png"
   },
   {
     id: "cyan-gradient-black-v2",
@@ -1928,7 +1928,7 @@ export const CyanBlackBottom = () => {
 //   );
 // }
 `,
-previewImage:"/CyanBBtm.png"
+    previewImage: "/CyanBBtm.png"
   },
 
   {
@@ -1986,7 +1986,7 @@ previewImage:"/CyanBBtm.png"
 //   );
 // }
 `,
-previewImage:"/FushBtm.png"
+    previewImage: "/FushBtm.png"
   },
   {
     id: "fuchsia-gradient-v2",
@@ -2043,7 +2043,7 @@ previewImage:"/FushBtm.png"
 //   );
 // }
 `,
-previewImage:"/FushTop.png"
+    previewImage: "/FushTop.png"
   },
   {
     id: "fuchsia-gradient-black-v1",
@@ -2098,7 +2098,7 @@ previewImage:"/FushTop.png"
 //   );
 // }
 `,
-previewImage:"/FushBTop.png"
+    previewImage: "/FushBTop.png"
   },
   {
     id: "fuchsia-gradient-black-v2",
@@ -2153,7 +2153,7 @@ previewImage:"/FushBTop.png"
 //   );
 // }
 `,
-previewImage:"/FushBBtm.png"
+    previewImage: "/FushBBtm.png"
   },
 
   {
@@ -2210,7 +2210,7 @@ export const RedBottom = () => {
 //   );
 // }
 `,
-previewImage:"/RedBtm.png"
+    previewImage: "/RedBtm.png"
   },
   {
     id: "red-gradient-v2",
@@ -2265,7 +2265,7 @@ export const RedTop = () => {
 //   );
 // }
 `,
-previewImage:"/RedTop.png"
+    previewImage: "/RedTop.png"
   },
   {
     id: "red-gradient-black-v1",
@@ -2319,7 +2319,7 @@ export const RedBlackTop = () => {
 //   );
 // }
 `,
-previewImage:"/RedBTop.png"
+    previewImage: "/RedBTop.png"
   },
   {
     id: "red-gradient-black-v2",
@@ -2373,7 +2373,7 @@ export const RedBlackBottom = () => {
 //   );
 // }
 `,
-previewImage:"/RedBBtm.png"
+    previewImage: "/RedBBtm.png"
   },
 
 
@@ -2383,286 +2383,469 @@ previewImage:"/RedBBtm.png"
 
   //effects
   {
-    id: "effect-glow-orbs",
-    name: "Floating Glow Orbs",
+    id: "cyberpunk-cityscape",
+    name: "CyberPunk Cityscape",
     category: "Effects",
     style: {
       backgroundColor: "black",
     },
-    component: GlowOrbsComponent,
+    component: CyberpunkHologramComponent,
     code: `
-import {motion} from "framer-motion"
-export const GlowOrbsComponent = () => (
-    <div className="absolute inset-0 overflow-hidden">
-      {[...Array(3)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute w-14 h-14 bg-cyan-500 rounded-full blur-lg opacity-50"
-          style={{
-            top: \`\${20 + i * 30}%\`,
-            left: \`\${20 + i * 25}%\`,
-          }}
-          animate={{ y: [0, -20, 0] }}
-          transition={{
-            repeat: Infinity,
-            duration: 4 + i,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
-    </div>
-  )
     //EXAMPLE USAGE
 // "use client";
-
 // import React from "react";
-// import {  GlowOrbsComponent  } from "./component/bg";
+// import { CyberpunkHologramComponent  } from "./component/bg";
 
 // export default function HomePage() {
 //   return (
 //     <div className="h-screen relative overflow-hidden">
 //       {/* Background Animation */}
-//       <GlowOrbsComponent  />
+//       <CyberpunkHologramComponent   />
 
 //       {/* Foreground Content */}
 //       <div className="absolute inset-0 z-10 flex items-center justify-center">
-//         {/* Your components go here */}
-//         <div className="text-center">
-//           <p className="text-4xl font-bold text-white">Your Components Goes Here</p>
-//           <p className="text-lg text-gray-300 mt-2">
-//             Replace this with any UI elements, cards, forms, etc.
-//           </p>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// } 
-  `,
-  previewImage:"/GlowOrbs.png"
-  },
-  {
-    id: "smooth-rain",
-    name: "Smooth Rain",
-    category: "Effects",
-    style: {
-      backgroundColor: "black",
-    },
-    component: SmoothRainComponent,
-    code: `
-    //EXAMPLE USAGE
-// "use client";
-// import React from "react";
-// import {  SmoothRainComponent } from "./component/bg";
-
-// export default function HomePage() {
-//   return (
-//     <div className="h-screen relative overflow-hidden">
-//       {/* Background Animation */}
-//       <SmoothRainComponent />
-
-//       {/* Foreground Content */}
-//       <div className="absolute inset-0 z-10 flex items-center justify-center">
-//         {/* Your components goes here */}
-//         <div className="text-center">
-//           <p className="text-4xl font-bold text-white">Your Components Goes Here</p>
-//           <p className="text-lg text-gray-300 mt-2">
-//             Replace this with any UI elements, cards, forms, etc.
-//           </p>
-//         </div>
+        
 //       </div>
 //     </div>
 //   );
 // }
 
-'use client';
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
 
-export const SmoothRainComponent = () => {
-  const [raindrops, setRaindrops] = useState<any[]>([]);
-  const [ripples, setRipples] = useState<any[]>([]);
+
+    "use client";
+import { motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
+
+interface HoloParticle {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  hue: number;
+  delay: number;
+  duration: number;
+  drift: number;
+}
+interface LightPanel {
+  id: number;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  delay: number;
+  duration: number;
+}
+
+export const CyberpunkHologramComponent = () => {
+  const [particles, setParticles] = useState<HoloParticle[]>([]);
+  const [panels, setPanels] = useState<LightPanel[]>([]);
 
   useEffect(() => {
-    // Generate random values only after mount
-    const generatedRaindrops = [...Array(150)].map((_, i) => ({
-      id: i,
-      x: Math.random() * 100,
-      startY: -20 - Math.random() * 50,
-      length: 8 + Math.random() * 25,
-      width: 0.5 + Math.random() * 1.5,
-      speed: 3 + Math.random() * 2,
-      opacity: 0.25 + Math.random() * 0.25,
-      delay: Math.random() * 5,
-      angle: -2 + Math.random() * 4,
-    }));
+    setParticles(
+      [...Array(60)].map((_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        size: 1 + Math.random() * 3,
+        hue: Math.floor(Math.random() * 360),
+        delay: Math.random() * 4,
+        duration: 2 + Math.random() * 4,
+        drift: 5 + Math.random() * 15,
+      }))
+    );
 
-    const generatedRipples = [...Array(20)].map((_, i) => ({
-      id: i,
-      x: Math.random() * 100,
-      y: 85 + Math.random() * 15,
-      delay: Math.random() * 6,
-      duration: 1.8 + Math.random() * 1.5,
-      maxScale: 2 + Math.random() * 2,
-    }));
-
-    setRaindrops(generatedRaindrops);
-    setRipples(generatedRipples);
+    setPanels(
+      [...Array(8)].map((_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        width: 40 + Math.random() * 80,
+        height: 10 + Math.random() * 30,
+        delay: Math.random() * 3,
+        duration: 2 + Math.random() * 3,
+      }))
+    );
   }, []);
 
-  if (raindrops.length === 0) return null; // Avoid mismatched initial render
-
   return (
-    <div className="h-screen absolute inset-0 overflow-hidden pointer-events-none">
-      {/* Background rain atmosphere */}
-      <div className="absolute inset-0 bg-gradient-to-b from-gray-900/20 via-gray-800/10 to-gray-700/30 opacity-60" />
-
-      {/* Heavy rain drops */}
-      {raindrops.map((drop) => (
+    <div className="absolute inset-0 h-screen overflow-hidden pointer-events-none bg-gradient-to-b from-[#05010a] via-[#0b0020] to-[#02010f]">
+      {/* Holographic particles */}
+      {particles.map((p) => (
         <motion.div
-          key={\`heavy-drop-\${drop.id}\`}
-          className="absolute"
+          key={\`particle-\${p.id}\`}
+          className="absolute rounded-full"
           style={{
-            left: \`\${drop.x}%\`,
-            top: \`\${drop.startY}%\`,
-            width: \`\${drop.width}px\`,
-            height: \`\${drop.length}px\`,
-            background: \`linear-gradient(180deg, 
-              rgba(255,255,255,\${drop.opacity}) 0%, 
-              rgba(200,230,255,\${drop.opacity * 0.8}) 50%, 
-              rgba(150,200,255,\${drop.opacity * 0.5}) 100%)\`,
-            borderRadius: "50px",
-            transform: \`rotate(\${drop.angle}deg)\`,
-            filter: "blur(0.3px)",
+            left: \`\${p.x}%\`,
+            top: \`\${p.y}%\`,
+            width: \`\${p.size}px\`,
+            height: \`\${p.size}px\`,
+            background: \`hsl(\${p.hue}, 100%, 70%)\`,
+            boxShadow: \`0 0 6px hsl(\${p.hue}, 100%, 70%), 0 0 12px hsl(\${p.hue}, 100%, 50%)\`,
           }}
           animate={{
-            y: ["0vh", "120vh"],
-            opacity: [0, drop.opacity, drop.opacity, 0],
+            x: [0, p.drift, 0],
+            opacity: [0, 1, 0],
+            scale: [1, 1.4, 1],
           }}
           transition={{
             repeat: Infinity,
-            duration: drop.speed,
-            delay: drop.delay,
-            ease: "easeIn",
+            duration: p.duration,
+            delay: p.delay,
+            ease: "easeInOut",
           }}
         />
       ))}
 
-      {/* Light mist drops */}
-      {[...Array(80)].map((_, i) => {
-        const mistDrop = {
-          x: Math.random() * 100,
-          y: Math.random() * 100,
-          size: 0.5 + Math.random() * 1,
-          opacity: 0.08 + Math.random() * 0.15,
-          duration: 4 + Math.random() * 2, // slower
-          delay: Math.random() * 5,
-        };
+      
 
-        return (
-          <motion.div
-            key={\`mist-\${i}\`}
-            className="absolute rounded-full"
-            style={{
-              left: \`\${mistDrop.x}%\`,
-              top: \`\${mistDrop.y}%\`,
-              width: \`\${mistDrop.size}px\`,
-              height: \`\${mistDrop.size}px\`,
-              background: \`rgba(255, 255, 255, \${mistDrop.opacity})\`,
-              filter: "blur(0.5px)",
-            }}
-            animate={{
-              y: ["-20px", "100vh"],
-              x: [0, (Math.random() - 0.5) * 30],
-              opacity: [0, mistDrop.opacity, 0],
-            }}
-            transition={{
-              repeat: Infinity,
-              duration: mistDrop.duration,
-              delay: mistDrop.delay,
-              ease: "easeInOut",
-            }}
-          />
-        );
-      })}
-
-      {/* Ground splash ripples */}
-      {ripples.map((ripple) => (
-        <motion.div
-          key={\`\ripple-\${ripple.id}\`}
-          className="absolute border border-white/15 rounded-full"
-          style={{
-            left: \`\${ripple.x}%\`,
-            top: \`\${ripple.y}%\`,
-            width: "4px",
-            height: "2px",
-          }}
-          animate={{
-            width: ["4px", \`\${ripple.maxScale * 15}px\`],
-            height: ["2px", \`\${ripple.maxScale * 8}px\`],
-            opacity: [0.4, 0.2, 0],
-          }}
-          transition={{
-            repeat: Infinity,
-            duration: ripple.duration + 0.5,
-            delay: ripple.delay,
-            ease: "easeOut",
-          }}
-        />
-      ))}
-
-      {/* Water puddle reflections */}
-      {[...Array(8)].map((_, i) => {
-        const puddle = {
-          x: Math.random() * 80 + 10,
-          y: 88 + Math.random() * 8,
-          width: 20 + Math.random() * 40,
-          delay: Math.random() * 3,
-        };
-
-        return (
-          <motion.div
-            key={\`puddle-\${i}\`}
-            className="absolute rounded-full"
-            style={{
-              left: \`\${puddle.x}%\`,
-              top: \`\${puddle.y}%\`,
-              width: \`\${puddle.width}px\`,
-              height: "3px",
-              background:
-                "linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)",
-              filter: "blur(1px)",
-            }}
-            animate={{
-              opacity: [0.1, 0.25, 0.1],
-              scaleX: [0.9, 1.1, 0.9],
-            }}
-            transition={{
-              repeat: Infinity,
-              duration: 3 + Math.random() * 1.5,
-              delay: puddle.delay,
-              ease: "easeInOut",
-            }}
-          />
-        );
-      })}
-
-      {/* Lightning flash */}
+      {/* Light beam sweeps */}
       <motion.div
-        className="absolute inset-0 bg-white/5 pointer-events-none"
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(120deg, transparent 40%, rgba(0,255,255,0.08) 50%, transparent 60%)",
+        }}
         animate={{
-          opacity: [0, 0, 0, 0.25, 0, 0, 0.08, 0],
+          backgroundPosition: ["0% 0%", "200% 0%"],
         }}
         transition={{
           repeat: Infinity,
-          duration: 10,
-          times: [0, 0.7, 0.72, 0.73, 0.74, 0.76, 0.77, 1],
+          duration: 6,
+          ease: "linear",
         }}
       />
     </div>
   );
 };
-  `,
-  previewImage:"/Rain.png"
+
+` ,
+    previewImage: "/cyberr.png"
+  },
+  {
+    id: "firefly-forest",
+    name: "Forest Firefly",
+    category: "Effects",
+    style: {
+      backgroundColor: "black",
+    },
+    component: FireflyForestComponent,
+    code: `
+    //EXAMPLE USAGE
+// "use client";
+// import React from "react";
+// import { FireflyForestComponent } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <FireflyForestComponent />
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+        
+//       </div>
+//     </div>
+//   );
+// }
+
+    "use client";
+import { motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
+
+interface Firefly {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  delay: number;
+  duration: number;
+}
+
+interface Mist {
+  id: number;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  delay: number;
+  speed: number;
+  opacity: number;
+}
+
+export const FireflyForestComponent = () => {
+  const [fireflies, setFireflies] = useState<Firefly[]>([]);
+  const [mists, setMists] = useState<Mist[]>([]);
+
+  useEffect(() => {
+    // Fireflies
+    setFireflies(
+      [...Array(60)].map((_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        size: 2 + Math.random() * 3,
+        delay: Math.random() * 5,
+        duration: 2 + Math.random() * 3,
+      }))
+    );
+
+    // Mist layers
+    setMists(
+      [...Array(5)].map((_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        y: 50 + Math.random() * 30,
+        width: 150 + Math.random() * 150,
+        height: 50 + Math.random() * 30,
+        delay: Math.random() * 8,
+        speed: 20 + Math.random() * 10,
+        opacity: 0.04 + Math.random() * 0.05,
+      }))
+    );
+  }, []);
+
+  return (
+    <motion.div
+     initial={{ opacity: 0 }}
+     animate={{ opacity: 1 }}
+     transition={{ duration: 1, ease: "easeOut" }}
+    
+    className="absolute inset-0 h-screen overflow-hidden pointer-events-none bg-gradient-to-b from-[#02010a] via-[#04132a] to-[#0a1c1f]">
+      {/* Mist layers */}
+      {mists.map((mist) => (
+        <motion.div
+          key={\`\mist-\${mist.id}\`}
+          className="absolute rounded-full"
+          style={{
+            left: \`\${mist.x}%\`,
+            top: \`\${mist.y}%\`,
+            width: \`\${mist.width}px\`,
+            height: \`\${mist.height}px\`,
+            background:
+              "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05), transparent 70%)",
+            filter: "blur(40px)",
+            opacity: mist.opacity,
+          }}
+          animate={{
+            x: ["0%", "10%", "0%"],
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: mist.speed,
+            delay: mist.delay,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+
+      {/* Fireflies */}
+      {fireflies.map((fly) => (
+        <motion.div
+          key={\`firefly-\${fly.id}\`}
+          className="absolute rounded-full"
+          style={{
+            left: \`\${fly.x}%\`,
+            top: \`\${fly.y}%\`,
+            width: \`\${fly.size}px\`,
+            height: \`\${fly.size}px\`,
+            background: "rgba(255, 255, 180, 1)",
+            boxShadow: "0 0 8px rgba(255,255,180,0.9), 0 0 20px rgba(255,255,200,0.5)",
+          }}
+          animate={{
+            opacity: [0, 1, 0],
+            y: [0, -5, 0],
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: fly.duration,
+            delay: fly.delay,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+
+      
+    </motion.div>
+  );
+};
+` ,
+    previewImage: "/ff.png"
+  },
+  {
+    id: "desert-mirage",
+    name: "Desert Mirage",
+    category: "Effects",
+    style: {
+      backgroundColor: "black",
+    },
+    component: DesertMirageComponent,
+    code: `
+    //EXAMPLE USAGE
+// "use client";
+// import React from "react";
+// import { DesertMirageComponent  } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <DesertMirageComponent   />
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+        
+//       </div>
+//     </div>
+//   );
+// }
+
+
+    "use client";
+import { motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
+
+interface SandParticle {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  opacity: number;
+  speed: number;
+  drift: number;
+  delay: number;
+}
+
+interface Star {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  opacity: number;
+  twinkleSpeed: number;
+  delay: number;
+}
+
+export const DesertMirageComponent = () => {
+  const [sandParticles, setSandParticles] = useState<SandParticle[]>([]);
+  const [stars, setStars] = useState<Star[]>([]);
+
+  useEffect(() => {
+    // Blowing sand
+    setSandParticles(
+      [...Array(60)].map((_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        size: 0.5 + Math.random() * 1.5,
+        opacity: 0.05 + Math.random() * 0.15,
+        speed: 6 + Math.random() * 6,
+        drift: 20 + Math.random() * 40,
+        delay: Math.random() * 6,
+      }))
+    );
+
+    // Stars
+    setStars(
+      [...Array(60)].map((_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 50,
+        size: 1 + Math.random() * 1.5,
+        opacity: 0.2 + Math.random() * 0.8,
+        twinkleSpeed: 2 + Math.random() * 3,
+        delay: Math.random() * 5,
+      }))
+    );
+  }, []);
+
+  return (
+    <motion.div
+     initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1, ease: "easeOut" }}
+
+    
+    className="absolute inset-0 h-screen overflow-hidden pointer-events-none bg-gradient-to-b from-[#0b0b14] via-[#191924] to-[#2d2a23]">
+     
+
+      {/* Stars */}
+      {stars.map((star) => (
+        <motion.div
+          key={\`star-\${star.id}\`}
+          className="absolute rounded-full"
+          style={{
+            left: \`\${star.x}%\`,
+            top: \`\${star.y}%\`,
+            width: \`\${star.size}px\`,
+            height: \`\${star.size}px\`,
+            background: "white",
+            opacity: star.opacity,
+          }}
+          animate={{
+            opacity: [0, star.opacity, 0],
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: star.twinkleSpeed,
+            delay: star.delay,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+
+      {/* Blowing sand particles */}
+      {sandParticles.map((sand) => (
+        <motion.div
+          key={\`sand-\${sand.id}\`}
+          className="absolute rounded-full"
+          style={{
+            left: \`\${sand.x}%\`,
+            top: \`\${sand.y}%\`,
+            width: \`\${sand.size}px\`,
+            height: \`\${sand.size}px\`,
+            background: \`rgba(255, 240, 200, \${sand.opacity})\`,
+            filter: "blur(0.5px)",
+          }}
+          animate={{
+            x: [0, sand.drift],
+            y: ["0vh", "100vh"],
+            opacity: [0, sand.opacity, 0],
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: sand.speed,
+            delay: sand.delay,
+            ease: "linear",
+          }}
+        />
+      ))}
+
+    
+
+      {/* Heat distortion glow */}
+      <motion.div
+        className="absolute bottom-20 left-0 w-full h-12"
+        style={{
+          background:
+            "linear-gradient(to top, rgba(255, 200, 150, 0.04), transparent)",
+          filter: "blur(8px)",
+        }}
+        animate={{
+          scaleX: [1, 1.02, 1],
+          opacity: [0.02, 0.05, 0.02],
+        }}
+        transition={{
+          repeat: Infinity,
+          duration: 3,
+          ease: "easeInOut",
+        }}
+      />
+    </motion.div>
+  );
+};
+` ,
+    previewImage: "/desert.png"
   },
   {
     id: "smooth-snow",
@@ -2672,7 +2855,7 @@ export const SmoothRainComponent = () => {
       backgroundColor: "black",
     },
     component: SnowAuroraComponent,
-    code:`//EXAMPLE USAGE
+    code: `//EXAMPLE USAGE
 // "use client";
 // import React from "react";
 // import {  SnowAuroraComponent  } from "./component/bg";
@@ -2727,7 +2910,7 @@ export const SnowAuroraComponent = () => {
   const [clouds, setClouds] = useState<Cloud[]>([]);
 
   useEffect(() => {
-    setSnowflakes([...Array(120)].map((_, i) => ({
+    setSnowflakes([...Array(60)].map((_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
@@ -2749,7 +2932,11 @@ export const SnowAuroraComponent = () => {
   }, []);
 
   return (
-    <div className="h-screen absolute inset-0 overflow-hidden pointer-events-none bg-gradient-to-b from-[#020617] via-[#0f172a] to-[#1e293b]">
+    <motion.div
+     initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1, ease: "easeOut" }}
+      className="h-screen absolute inset-0 overflow-hidden pointer-events-none bg-gradient-to-b from-[#020617] via-[#0f172a] to-[#1e293b]">
       {/* Aurora glow */}
       <motion.div
         className="absolute inset-x-0 top-0 h-1/2"
@@ -2820,28 +3007,319 @@ export const SnowAuroraComponent = () => {
           }}
         />
       ))}
-
-      {/* Ground frost shimmer */}
-      <motion.div
-        className="absolute bottom-0 left-0 w-full h-16"
-        style={{
-          background:
-            "linear-gradient(to top, rgba(255,255,255,0.08), transparent)",
-        }}
-        animate={{
-          opacity: [0.05, 0.15, 0.05],
-        }}
-        transition={{
-          repeat: Infinity,
-          duration: 5,
-          ease: "easeInOut",
-        }}
-      />
-    </div>
+    </motion.div>
   );
 };
 ` ,
-previewImage:"/Snow.png"
+    previewImage: "/Snow.png"
+  },
+  {
+    id: "ocean-vibes",
+    name: "Ocean Vibes",
+    category: "Effects",
+    style: {
+      backgroundColor: "black",
+    },
+    component: OceanGlowComponent,
+    code: `
+    //EXAMPLE USAGE
+// "use client";
+// import React from "react";
+// import { OceanGlowComponent  } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <OceanGlowComponent   />
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+        
+//       </div>
+//     </div>
+//   );
+// }
+
+
+
+
+   "use client";
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+
+interface OceanParticle {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  opacity: number;
+  drift: number;
+  speed: number;
+  delay: number;
+  hue: number;
+  brightness: number;
+}
+
+export const OceanGlowComponent = () => {
+  const [particles, setParticles] = useState<OceanParticle[]>([]);
+
+  useEffect(() => {
+    setParticles(
+      [...Array(80)].map((_, i) => {
+        const yPos = Math.random() * 100;
+        const isBottomHalf = yPos > 50;
+
+        return {
+          id: i,
+          x: Math.random() * 100,
+          y: yPos,
+          size: 1 + Math.random() * 3,
+          opacity: isBottomHalf
+            ? 0.6 + Math.random() * 0.4 // brighter glow
+            : 0.2 + Math.random() * 0.4, // softer top glow
+          drift: -5 + Math.random() * 10,
+          speed: 6 + Math.random() * 6,
+          delay: Math.random() * 6,
+          hue: 180 + Math.random() * 80,
+          brightness: isBottomHalf ? 100 : 60, // bottom particles more luminous
+        };
+      })
+    );
+  }, []);
+
+  return (
+    <motion.div
+     initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 2, ease: "easeOut" }}
+
+      className="absolute inset-0 h-screen overflow-hidden pointer-events-none"
+      style={{
+        background:
+          "linear-gradient(to bottom, #a8e0ff 0%, #0077b6 50%, #001d3d 100%)",
+      }}
+    >
+      {/* Particles */}
+      {particles.map((p) => (
+        <motion.div
+          key={\`particle-\${p.id}\`}
+          className="absolute rounded-full"
+          style={{
+            left: \`\${p.x}%\`,
+            top: \`\${p.y}%\`,
+            width: \`\${p.size}px\`,
+            height: \`\${p.size}px\`,
+            background: \`hsl(\${p.hue}, 100%, \${p.brightness}%)\`,
+            boxShadow: \`0 0 8px hsl(\${p.hue}, 100%, \${p.brightness}%),
+                        0 0 16px hsl(\${p.hue}, 100%, \${p.brightness - 10}%)\`,
+            opacity: p.opacity,
+            filter: "blur(0.5px)",
+          }}
+          animate={{
+            x: [0, p.drift, 0],
+            y: ["0vh", "100vh"],
+            opacity: [0, p.opacity, 0],
+            scale: [1, 1.3, 1],
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: p.speed,
+            delay: p.delay,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+
+      {/* Light rays */}
+      <motion.div
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(120deg, transparent 40%, rgba(255,255,255,0.05) 50%, transparent 60%)",
+          mixBlendMode: "screen",
+        }}
+        animate={{
+          backgroundPosition: ["0% 0%", "200% 0%"],
+        }}
+        transition={{
+          repeat: Infinity,
+          duration: 10,
+          ease: "linear",
+        }}
+      />
+    </motion.div>
+  );
+};
+
+` ,
+    previewImage: "/ocean.png"
+  },
+  {
+    id: "volcanic-embers",
+    name: "Volcanic Embers",
+    category: "Effects",
+    style: {
+      backgroundColor: "black",
+    },
+    component: VolcanicEmberStormComponent,
+    code: `
+    //EXAMPLE USAGE
+// "use client";
+// import React from "react";
+// import { VolcanicEmberStormComponent  } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <VolcanicEmberStormComponent   />
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+        
+//       </div>
+//     </div>
+//   );
+// }
+
+  "use client";
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+
+interface Ember {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  hue: number;
+  opacity: number;
+  speed: number;
+  drift: number;
+  delay: number;
+}
+
+interface AshCloud {
+  id: number;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  delay: number;
+  speed: number;
+  opacity: number;
+}
+
+export const VolcanicEmberStormComponent = () => {
+  const [embers, setEmbers] = useState<Ember[]>([]);
+  const [clouds, setClouds] = useState<AshCloud[]>([]);
+
+  useEffect(() => {
+    // Ember particles
+    setEmbers(
+      [...Array(80)].map((_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        y: 60 + Math.random() * 40,
+        size: 1 + Math.random() * 2,
+        hue: 20 + Math.random() * 40, // orange-red range
+        opacity: 0.3 + Math.random() * 0.7,
+        speed: 5 + Math.random() * 4,
+        drift: -5 + Math.random() * 10,
+        delay: Math.random() * 5,
+      }))
+    );
+
+    // Ash clouds
+    setClouds(
+      [...Array(5)].map((_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        y: 30 + Math.random() * 40,
+        width: 200 + Math.random() * 200,
+        height: 50 + Math.random() * 40,
+        delay: Math.random() * 6,
+        speed: 25 + Math.random() * 10,
+        opacity: 0.05 + Math.random() * 0.07,
+      }))
+    );
+  }, []);
+
+  return (
+    <motion.div
+     initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 2, ease: "easeOut" }}
+
+      className="absolute inset-0 h-screen overflow-hidden pointer-events-none"
+      style={{
+        background:
+          "linear-gradient(to top, #2b0000 0%, #0d0000 40%, #000000 100%)",
+      }}
+    >
+      {/* Ash clouds */}
+      {clouds.map((cloud) => (
+        <motion.div
+          key={\`cloud-\${cloud.id}\`}
+          className="absolute rounded-full"
+          style={{
+            left: \`\${cloud.x}%\`,
+            top: \`\${cloud.y}%\`,
+            width: \`\${cloud.width}px\`,
+            height: \`\${cloud.height}px\`,
+            background:
+              "radial-gradient(circle at 50% 50%, rgba(50,50,50,0.1), transparent 70%)",
+            filter: "blur(60px)",
+            opacity: cloud.opacity,
+          }}
+          animate={{
+            x: ["0%", "10%", "0%"],
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: cloud.speed,
+            delay: cloud.delay,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+
+      {/* Ember particles */}
+      {embers.map((e) => (
+        <motion.div
+          key={\`ember-\${e.id}\`}
+          className="absolute rounded-full"
+          style={{
+            left: \`\${e.x}%\`,
+            top: \`\${e.y}%\`,
+            width: \`\${e.size}px\`,
+            height: \`\${e.size}px\`,
+            background: \`hsl(\${e.hue}, 100%, 60%)\`,
+            boxShadow: \`0 0 8px hsl(\${e.hue}, 100%, 60%), 0 0 16px hsl(\${e.hue}, 100%, 40%)\`,
+            opacity: e.opacity,
+          }}
+          animate={{
+            x: [0, e.drift, 0],
+            y: ["0vh", "-100vh"],
+            opacity: [0, e.opacity, 0],
+            scale: [1, 1.4, 1],
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: e.speed,
+            delay: e.delay,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+
+    </motion.div>
+  );
+};
+
+
+` ,
+    previewImage: "/ember.png"
   },
   {
     id: "cheryy-blossom",
@@ -2851,7 +3329,7 @@ previewImage:"/Snow.png"
       backgroundColor: "black",
     },
     component: NightSakuraComponent,
-    code:`
+    code: `
     //EXAMPLE USAGE
 // "use client";
 // import React from "react";
@@ -2895,39 +3373,29 @@ export const NightSakuraComponent = () => {
 
   useEffect(() => {
     setPetals(
-      [...Array(50)].map((_, i) => ({
+      [...Array(30)].map((_, i) => ({
         id: i,
         x: Math.random() * 100,
-        y: -10 - Math.random() * 100, // some start above the screen
+        y: -10 - Math.random() * 1, // some start above the screen
         size: 16 + Math.random() * 18,
         rotation: Math.random() * 360,
         opacity: 0.5 + Math.random() * 0.5,
         speed: 12 + Math.random() * 8,
         drift: 20 + Math.random() * 60, // sway amplitude
-        delay: Math.random() * 8,
+        delay: Math.random() * 1,
       }))
     );
   }, []);
 
   return (
-    <div className="h-screen absolute inset-0 overflow-hidden pointer-events-none bg-gradient-to-b from-[#0a0320] via-[#15052f] to-[#1a0f2f]">
-      {/* Moon glow */}
-      <motion.div
-        className="absolute inset-x-0 top-0 h-1/2"
-        style={{
-          background:
-            "radial-gradient(ellipse at top, rgba(255,182,193,0.15) 0%, transparent 70%), radial-gradient(ellipse at 70% 20%, rgba(200,150,255,0.1) 0%, transparent 60%)",
-          filter: "blur(80px)",
-        }}
-        animate={{
-          backgroundPosition: ["0% 0%", "100% 0%", "0% 0%"],
-        }}
-        transition={{
-          repeat: Infinity,
-          duration: 50,
-          ease: "linear",
-        }}
-      />
+    <motion.div
+     initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1, ease: "easeOut" }}
+
+    
+    className="h-screen absolute inset-0 overflow-hidden pointer-events-none bg-gradient-to-b from-[#0a0320] via-[#15052f] to-[#1a0f2f]">
+      
 
       {/* Petals */}
       {petals.map((petal) => (
@@ -2968,29 +3436,288 @@ export const NightSakuraComponent = () => {
   />
 ))}
 
-      {/* Ground shimmer */}
-      <motion.div
-        className="absolute bottom-0 left-0 w-full h-20"
-        style={{
-          background:
-            "linear-gradient(to top, rgba(255,192,203,0.08), transparent)",
-        }}
-        animate={{
-          opacity: [0.05, 0.15, 0.05],
-        }}
-        transition={{
-          repeat: Infinity,
-          duration: 6,
-          ease: "easeInOut",
-        }}
-      />
-    </div>
+     
+    </motion.div>
   );
 };
 ` ,
-previewImage:"/Sakura.png"
+    previewImage: "/Sakura.png"
+  },
+  {
+    id: "smooth-rain",
+    name: "Chill Rain",
+    category: "Effects",
+    style: {
+      backgroundColor: "black",
+    },
+    component: SmoothRainComponent,
+    code: `
+    //EXAMPLE USAGE
+// "use client";
+// import React from "react";
+// import {  SmoothRainComponent } from "./component/bg";
+
+// export default function HomePage() {
+//   return (
+//     <div className="h-screen relative overflow-hidden">
+//       {/* Background Animation */}
+//       <SmoothRainComponent />
+
+//       {/* Foreground Content */}
+//       <div className="absolute inset-0 z-10 flex items-center justify-center">
+//         {/* Your components goes here */}
+//         <div className="text-center">
+//           <p className="text-4xl font-bold text-white">Your Components Goes Here</p>
+//           <p className="text-lg text-gray-300 mt-2">
+//             Replace this with any UI elements, cards, forms, etc.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+'use client';
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+
+interface Raindrop {
+  id: number;
+  x: number;
+  startY: number;
+  length: number;
+  width: number;
+  speed: number;
+  opacity: number;
+  delay: number;
+  angle: number;
+}
+interface Ripple {
+  id: number;
+  x: number;
+  y: number;
+  delay: number;
+  duration: number;
+  maxScale: number;
+}
+interface MistDrop {
+  x: number;
+  y: number;
+  size: number;
+  opacity: number;
+  duration: number;
+  delay: number;
+  drift: number;
+}
+interface Puddle {
+  x: number;
+  y: number;
+  width: number;
+  delay: number;
+}
+
+export const SmoothRainComponent = () => {
+ const [raindrops, setRaindrops] = useState<Raindrop[]>([]);
+  const [ripples, setRipples] = useState<Ripple[]>([]);
+  const [mistDrops, setMistDrops] = useState<MistDrop[]>([]);
+  const [puddles, setPuddles] = useState<Puddle[]>([]);
+
+  useEffect(() => {
+    // Generate all random-based elements only on client
+    setRaindrops(
+      [...Array(150)].map((_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        startY: -20 - Math.random() * 50,
+        length: 8 + Math.random() * 25,
+        width: 0.5 + Math.random() * 1.5,
+        speed: 3 + Math.random() * 2,
+        opacity: 0.25 + Math.random() * 0.25,
+        delay: Math.random() * 5,
+        angle: -2 + Math.random() * 4,
+      }))
+    );
+
+    setRipples(
+      [...Array(20)].map((_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        y: 85 + Math.random() * 15,
+        delay: Math.random() * 6,
+        duration: 1.8 + Math.random() * 1.5,
+        maxScale: 2 + Math.random() * 2,
+      }))
+    );
+
+    setMistDrops(
+      [...Array(80)].map(() => ({
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        size: 0.5 + Math.random() * 1,
+        opacity: 0.08 + Math.random() * 0.15,
+        duration: 4 + Math.random() * 2,
+        delay: Math.random() * 5,
+        drift: (Math.random() - 0.5) * 30,
+      }))
+    );
+
+    setPuddles(
+      [...Array(8)].map(() => ({
+        x: Math.random() * 80 + 10,
+        y: 88 + Math.random() * 8,
+        width: 20 + Math.random() * 40,
+        delay: Math.random() * 3,
+      }))
+    );
+  }, []);
+
+  if (!raindrops.length) return null; // Avoid SSR mismatch
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className="h-screen absolute inset-0 overflow-hidden pointer-events-none"
+    >
+      {/* Background rain atmosphere */}
+      <div className="absolute inset-0 bg-gradient-to-b from-gray-900/20 via-gray-800/10 to-gray-700/30 opacity-60" />
+
+      {/* Heavy rain drops */}
+      {raindrops.map((drop) => (
+        <motion.div
+          key={\`heavy-drop-\${drop.id}\`}
+          className="absolute"
+          style={{
+            left: \`\${drop.x}%\`,
+            top: \`\${drop.startY}%\`,
+            width: \`\${drop.width}px\`,
+            height: \`\${drop.length}px\`,
+            background: \`linear-gradient(180deg, 
+              rgba(255,255,255,\${drop.opacity}) 0%, 
+              rgba(200,230,255,\${drop.opacity * 0.8}) 50%, 
+              rgba(150,200,255,\${drop.opacity * 0.5}) 100%)\`,
+            borderRadius: "50px",
+            transform: \`rotate(\${drop.angle}deg)\`,
+            filter: "blur(0.3px)",
+          }}
+          animate={{
+            y: ["0vh", "120vh"],
+            opacity: [0, drop.opacity, drop.opacity, 0],
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: drop.speed,
+            delay: drop.delay,
+            ease: "easeIn",
+          }}
+        />
+      ))}
+
+      {/* Mist drops */}
+      {mistDrops.map((mist, i) => (
+        <motion.div
+          key={\`mist-\${i}\`}
+          className="absolute rounded-full"
+          style={{
+            left: \`\${mist.x}%\`,
+            top: \`\${mist.y}%\`,
+            width: \`\${mist.size}px\`,
+            height: \`\${mist.size}px\`,
+            background: \`rgba(255, 255, 255, \${mist.opacity})\`,
+            filter: "blur(0.5px)",
+          }}
+          animate={{
+            y: ["-20px", "100vh"],
+            x: [0, mist.drift],
+            opacity: [0, mist.opacity, 0],
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: mist.duration,
+            delay: mist.delay,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+
+      {/* Ground ripples */}
+      {ripples.map((ripple) => (
+        <motion.div
+          key={\`ripple-\${ripple.id}\`}
+          className="absolute border border-white/15 rounded-full"
+          style={{
+            left: \`\${ripple.x}%\`,
+            top: \`\${ripple.y}%\`,
+            width: "4px",
+            height: "2px",
+          }}
+          animate={{
+            width: ["4px", \`\${ripple.maxScale * 15}px\`],
+            height: ["2px", \`\${ripple.maxScale * 8}px\`],
+            opacity: [0.4, 0.2, 0],
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: ripple.duration + 0.5,
+            delay: ripple.delay,
+            ease: "easeOut",
+          }}
+        />
+      ))}
+
+      {/* Water puddles */}
+      {puddles.map((puddle, i) => (
+        <motion.div
+          key={\`puddle-\${i}\`}
+          className="absolute rounded-full"
+          style={{
+            left: \`\${puddle.x}%\`,
+            top: \`\${puddle.y}%\`,
+            width: \`$\{puddle.width}px\`,
+            height: "3px",
+            background:
+              "linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)",
+            filter: "blur(1px)",
+          }}
+          animate={{
+            opacity: [0.1, 0.25, 0.1],
+            scaleX: [0.9, 1.1, 0.9],
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: 3 + Math.random() * 1.5,
+            delay: puddle.delay,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+
+      {/* Lightning flash */}
+      <motion.div
+        className="absolute inset-0 bg-white/5 pointer-events-none"
+        animate={{
+          opacity: [0, 0, 0, 0.25, 0, 0, 0.08, 0],
+        }}
+        transition={{
+          repeat: Infinity,
+          duration: 10,
+          times: [0, 0.7, 0.72, 0.73, 0.74, 0.76, 0.77, 1],
+        }}
+      />
+    </motion.div>
+  );
+};
+  `,
+    previewImage: "/Rain.png"
   },
   
+ 
+  
+  
+
+  
+
 
   //floatings
   {
@@ -3049,7 +3776,7 @@ export const SoftDotNetwork = () => {
 //   );
 // }
 `,
-previewImage:"/SoftD1.png"
+    previewImage: "/SoftD1.png"
   },
   {
     id: "dots-soft-network-v2",
@@ -3106,7 +3833,7 @@ export const SoftDotNetworkv2 = () => (
 //   );
 // }
 `,
-previewImage:"/sdv2.png"
+    previewImage: "/sdv2.png"
   },
   {
     id: "moving-dots",
@@ -3204,7 +3931,7 @@ export const MovingDotsComponent = () => {
 // }
 
 `,
-previewImage:"/movgrddot.png"
+    previewImage: "/movgrddot.png"
   },
   {
     id: "fade-dot",
@@ -3316,10 +4043,10 @@ export const FadeDotComponent = () => {
 //   );
 // }
 `,
-previewImage:"/FadeD.png"
+    previewImage: "/FadeD.png"
   },
-  
-  
+
+
   {
     id: "blinking-dots",
     name: "Blinking Dots",
@@ -3390,7 +4117,7 @@ export const BlinkingDotsComponent = () => {
 //   );
 // }
 `,
-previewImage:"/blinkd.png"
+    previewImage: "/blinkd.png"
   },
   {
     id: "moving-particles",
@@ -3531,7 +4258,7 @@ export const ParticlesBackgroundComponent = () => {
 //   );
 // }
 `,
-previewImage:"/movp.png"
+    previewImage: "/movp.png"
   },
   {
     id: "glowing-particles",
@@ -3638,7 +4365,7 @@ export const GlowingParticles: React.FC<GalaxyProps> = ({ starCount = 200 }) => 
 //   );
 // }
 `,
-previewImage:"/glowp.png"
+    previewImage: "/glowp.png"
   },
 ];
 

@@ -1,5 +1,5 @@
 import { BlinkingDotsComponent, DotNetworkComponent, DotNetworkComponentv2, FadeDotComponent, MovingDotsComponent ,WavyDots} from "@/bgs/Dots";
-import  {    GlowOrbsComponent, NightSakuraComponent, SmoothRainComponent, SnowAuroraComponent } from "@/bgs/Effects";
+import  {    CyberpunkHologramComponent, DesertMirageComponent, FireflyForestComponent,  NightSakuraComponent, OceanGlowComponent, SmoothRainComponent, SnowAuroraComponent, VolcanicEmberStormComponent } from "@/bgs/Effects";
 import {  FloatingParticles, GlowingParticles, ParticlesBackgroundComponent,  } from "@/bgs/Dots";
 import { AnimatedBlackGridBackground, CoolBlueGrid, CyanBurstGrid, DarkBg, GreenPunchGrid, LimeFadeGrid, MagentaFlame, MagentaGrid, NeonShock, ToxicPulse, VioletMistGrid, WarmAmberGrid } from "@/bgs/Geometrics";
 import { CyanGradient, CyanGradientBlack, CyanGradientBlackTop, CyanGradientTop, FuchsiaGradient, FuchsiaGradientBlack, FuchsiaGradientBlackTop, FuchsiaGradientTop, PurpleGradient, PurpleGradientBlack, PurpleGradientBlackTop, PurpleGradientTop, RedGradient, RedGradientBlack, RedGradientBlackTop, RedGradientTop, TealGradient, TealGradientBlack, TealGradientBlackTop, TealGradientTop, } from "@/bgs/Gradients";
@@ -40,10 +40,14 @@ export const PatternComponents: Record<string, React.FC> = {
 
 
   //effects
-  "effect-glow-orbs": GlowOrbsComponent,
   "smooth-rain":SmoothRainComponent,
   "smooth-snow":SnowAuroraComponent,
   "cheryy-blossom":NightSakuraComponent,
+  "firefly-forest":FireflyForestComponent,
+  "desert-mirage":DesertMirageComponent,
+  "cyberpunk-cityscape":CyberpunkHologramComponent,
+  "ocean-vibes":OceanGlowComponent,
+  "volcanic-embers":VolcanicEmberStormComponent,
 
 
 

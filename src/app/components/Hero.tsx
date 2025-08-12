@@ -59,7 +59,7 @@ export default function Hero({ activePattern, setActivePattern, theme }: HeroPro
                 {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-10 px-4">
 
-                    <RainbowButton>
+                    <RainbowButton >
                         <Link
                             href="/how-to-use"
                             className="group flex items-center gap-2 px-3 py-2  text-white dark:text-black text-lg "
@@ -69,7 +69,7 @@ export default function Hero({ activePattern, setActivePattern, theme }: HeroPro
                         </Link>
                     </RainbowButton>
 
-                    <RainbowButton variant={"outline"}>
+                    <RainbowButton  variant={"outline"}>
 
                     <Link
                         href="/how-to-contribute"

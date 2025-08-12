@@ -22,15 +22,25 @@ export function Navbar() {
           </span>
         </Link>
 
-        {/* Right Side: Social Icons and Theme Toggle */}
-        <div className="flex items-center right-2 gap-2 pr-4 sm:gap-5">
-          <Link href="https://github.com/ayubdotdev" target="_blank" rel="noopener noreferrer">
+        {/* Right Side: Social Icons, Divider, Theme Toggle */}
+        <div className="flex items-center gap-3 sm:gap-5 pr-4">
+          <Link
+            href="https://github.com/ayubdotdev"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <Github className="h-6 w-6 text-zinc-700 transition-colors hover:text-indigo-500 dark:text-zinc-300 dark:hover:text-indigo-400" />
           </Link>
-          <Link href="https://x.com/Ayyubdotdev" target="_blank" rel="noopener noreferrer">
+          <Link
+            href="https://x.com/Ayyubdotdev"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <Twitter className="h-6 w-6 text-zinc-700 transition-colors hover:text-indigo-500 dark:text-zinc-300 dark:hover:text-indigo-400" />
           </Link>
-          </div>
+
+         
+        </div>
       </nav>
     </header>
   )
