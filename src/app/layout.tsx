@@ -17,6 +17,18 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "VeilMotion",
   description: "Veilmotion brings visuals to life",
+  openGraph: {
+    title: "VeilMotion",
+    description: "VeilMotion - Explore Animated BGs",
+    images: [
+      {
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+        alt: "My OG Image",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -33,7 +45,7 @@ export default function RootLayout({
       <body className="antialiased">
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark" 
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >
