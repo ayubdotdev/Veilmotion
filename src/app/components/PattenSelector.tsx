@@ -1,19 +1,19 @@
-import { AnimatePresence } from "framer-motion";
-import { Check, Copy, Eye, X, Sun, Moon, CheckCircle } from "lucide-react";
-import React, { Dispatch, SetStateAction, useState } from "react";
-import { motion } from "framer-motion";
-import { PatternComponents } from "../components/PatternComponents"
-import { patterns } from "../utils/patterns";
-import { ReturnPreview, useReturnPreview } from "./Return";
-import Favorite from "./Favorites";
-import { useTheme } from "next-themes";
-import Image from "next/image";
-import { toast } from "sonner";
+import { AnimatePresence } from 'framer-motion';
+import { Check, Copy, Eye, X, Sun, Moon, CheckCircle } from 'lucide-react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
+import { motion } from 'framer-motion';
+import { PatternComponents } from '../components/PatternComponents';
+import { patterns } from '../utils/patterns';
+import { ReturnPreview, useReturnPreview } from './Return';
+import Favorite from './Favorites';
+import { useTheme } from 'next-themes';
+import Image from 'next/image';
+import { toast } from 'sonner';
 
 interface Pattern {
   id: string;
   name: string;
-  category: "Grids" | "Gradients" | "Effects" | "Dots";
+  category: 'Grids' | 'Gradients' | 'Effects' | 'Dots';
   style: React.CSSProperties;
   component: React.FC;
   code: string;
@@ -21,21 +21,27 @@ interface Pattern {
   previewImage?: string; // NEW - path to static preview image
 }
 
-
 interface PatternSelectorProps {
   activePattern?: Pattern | null;
   setActivePattern?: Dispatch<SetStateAction<Pattern | null>>;
 }
 
-const categories = ["All", "Grids", "Gradients", "Effects", "Dots", "Favorites"] as const;
+const categories = [
+  'All',
+  'Grids',
+  'Gradients',
+  'Effects',
+  'Dots',
+  'Favorites',
+] as const;
 type Category = (typeof categories)[number];
 
 export default function PatternSelector({
   activePattern,
-  setActivePattern
+  setActivePattern,
 }: PatternSelectorProps) {
   const { theme, setTheme } = useTheme();
-  const [activeCategory, setActiveCategory] = useState<Category>("All");
+  const [activeCategory, setActiveCategory] = useState<Category>('All');
   const [isCopied, setIsCopied] = useState<string | null>(null);
   const [previewPattern, setPreviewPattern] = useState<Pattern | null>(null);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
@@ -44,11 +50,11 @@ export default function PatternSelector({
     isPreviewActive,
     savePositionAndPreview,
     returnToSavedPosition,
-    clearPreview
+    clearPreview,
   } = useReturnPreview();
 
   const handleToggleFavorite = (patternId: string) => {
-    setFavorites(prev => {
+    setFavorites((prev) => {
       const newFavorites = new Set(prev);
       if (newFavorites.has(patternId)) {
         newFavorites.delete(patternId);
@@ -103,10 +109,10 @@ export default function PatternSelector({
 
     // Automatically switch theme based on pattern's isLightBackground property
     if (pattern.isLightBackground) {
-      setTheme("light");
+      setTheme('light');
       console.log('Switched to light mode for pattern:', pattern.name);
     } else {
-      setTheme("dark");
+      setTheme('dark');
       console.log('Switched to dark mode for pattern:', pattern.name);
     }
 
@@ -133,14 +139,17 @@ export default function PatternSelector({
     returnToSavedPosition();
   };
 
-  const filteredPatterns = activeCategory === "All"
-    ? patterns
-    : activeCategory === "Favorites"
+  const filteredPatterns =
+    activeCategory === 'All'
+      ? patterns
+      : activeCategory === 'Favorites'
       ? patterns.filter((pattern: Pattern) => favorites.has(pattern.id))
-      : patterns.filter((pattern: Pattern) => pattern.category === activeCategory);
+      : patterns.filter(
+          (pattern: Pattern) => pattern.category === activeCategory,
+        );
 
   return (
-    <div className="min-h-screen bg-black relative">
+    <div className="min-h-screen relative">
       <AnimatePresence>
         {previewPattern && (
           <motion.div
@@ -152,8 +161,7 @@ export default function PatternSelector({
             style={previewPattern.style}
           >
             {PatternComponents[previewPattern.id] &&
-              React.createElement(PatternComponents[previewPattern.id])
-            }
+              React.createElement(PatternComponents[previewPattern.id])}
           </motion.div>
         )}
       </AnimatePresence>
@@ -178,14 +186,15 @@ export default function PatternSelector({
       />
 
       {/* Main Content */}
-      <div className="relative z-10 bg-white dark:bg-black backdrop-blur-sm">
+      <div className="relative z-10 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white">
               Explore Stunning Animated Backgrounds
             </h1>
             <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Choose from our collection of animated background patterns. <br />Preview them live and copy the React code for your projects.
+              Choose from our collection of animated background patterns. <br />
+              Preview them live and copy the React code for your projects.
             </p>
           </div>
 
@@ -196,17 +205,22 @@ export default function PatternSelector({
                 <button
                   key={category}
                   onClick={() => setActiveCategory(category)}
-                  className={`relative text-sm font-medium transition-all px-4 py-2 rounded-lg text-center ${activeCategory === category
-                    ? "text-white shadow-md"
-                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-                    }`}
+                  className={`relative text-sm font-medium transition-all px-4 py-2 rounded-lg text-center ${
+                    activeCategory === category
+                      ? 'text-white shadow-md'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                  }`}
                 >
                   {activeCategory === category && (
                     <motion.div
                       layoutId="activeTab"
                       className="absolute inset-0 bg-blue-500 rounded-lg"
                       initial={false}
-                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                      transition={{
+                        type: 'spring',
+                        stiffness: 400,
+                        damping: 30,
+                      }}
                     />
                   )}
                   <span className="relative z-10">{category}</span>
@@ -215,9 +229,8 @@ export default function PatternSelector({
             </div>
           </div>
 
-
           {/* Empty Favorites Message */}
-          {activeCategory === "Favorites" && favorites.size === 0 && (
+          {activeCategory === 'Favorites' && favorites.size === 0 && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -243,7 +256,6 @@ export default function PatternSelector({
                 exit={{ opacity: 0, y: 20 }}
                 className="group relative bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 w-full max-w-sm"
               >
-
                 {/* Favorite Heart Icon */}
                 <Favorite
                   patternId={pattern.id}
@@ -264,12 +276,8 @@ export default function PatternSelector({
                            (max-width: 1200px) 50vw,
                            25vw"
                     />
-
                   ) : (
-                    <div
-                      className="w-full h-full"
-                      style={pattern.style}
-                    />
+                    <div className="w-full h-full" style={pattern.style} />
                   )}
 
                   {/* Hover Overlay */}
@@ -284,10 +292,11 @@ export default function PatternSelector({
                       </button>
                       <button
                         onClick={(e) => handleCopyCode(pattern, e)}
-                        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors z-20 ${isCopied === pattern.id
-                            ? "bg-green-500 text-white"
-                            : "bg-white text-gray-900 hover:bg-gray-100"
-                          }`}
+                        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors z-20 ${
+                          isCopied === pattern.id
+                            ? 'bg-green-500 text-white'
+                            : 'bg-white text-gray-900 hover:bg-gray-100'
+                        }`}
                       >
                         {isCopied === pattern.id ? (
                           <>
@@ -301,11 +310,9 @@ export default function PatternSelector({
                           </>
                         )}
                       </button>
-
                     </div>
                   </div>
                 </div>
-
 
                 {/* Pattern Info */}
                 <div className="p-4">
@@ -320,7 +327,7 @@ export default function PatternSelector({
                     layoutId="activePattern"
                     className="absolute inset-0 border-2 border-blue-500 rounded-xl pointer-events-none"
                     initial={false}
-                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                   />
                 )}
               </motion.div>
